@@ -1,0 +1,23 @@
+{
+  "name": "ort-tp2-api",
+  "version": "1.0.0",
+  "description": "Sistema backend de gestión de grupos de entrenamiento wellness",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leobuezo/ort-tp2-api.git"
+  },
+  "author": "Grupo 7",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/leobuezo/ort-tp2-api/issues"
+  },
+  "homepage": "https://github.com/leobuezo/ort-tp2-api#readme",
+  "devDependencies": {
+    "chai": "^4.3.6",
+    "mocha": "^10.0.0"
+  }
+}
