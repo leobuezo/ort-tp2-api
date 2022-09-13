@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Sistema backend de gestión de grupos de entrenamiento wellness",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -19,5 +20,8 @@
   "devDependencies": {
     "chai": "^4.3.6",
     "mocha": "^10.0.0"
+  },
+  "dependencies": {
+    "chalk": "^5.0.1"
   }
 }
