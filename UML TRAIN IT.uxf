@@ -1,0 +1,55 @@
+<diagram program="umletino" version="15.0.0"><zoom_level>13</zoom_level><element><id>UMLClass</id><coordinates><x>52</x><y>364</y><w>377</w><h>182</h></coordinates><panel_attributes>AdministradorDelTeam
+--
+
+--
++registrarAlumnoAlTeam(Team, Alumno):void
++registrarEntrenadorAlTeam(Team, Alumno):void
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>520</x><y>364</y><w>416</w><h>182</h></coordinates><panel_attributes>Entrenador
+--
+-nombre: String
+-apellido: String
+--
++crearClase(String: titulo, int: cupo, String: rutina):void
++cancelarClase(String: motivo):void
++publicarRutina(Clase):void
++darFeedback(Clase, Alumno, String: feedback): void</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1014</x><y>364</y><w>338</w><h>182</h></coordinates><panel_attributes>Alumno
+--
+-nombre: String
+-apellido: String
+--
++anotarseAClase():void
++bajarseDeClase(motivo:String):void
++solicitarFeedback(Clase, Entrenador): void
++darFeedback(Clase, String: feedback): void</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>572</x><y>650</y><w>299</w><h>169</h></coordinates><panel_attributes>Clase
+--
+//-estado: ESTADO
+-cupo: int
+//-entrenadores: ArrayList&lt;Entrenador&gt;
+//-alumnos: ArrayList&lt;Alumno&gt;
+//-listaEspera: ArrayList&lt;Alumno&gt; (Puede ser una cola)
+--
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>559</x><y>65</y><w>286</w><h>169</h></coordinates><panel_attributes>Team
+--
+//-admin: AdministradorDelTeam
+//-entrenadores: ArrayList&lt;Entrenador&gt;
+//-atletas: ArrayList&lt;Alumno&gt;
+-</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>689</x><y>221</y><w>143</w><h>169</h></coordinates><panel_attributes>lt=&lt;-
+m1=0..n
+-entrenadores</panel_attributes><additional_attributes>10;110;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>689</x><y>221</y><w>507</w><h>169</h></coordinates><panel_attributes>lt=&lt;-
+m1=0..n
+-atletas</panel_attributes><additional_attributes>350;110;350;40;10;40;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>182</x><y>221</y><w>546</w><h>169</h></coordinates><panel_attributes>lt=&lt;-
+m1=1
+-admin</panel_attributes><additional_attributes>10;110;10;40;400;40;400;10</additional_attributes></element><element><id>Relation</id><coordinates><x>715</x><y>533</y><w>143</w><h>143</h></coordinates><panel_attributes>lt=&lt;-
+m1=0..n
+-entrenadores</panel_attributes><additional_attributes>10;10;10;90</additional_attributes></element><element><id>Relation</id><coordinates><x>858</x><y>533</y><w>377</w><h>234</h></coordinates><panel_attributes>lt=&lt;-
+m1=0..n
+-alumnos</panel_attributes><additional_attributes>250;10;250;160;10;160</additional_attributes></element><element><id>Relation</id><coordinates><x>858</x><y>533</y><w>481</w><h>273</h></coordinates><panel_attributes>lt=&lt;-
+m1=0..n
+-listaEspera</panel_attributes><additional_attributes>330;10;330;190;10;190</additional_attributes></element><element><id>UMLClass</id><coordinates><x>234</x><y>650</y><w>169</w><h>156</h></coordinates><panel_attributes>&lt;&lt;Enum&gt;&gt;
+ESTADO
+--
+_+A_REALIZAR_
+_+RALIZADA_
+_+CANCELADA_</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>390</x><y>715</y><w>208</w><h>65</h></coordinates><panel_attributes>lt=&lt;-
+m1=1
+-estado</panel_attributes><additional_attributes>10;20;140;20</additional_attributes></element></diagram>
