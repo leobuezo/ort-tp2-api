@@ -7,18 +7,49 @@ const expect= chai.expect
 
 
 describe('Alumno del Team', () => {
-    let alumno 
-    before( () => {
-        alumno = new Alumno();
-    })
+     //Arrange
+     let alumnoHabilitado;
+     let alumnoInhabilitado;
+     let claseConCupo;
+     let claseSinCupo;
+     before( () => {
+         alumnoHabilitado = new Alumno("test","test",18,true);
+
+         alumnoInhabilitado= new Alumno("test inhabilitado","test inhabilitado",18,false);
+
+         claseConCupo= new Clase("running", 15);
+         claseSinCupo= new Clase("test",1);
+         claseSinCupo.anotarAlumno(alumnoHabilitado);
+     });
+
 
     describe('#anotarseAclases', () => {
-        it('tiene un metodo para acceder a las clases', () => {
+        it('un alumno no puede anotarse a clases por no estar habilitado', () => {
+ 
+            //Act
+             const result= alumnoInhabilitado.anotarseAClase(claseConCupo);
+            
+             //Assert
+             expect(result).to.equal('RESULTADO.NO_ADMITIDO');
+        });
+        it('un alumno habilitado puede anotarse a clases con cupo', () => {
+            //Act
+            const result= alumnoHabilitado.anotarseAClase(claseConCupo);
+            
             //Assert
-            expect(alumno.anotarseAClases).to.be.a('function');
-        })
-    })
+            expect(result).to.equal('ANOTADO.OK');
+        });
 
+        it('un alumno habilitado se anota a una clase en lista de espera', () => {
+            //Act
+            const result= alumnoHabilitado.anotarseAClase(claseSinCupo);
+            
+            //Assert
+            expect(result).to.equal('ANOTADO.ESPERA');
+        });
+       
+    });
+/*
     let clases
     before(() => {
       alumno= new Alumno();
@@ -42,5 +73,8 @@ describe('Alumno del Team', () => {
             //Assert
             expect(result).is.true
         })
+
     })
+
+    */
 })
