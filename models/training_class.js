@@ -4,6 +4,7 @@ export default class Clase{
         this.cupo = cupo
         this.alumnos= new Array()
         this.listaEspera= new Array();
+        this.esCancelada = false;
     }
 
     darBaja(alumno, motivo){

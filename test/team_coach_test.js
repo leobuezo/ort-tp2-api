@@ -1,7 +1,8 @@
-import chai from 'chai';
+import chai, { assert } from 'chai';
 import Alumno from '../models/team_athlete.js'
 import Entrenador from '../models/team_coach.js'
 import Clase from '../models/training_class.js'
+import chalk from 'chalk';
 
 const expect = chai.expect
 
@@ -17,21 +18,24 @@ describe('Entrenador del team', () => {
             let claseNueva = entrenador.crearClase('Runnning', 15)
 
             // Assert
-            expect(claseNueva).to.equal(true)
+            assert.instanceOf(claseNueva, Clase, 'claseNueva is instanceOf Clase!');
         })
     })
 
-    let clase
+    let claseFuncional;
     before( () => {
-        clase = new Clase('running', 15)
+        claseFuncional = new Clase('Funcional', 20)
     })
     
     describe('#cancelarClase()', () => {
         it('se cancela la clase', () => {
             // Act
-            let cancelarClase = entrenador.cancelarClase(clase, 'Lluvia')
+            let cancelarClase = entrenador.cancelarClase(claseFuncional, 'Lluvia');
+            console.log(chalk.bgBlue(JSON.stringify(claseFuncional)));
             // Assert
-            expect(cancelarClase).to.equal(true)
+            expect(cancelarClase).to.equal(true);
+            expect(claseFuncional.esCancelada).to.equal(true);
+            expect(claseFuncional.motivoCancelada).to.not.be.null;
         })
     })
 
