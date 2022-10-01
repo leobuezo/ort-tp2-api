@@ -1,5 +1,6 @@
 import assert from 'assert';
 import chai from 'chai';
+import chalk from 'chalk';
 import Admin from '../models/team_admin.js';
 import Alumno from '../models/team_athlete.js'
 import Entrenador from '../models/team_coach.js'
@@ -9,7 +10,7 @@ const expect = chai.expect
 describe('Administrador Del Team', () => { 
     let admin
     before( () => {
-        admin = new Admin();
+        admin = new Admin('Pepe Admin', 'ORThletics');
     })
 
     describe('#registrarAlumnoAlTeam()', () => {
@@ -17,8 +18,8 @@ describe('Administrador Del Team', () => {
         before(() => {
             // Arrange
             prospectoAlumno = {
-                nombre: 'f',
-                apellido: 'f',
+                nombre: 'Sergio',
+                apellido: 'Agüero',
                 aptoFisico: true,
                 edad: 18
             };
@@ -47,14 +48,14 @@ describe('Administrador Del Team', () => {
 
         it('el solicitante tiene apto fisico', () => {
             // Act
-            const result = admin.validarAptoFisico(prospectoAlumno)
+            const result = admin.validarAptoFisico(prospectoAlumno.aptoFisico)
             // Assert
             expect(result).to.equal(true)
         })
 
         it('el solicitante sea mayor de edad', () => {
             // Act
-            const result = admin.validarEsMayor(prospectoAlumno)
+            const result = admin.validarEsMayor(prospectoAlumno.edad)
             // Assert
             expect(result).to.equal(true)
         })
