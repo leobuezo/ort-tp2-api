@@ -1,4 +1,5 @@
-//import Clase from '../models/training_class.js'
+import chalk from "chalk";
+import Clase from '../models/training_class.js'
 
 export default class Entrenador {
     constructor(nombre){
@@ -6,12 +7,21 @@ export default class Entrenador {
     }
 
     crearClase(titulo, cupo){
-        //let claseNueva = new Clase(titulo, cupo)
-        return true
+        let claseNueva = new Clase(titulo, cupo)
+        console.log(chalk.bgBlue(JSON.stringify(claseNueva)));
+        return claseNueva;
     }
 
     cancelarClase(clase, motivo){
-        return true
+        let result = false;
+        if(clase !== null || clase !== undefined) {
+            if(motivo !== null || motivo != '') {
+                result = true;
+                clase.esCancelada = true;
+                clase.motivoCancelada = motivo;
+            }
+        }
+        return result;
     }
 
     publicarRutina(){
