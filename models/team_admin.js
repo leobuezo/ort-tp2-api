@@ -4,9 +4,10 @@ import Entrenador from "../models/team_coach.js";
 
 const EDAD_PERMITIDA = 18;
 export default class AdministradorDelTeam {
-    constructor(nombre, nombreTeam){
+    constructor(nombre, nombreTeam, rol){
         this.nombre = nombre;
         this.nombreTeam = nombreTeam
+        this.rol = rol
     }
 
     registrarAlumnoAlTeam(prospecto){

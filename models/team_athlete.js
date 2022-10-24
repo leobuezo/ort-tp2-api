@@ -1,11 +1,14 @@
+
 export default class Alumno {
-    constructor(nombre, apellido, edad, aptoFisico, team){
+    constructor(nombre, apellido, edad, aptoFisico, team, rol, dni){
         this.nombre = nombre;
         this.apellido = apellido;
         this.edad = edad;
+        this.dni = dni
         this.aptoFisico = aptoFisico;
-        this.team= team;
-        this.cuotaAlDia= true;
+        this.team = team;
+        this.cuotaAlDia = true;
+        this.rol = rol
     }
 
 
