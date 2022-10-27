@@ -1,13 +1,13 @@
-import Alumno from "../models/team_athlete";
-import { AthleteStorage } from "./Storage/athlete_storage";
+import Alumno from "../models/team_athlete.js";
+import { AthleteStorage } from "./Storage/athlete_storage.js";
 
 export class AthleteRepository{
     constructor(){
         this.storage = new AthleteStorage()
     }
 
-    crearAtleta(nombre, apellido, edad, aptoFisico, team){
-        return await this.storage.crearAtleta(new Alumno(nombre, apellido, edad, aptoFisico, team))
+    crearAtleta(nombre, apellido, edad, aptoFisico){
+        return this.storage.crearAtleta(new Alumno(nombre, apellido, edad, aptoFisico))
     }
 
     modificarAtleta(){
@@ -15,14 +15,14 @@ export class AthleteRepository{
     }
 
     borrarAtleta(atleta){
-        return await this.storage.borrarAtleta(atleta)
+        return this.storage.borrarAtleta(atleta)
     }
 
-    buscarAtleta(atleta){
-        return await this.storage.buscarAtleta(atleta)
+    buscarUnAtleta(id){
+        return this.storage.buscarUnAtleta(id)
     }
 
-    buscarAtleta(){
+    async buscarAtleta(){
         return await this.storage.buscarAtleta()
     }
     

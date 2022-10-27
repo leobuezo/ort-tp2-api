@@ -1,13 +1,22 @@
-import { StorageConnection } from "./storage_connection"
+import { MongoClient } from "mongodb"
+import { StorageConnection } from "./storage_connection.js"
+
 
 export class AthleteStorage{
     constructor(){
-        this.storageConnection = new StorageConnection("TrainIt","Athlete")
-        this.collection = this.storageConnection.getCollection()
+        this.connection = "mongodb+srv://trainit:comunidadort2022@cluster0.fxvbo5l.mongodb.net/?retryWrites=true&w=majority"
+        this.dbName = "TrainIt"
+        this.collectionName = "Athlete"
+        this.client = new MongoClient(this.connection)
+        this.connect()
+        this.db = this.client.db(this.dbName)
+        this.collection = this.db.collection(this.collectionName)
     }
-
+    async connect(){
+        await this.client.connect()
+    }
     async crearAtleta(atleta){
-        return await this.collection.insertOne(atleta)
+        return this.collection.insertOne(atleta)
     }
 
     async modificarAtleta(){
@@ -18,11 +27,13 @@ export class AthleteStorage{
         await this.collection.deleteMany({id : atleta.id})
     }
 
-    async buscarAtleta(atleta){
-        return await this.collection.find({id : atleta.id}).toArray()
+    async buscarUnAtleta(identificador){
+        return this.collection.find( {id : identificador} ).toArray()
     }
 
     async buscarAtleta(){
-        return await this.collection.find({}).toArray()
+        console.log("busco todo")
+        return this.collection.find({}).toArray()
     }
+
 }
