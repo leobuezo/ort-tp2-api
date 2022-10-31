@@ -6,20 +6,24 @@ export class AthleteRepository{
         this.storage = new AthleteStorage()
     }
 
-    crearAtleta(nombre, apellido, edad, aptoFisico){
-        return this.storage.crearAtleta(new Alumno(nombre, apellido, edad, aptoFisico))
+    crearAtleta(atleta){
+        return this.storage.crearAtleta(atleta)
     }
 
-    modificarAtleta(){
-        throw new Error("Este endpoint todavia no esta disponible")
+    modificarAtleta(atleta){
+        return this.storage.modificarAtleta(atleta)
     }
 
-    borrarAtleta(atleta){
-        return this.storage.borrarAtleta(atleta)
+    darFeedback(feedback){
+        return this.storage.darFeedback(feedback)
     }
 
-    buscarUnAtleta(id){
-        return this.storage.buscarUnAtleta(id)
+    borrarAtleta(dni){
+        return this.storage.borrarAtleta(dni)
+    }
+
+    buscarUnAtleta(dni){
+        return this.storage.buscarUnAtleta(dni)
     }
 
     async buscarAtleta(){

@@ -4,19 +4,21 @@ import { Rol } from './roles.js'
 import { ClassRepository } from "../Repositorio/class_repository.js";
 
 export class Entrenador {
-    constructor(nombre,edad, dni, rol){
+    constructor(nombre, apellido, edad, dni, rol, team, email){
         this.nombre = nombre;
+        this.apellido = apellido
         this.edad = edad
         this.dni = dni
         this.rol = new Rol(rol)
-        this.repository = new ClassRepository()
+        this.team = team
+        this.email = email
     }
 
-    crearClase(titulo, cupo){
+/*    crearClase(titulo, cupo){
         return this.repository.crearClase(titulo,cupo)
-//        let claseNueva = new Clase(titulo, cupo)
-//        console.log(chalk.bgBlue(JSON.stringify(claseNueva)));
-//        return claseNueva;
+        let claseNueva = new Clase(titulo, cupo)
+        console.log(chalk.bgBlue(JSON.stringify(claseNueva)));
+        return claseNueva;
     }
 
     cancelarClase(clase, motivo){
@@ -28,7 +30,7 @@ export class Entrenador {
         } else {
             throw new Error("Para cancelar una clase se debe proveer un motivo")
         }
-/*
+
         let result = false;
         if(clase !== null || clase !== undefined) {
             if(motivo !== null || motivo != '') {
@@ -38,7 +40,7 @@ export class Entrenador {
             }
         }
         return result;
-*/
+
     }
 
     publicarRutina(){
@@ -48,4 +50,5 @@ export class Entrenador {
     darFeedback(){
         return true
     }
+*/
 }

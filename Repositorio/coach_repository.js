@@ -1,28 +1,35 @@
-import { Entrenador } from "../models/team_coach";
-import { CoachStorage } from "./Storage/coach_storage";
+import { CoachStorage } from "./Storage/coach_storage.js";
 
 export class CoachRepository{
     constructor(){
         this.storage = new CoachStorage()
     }
 
-    crearCoach(nombre, edad, dni){
-        this.storage.crearCoach(new Entrenador(nombre, edad, dni))
+    crearCoach(coach){
+        return this.storage.crearCoach(coach)
     }
 
     modificarCoach(coach){
+        return this.storage.modificarCoach(coach)
+    }
 
+    darFeedback(feedback){
+        return this.storage.darFeedback(feedback)
     }
 
     borrarCoach(coach){
-        this.storage.borrarCoach(coach)
+        return this.storage.borrarCoach(coach)
     }
 
-    buscarCoach(coach){
-        this.storage.buscarCoach(coach)
+    buscarUnCoach(dni){
+        return this.storage.buscarUnCoach(dni)
     }
 
     buscarCoach(){
-        this.storage.buscarCoach()
+        return this.storage.buscarCoach()
+    }
+
+    crearClase(clase){
+        this.storage.crearClase(clase)
     }
 }

@@ -1,15 +1,20 @@
 import chalk from "chalk";
 import Alumno from "../models/team_athlete.js";
-import Entrenador from "../models/team_coach.js";
+import {Entrenador} from "../models/team_coach.js";
+import { Rol } from "./roles.js";
 
-const EDAD_PERMITIDA = 18;
 export default class AdministradorDelTeam {
-    constructor(nombre, nombreTeam, rol){
-        this.nombre = nombre;
-        this.nombreTeam = nombreTeam
-        this.rol = rol
+    constructor(nombre, apellido, edad, team, rol, dni, email){
+        this.nombre = nombre
+        this.apellido = apellido,
+        this.edad = edad
+        this.team = team
+        this.rol = new Rol(rol)
+        this.dni = dni
+        this.email = email
     }
-
+/* 
+const EDAD_PERMITIDA = 18;
     registrarAlumnoAlTeam(prospecto){
         if(prospecto == null || prospecto == undefined) {
             console.error(chalk.bgRed('ERROR: prospecto no puede ser null o undefined.'));
@@ -37,5 +42,6 @@ export default class AdministradorDelTeam {
     validarEsMayor(edad){
         return edad >= EDAD_PERMITIDA;
     }
+    */
 }
 

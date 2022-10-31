@@ -1,12 +1,16 @@
+
+
 export default class Clase{
-    constructor(titulo, cupo){
+    constructor(titulo, cupo, ubicacion, diaActividad){
         this.titulo = titulo
         this.cupo = cupo
-        this.alumnos= new Array()
-        this.listaEspera= new Array();
+        this.ubicacion = ubicacion
+        this.diaActividad = diaActividad
+        this.alumnos = []
+        this.listaEspera = []
         this.esCancelada = false;
     }
-
+/* 
     darBaja(alumno, motivo){
         this.alumnos.filter(alum => alum != alumno);
         return this.alumnos.includes(alumno);
@@ -32,4 +36,5 @@ export default class Clase{
     tieneCupo(){
         return this.alumnos.length < this.cupo;
     }
+*/
 }

@@ -1,4 +1,5 @@
-import { StorageConnection } from "./storage_connection"
+import { NotImplemented } from "../../ErrorHandling/NotImplementedApi.js"
+import { StorageConnection } from "./storage_connection.js"
 
 export class ClassStorage{
     constructor(){        
@@ -18,11 +19,11 @@ export class ClassStorage{
     }
 
     async modificarClase(clase){
-        throw new Error("Este endpoint todavia no esta disponible")
+        throw new NotImplemented("Este endpoint todavia no esta disponible")
     }
 
     async cancelarClase(clase){
-        throw new Error("Este endpoint todavia no esta disponible")
+        throw new NotImplemented("Este endpoint todavia no esta disponible")
     }
 
     async borrarClase(clase){

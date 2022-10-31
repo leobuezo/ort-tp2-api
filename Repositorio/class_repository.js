@@ -1,5 +1,5 @@
-import Clase from "../models/training_class"
-import { ClassStorage } from "./Storage/class_storage"
+import Clase from "../models/training_class.js"
+import { ClassStorage } from "./Storage/class_storage.js"
 
 export class ClassRepository{
     constructor(){
