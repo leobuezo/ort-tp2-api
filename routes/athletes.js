@@ -75,9 +75,4 @@ router.put("/" , async (req,res) => {
     }
 })
 
-//SIMULO COMO SERIA
-router.get("/NuevoRouteo", (req,res) => {
-    console.log("estoy aca")
-})
-
 export default router
