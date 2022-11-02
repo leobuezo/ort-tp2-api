@@ -4,9 +4,9 @@ import { NotImplemented } from '../ErrorHandling/NotImplementedApi.js'
 import AdministradorDelTeam from '../models/team_admin.js'
 import Alumno from '../models/team_athlete.js'
 import { Entrenador } from '../models/team_coach.js'
-import { AdminRepository } from '../Repositorio/admin_repository.js'
-import { AthleteRepository } from '../Repositorio/athlete_repository.js'
-import { CoachRepository } from '../Repositorio/coach_repository.js'
+import { AdminRepository } from '../Repository/admin_repository.js'
+import { AthleteRepository } from '../Repository/athlete_repository.js'
+import { CoachRepository } from '../Repository/coach_repository.js'
 
 const router = express.Router()
 

@@ -1,7 +1,7 @@
 import chalk from "chalk";
 import Clase from '../models/training_class.js'
 import { Rol } from './roles.js'
-import { ClassRepository } from "../Repositorio/class_repository.js";
+import { ClassRepository } from "../Repository/class_repository.js";
 
 export class Entrenador {
     constructor(nombre, apellido, edad, dni, rol, team, email){

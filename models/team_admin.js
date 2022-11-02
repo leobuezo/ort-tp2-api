@@ -5,6 +5,7 @@ import { Rol } from "./roles.js";
 
 export default class AdministradorDelTeam {
     constructor(nombre, apellido, edad, team, rol, dni, email){
+        this._id = generateUUID()
         this.nombre = nombre
         this.apellido = apellido,
         this.edad = edad
@@ -12,6 +13,10 @@ export default class AdministradorDelTeam {
         this.rol = new Rol(rol)
         this.dni = dni
         this.email = email
+    }
+
+    generateUUID(){
+        return uuidv4()
     }
 /* 
 const EDAD_PERMITIDA = 18;

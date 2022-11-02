@@ -1,7 +1,8 @@
 import express from 'express'
 import Alumno from '../models/team_athlete.js'
-import { AdminRepository } from '../Repositorio/admin_repository.js'
-import { AthleteRepository } from '../Repositorio/athlete_repository.js'
+import { AdminRepository } from '../Repository/admin_repository.js'
+import { AthleteRepository } from '../Repository/athlete_repository.js'
+import { obtenerAtletas } from '../Services/AthleteServices.js'
 
 const router = express.Router()
 
@@ -9,10 +10,13 @@ const repositorioAtleta = new AthleteRepository()
 const repositorioAdmin = new AdminRepository()
 
 //GET ALL ATHLETES
-router.get("/", async (req,res) => {
-     const atletas = await repositorioAtleta.buscarAtleta()
-     res.json(atletas)
-})
+// router.get("/" ,async (req,res) => {
+//      const atletas = await repositorioAtleta.buscarAtleta()
+//      res.json(atletas)
+// })
+
+//GET ALL ATHLETES
+router.get("/" , obtenerAtletas)
 
 //GET AN ATHLETE BASED ON THEIR DNI
 router.get("/:dni", async function(req,res) {
@@ -69,6 +73,11 @@ router.put("/" , async (req,res) => {
         const repoAdmin = await repositorioAdmin.registrarAtleta(atleta[0].dni,team)
         res.status(201).json(repoAdmin)
     }
+})
+
+//SIMULO COMO SERIA
+router.get("/NuevoRouteo", (req,res) => {
+    console.log("estoy aca")
 })
 
 export default router

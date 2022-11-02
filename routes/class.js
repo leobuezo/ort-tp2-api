@@ -1,6 +1,6 @@
 import express from 'express'
 import { NotImplemented } from '../ErrorHandling/NotImplementedApi.js'
-import { ClassRepository } from '../Repositorio/class_repository.js'
+import { ClassRepository } from '../Repository/class_repository.js'
 
 const router = express.Router()
 
