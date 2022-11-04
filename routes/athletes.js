@@ -1,78 +1,45 @@
 import express from 'express'
-import Alumno from '../models/team_athlete.js'
-import { AdminRepository } from '../Repository/admin_repository.js'
+import { body, check } from 'express-validator'
 import { AthleteRepository } from '../Repository/athlete_repository.js'
-import { obtenerAtletas } from '../Services/AthleteServices.js'
+import { obtenerAtletas, obtenerUnAtleta, crearAtleta, borrarAtleta, agregarAlTeam, modificarAtleta } from '../Services/AthleteServices.js'
+
+//Import this callback to validate if user exists or not
+import { validateUser, userExists } from '../CustomValidators/AthleteValidator.js'
 
 const router = express.Router()
-
-const repositorioAtleta = new AthleteRepository()
-const repositorioAdmin = new AdminRepository()
+const respositorio = new AthleteRepository()
 
 //GET ALL ATHLETES
-// router.get("/" ,async (req,res) => {
-//      const atletas = await repositorioAtleta.buscarAtleta()
-//      res.json(atletas)
-// })
-
-//GET ALL ATHLETES
-router.get("/" , obtenerAtletas)
+router.get("/",
+    obtenerAtletas)
 
 //GET AN ATHLETE BASED ON THEIR DNI
-router.get("/:dni", async function(req,res) {
-    const {dni} = req.params
-    const atleta = await repositorioAtleta.buscarUnAtleta(dni)
-
-    atleta.length === 1 ? res.status(201).json(atleta) : res.status(204).send(`La persona con dni ${dni} no existe`)
-})
+router.get("/:dni",
+    check('dni').custom(userExists),
+    obtenerUnAtleta)
 
 //CREATE AN ATHLETE
-router.post("/", async function(req,res) {
-    const { nombre, apellido, edad, dni, aptoFisico, team, rol } = req.body
-    const atleta = await repositorioAtleta.buscarUnAtleta(dni)
-    if(atleta.length === 1)
-    {
-        res.status(400).json(`Ya existe una persona con el dni ${dni}`)
-
-    }
-    else
-    {
-        const athlete = new Alumno(nombre, apellido, edad, dni, aptoFisico, team, rol)
-        const repo = await repositorioAtleta.crearAtleta(athlete)
-        res.status(200).json(repo)
-    }
-})
+router.post("/",
+    check('edad').toInt(),
+    check('dni').custom(validateUser),
+    body('email').isEmail(),
+    body('aptoFisico').isBoolean(),
+    crearAtleta)
 
 //DELETE AN ATHLETE
-router.delete("/:dni" , async (req,res) => {
-    const {dni} = req.params
-    const atleta = await repositorioAtleta.buscarUnAtleta(dni)
-
-    if(atleta.length !== 1){
-        res.status(404).send(`La persona con dni ${dni} no existe`)
-    }
-    else
-    {
-        const repo = await repositorioAtleta.borrarAtleta(dni)
-        res.status(200).json(`Se borro a la persona con dni ${dni}`)
-    }
-})
+router.delete("/:dni",
+    check('dni').custom(userExists),
+    borrarAtleta)
 
 //ADD AN ATHLETE TO A TEAM
-router.put("/" , async (req,res) => {
-    const {dni, team} = req.body
-    const atleta = await repositorioAtleta.buscarUnAtleta(dni)
+router.put("/agregarTeam",
+    check('dni').custom(userExists),
+    agregarAlTeam)
 
-    if(atleta.length !== 1){
-        res.status(204).send(`El atleta con dni ${dni} no existe`)
-    }
-    else
-    {
-        console.log(team)
-        console.log(atleta[0])
-        const repoAdmin = await repositorioAdmin.registrarAtleta(atleta[0].dni,team)
-        res.status(201).json(repoAdmin)
-    }
-})
+router.put("/", 
+    modificarAtleta)
+
+//Chequear si alguien hace algun servicio para las clases, si no, 
+//lo hago para poder hacer el endpoint de darse de baja a una clase
 
 export default router

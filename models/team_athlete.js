@@ -1,37 +1,52 @@
+import { v4 as uuidv4 } from "uuid";
+import { InvalidProperty } from "../ErrorHandling/CustomError.js";
 import { Rol } from "./roles.js";
 
 export default class Alumno {
-    constructor(nombre, apellido, edad, dni, aptoFisico, team, rol, email){ 
-        this.nombre = nombre
-        this.apellido = apellido
-        this.edad = edad
-        this.dni = dni
+    constructor(nombre, apellido, edad, dni, aptoFisico, team, rol, email) {
+        this._id = uuidv4()
+        this.nombre = this.validateNombre(nombre)
+        this.apellido = this.validateApellido(apellido)
+        this.edad = this.validateEdad(edad)
+        this.dni = this.validateDni(dni)
         this.aptoFisico = aptoFisico
         this.team = team
         this.cuotaAlDia = true
-        this.rol = new Rol(rol)
+        this.rol = this.validateRol(rol)
         this.email = email
     }
 
-/*
-    anotarseAClase(clase){
-        let resultado = 'RESULTADO.ERROR';
-        if(clase != null & clase != undefined){
-            resultado= clase.anotarAlumno(this)
-            if(resultado == 'ANOTADO.OK' || resultado == 'ANOTADO.ESPERA'){
-               this.clase= clase
-            }
+    validateNombre(name) {
+        if (!name) {
+            throw new InvalidProperty(`El nombre es invalido. Por favor ingrese un dato valido`)
         }
-        return resultado
+        return name
+    }
+    validateApellido(apellido) {
+        if (!apellido) {
+            throw new InvalidProperty(`El apellido es invalido. Por favor ingrese un dato valido`)
+        }
+        return apellido
+    }
+    validateEdad(edad) {
+        if (!edad) {
+            throw new InvalidProperty(`La edad es invalida. Por favor ingrese un numero mayor a 0`)
+        }
+        return edad
     }
 
-
-    darBajaDeClase(clase, motivo){
-        if(this.clase == clase){
-            return this.clase.darBaja(this, motivo);
+    validateDni(dni) {
+        if (!dni) {
+            throw new InvalidProperty(`El dni es invalido. Por favor, ingrese un dato valido`)
         }
-        return false;
+        return dni
     }
 
-*/
+    validateRol(rol) {
+        if (rol !== "Athlete") {
+            throw new InvalidProperty(`El rol ${rol} no le pertenece al atleta.`)
+        }
+        return new Rol(rol)
+    }
+
 }
