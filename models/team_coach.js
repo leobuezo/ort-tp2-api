@@ -14,10 +14,11 @@ export class Entrenador {
         this.email = email
     }
 
-/*    crearClase(titulo, cupo){
-        return this.repository.crearClase(titulo,cupo)
+    crearClase(titulo, cupo){
+        //return this.repository.crearClase(titulo,cupo)
         let claseNueva = new Clase(titulo, cupo)
-        console.log(chalk.bgBlue(JSON.stringify(claseNueva)));
+        console.log(chalk.bgBlue(`Creando una nueva clase de entrenamiento por ${this.nombre}`));
+        console.log(JSON.stringify(claseNueva));
         return claseNueva;
     }
 
@@ -47,8 +48,11 @@ export class Entrenador {
         return true
     }
 
-    darFeedback(){
-        return true
+    darFeedback(feedback, feedbackContent){
+        if(feedbackContent == null || feedbackContent == undefined) {
+            throw new Error('Feedback debe tener un contenido válido.');
+        }
+        feedback.darFeedback(feedbackContent);
     }
-*/
+
 }

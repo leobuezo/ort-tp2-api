@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 import { InvalidProperty } from "../ErrorHandling/CustomError.js";
 import { Rol } from "./roles.js";
+import Feedback from '../models/feedback.js'
 
 export default class Alumno {
     constructor(nombre, apellido, edad, dni, aptoFisico, team, rol, email) {
@@ -49,4 +50,14 @@ export default class Alumno {
         return new Rol(rol)
     }
 
+    solicitarFeedback(clase, entrenador) {
+        return new Feedback(this.dni, clase.titulo, entrenador.dni)
+    }
+
+    cerrarFeedback(feedback) {
+        if(feedback.estado != 'completed') {
+            throw new Error('Feedback no tiene contenido, no se encuentra en estado COMPLETADO.');
+        }
+        feedback.cerrarFeedback();
+    }
 }
