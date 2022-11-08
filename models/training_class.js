@@ -10,7 +10,7 @@ export default class Clase{
         this.listaEspera = []
         this.esCancelada = false;
     }
-/* 
+ 
     darBaja(alumno, motivo){
         this.alumnos.filter(alum => alum != alumno);
         return this.alumnos.includes(alumno);
@@ -36,5 +36,5 @@ export default class Clase{
     tieneCupo(){
         return this.alumnos.length < this.cupo;
     }
-*/
+
 }
