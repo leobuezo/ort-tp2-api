@@ -1,4 +1,9 @@
-import express from 'express'
+import express from 'express';
+import path from 'path';
+//swagger
+import {swaggerDocs} from './config/swagger.js'
+
+
 
 const app = express()
 const port = 3000
@@ -8,7 +13,12 @@ import admin from "./routes/admin.js"
 import session from "./routes/session.js"
 import router from './routes/class.js'
 
+
+//middleware
 app.use(express.json())
+
+
+
 
 app.use("/athletes", atheles)
 app.use("/coaches", coaches)
@@ -16,10 +26,15 @@ app.use("/admin", admin)
 app.use("/session", session)
 app.use("/class", router)
 
+
+//routes
 app.get("/" , (req,res) => {
     res.json({
         status: 'API currently running'
     })
 })
 
-app.listen(port, () => console.log(`API Listening on port: ${port}`))
+app.listen(port, () => {
+    console.log(`API Listening on port: ${port}`);
+    swaggerDocs(app,port);
+})
