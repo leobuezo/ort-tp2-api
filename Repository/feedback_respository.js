@@ -1,5 +1,4 @@
-import { FeedbackStorage } from "./Storage/feedback_storage.js";
-import { Feedback } from "../models/feedback.js";
+import FeedbackStorage from "./Storage/feedback_storage.js";
 
 export default class FeedbackRepository {
     constructor() {
@@ -16,20 +15,20 @@ export default class FeedbackRepository {
         return feedback;
     }
 
-    darFeedback(dni_atleta, titulo_clase, devolucion, estado_feedback) {
+    darFeedback(dni_atleta, devolucion) {
         let feedback = null;
         try {
-            feedback = this.storage.darFeedback(dni_atleta, titulo_clase, devolucion, estado_feedback);
+            feedback = this.storage.darFeedback(dni_atleta, devolucion);
         } catch(error) {
             console.log(error);
         }
         return feedback;
     }
 
-    cerrarFeedback(dni_atleta, titulo_clase, estado_feedback) {
+    cerrarFeedback(dni_atleta) {
         let feedback = null;
         try {
-            feedback = this.storage.cerrarFeedback(dni_atleta, titulo_clase, estado_feedback);
+            feedback = this.storage.cerrarFeedback(dni_atleta);
         } catch(error) {
             console.log(error);
         }
@@ -56,10 +55,10 @@ export default class FeedbackRepository {
         return feedback;        
     }
 
-    obtenerUnFeedback(dni_atleta, dni_coach) {
+    obtenerUnFeedback(dni_atleta) {
         let feedback = null;
         try {
-            feedback = this.storage.obtenerUnFeedback(dni_atleta, dni_coach);
+            feedback = this.storage.obtenerUnFeedback(dni_atleta);
         } catch(error) {
             console.log(error);
         }

@@ -1,7 +1,7 @@
 import { NotImplemented } from "../ErrorHandling/CustomError.js"
-import { FeedbackRepository } from "../Repository/feedback_respository.js"
+import FeedbackRepository from "../Repository/feedback_respository.js"
 import { validationResult } from "express-validator"
-import { Feedback } from "../models/feedback.js"
+import Feedback from "../models/feedback.js"
 
 const repositorio = new FeedbackRepository()
 
@@ -14,8 +14,8 @@ export const obtenerUnFeedbackPorId = async (req, res) => {
             errores: errors.array()
         })
     }
-    const { feedbackId } = req.params
-    const responseObject = await repositorio.obtenerUnFeedbackPorId(feedbackId)
+    const { _id } = req.params
+    const responseObject = await repositorio.obtenerUnFeedbackPorId(_id)
     return res.status(200).json(responseObject)
 }
 
@@ -27,8 +27,8 @@ export const obtenerUnFeedback = async (req, res) => {
             errores: errors.array()
         })
     }
-    const { dni_atleta, dni_coach } = req.params
-    const responseObject = await repositorio.obtenerUnFeedback(dni_atleta, dni_coach)
+    const { dni_atleta } = req.params
+    const responseObject = await repositorio.obtenerUnFeedback(dni_atleta)
     return res.status(200).json(responseObject)
 }
 

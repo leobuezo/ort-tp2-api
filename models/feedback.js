@@ -1,33 +1,25 @@
+import { v4 as uuidv4 } from "uuid";
+
 export default class Feedback {
     constructor(dni_atleta, titulo_clase, dni_coach) {
-        this.id = 'qwerty99991'//generateUUID()
-        this.estado = this.feedbackState.pending
+        this._id = uuidv4()
+        this.estado = "pending"
         this.dni_atleta = dni_atleta
         this.titulo_clase = titulo_clase
         this.dni_coach = dni_coach
         this.feedbackContent = null
     }
 
-    feedbackState = {
-        pending: "pending",
-        completed: "completed",
-        closed: "closed"
-    }
-
-    generateUUID() {
-        return uuidv4()
-    }
-
     darFeedback(feedbackContent) {
         if(feedbackContent != undefined || feedbackContent != null) {
             this.feedbackContent = feedbackContent;
-            this.estado = this.feedbackState.completed;
+            this.estado = "completed";
         }
     }
 
     cerrarFeedback() {
-        if(this.estado == this.feedbackState.completed) {
-            this.estado = this.feedbackState.closed;
+        if(this.estado == "completed") {
+            this.estado = "closed";
         }
     }
 
