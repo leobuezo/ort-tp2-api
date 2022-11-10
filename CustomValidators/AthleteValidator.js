@@ -1,3 +1,4 @@
+
 import { AthleteRepository } from '../Repository/athlete_repository.js'
 
 const repositorio = new AthleteRepository()
