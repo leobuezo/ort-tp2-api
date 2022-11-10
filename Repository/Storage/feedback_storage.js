@@ -7,8 +7,8 @@ export default class FeedbackStorage{
         this.collection = this.storageConnection.getCollection();
     }
 
-    async crearFeedback(feedback) {
-        return await this.client.insertOne(feedback);
+    async crearFeedback(nuevoFeedback) {
+        return await this.client.insertOne(nuevoFeedback);
     }
 
     async darFeedback(dni_atleta, titulo_clase, devolucion, estado_feedback) {
@@ -23,8 +23,12 @@ export default class FeedbackStorage{
         return await this.client.delete( {dni_atleta: dni_atleta, titulo_clase: titulo_clase} );
     }
 
-    async buscarFeedback(dni_atleta, titulo_clase) {
-        return await this.client.findOne( {dni_atleta: dni_atleta, titulo_clase: titulo_clase} ).toArray();
+    async obtenerUnFeedbackPorId(feedbackId) {
+        return await this.client.findOne( { id: feedbackId } ).toArray();
+    }
+
+    async obtenerUnFeedback(dni_atleta, dni_coach) {
+        return await this.client.findOne( { dni_atleta: dni_atleta, dni_coach: dni_coach } ).toArray();
     }
 
     async obtenerFeedbacks() {

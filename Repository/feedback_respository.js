@@ -6,10 +6,10 @@ export default class FeedbackRepository {
         this.storage = new FeedbackStorage()
     }
 
-    crearFeedback(dni_atleta, titulo_clase, dni_coach) {
+    crearFeedback(nuevoFeedback) {
         let feedback = null;
         try {
-            feedback = this.storage.crearFeedback( new Feedback(dni_atleta, titulo_clase, dni_coach) );
+            feedback = this.storage.crearFeedback(nuevoFeedback);
         } catch(error) {
             console.log(error);
         }
@@ -46,10 +46,20 @@ export default class FeedbackRepository {
         return feedback;
     }
 
-    obtenerUnFeedback(dni_atleta, titulo_clase) {
+    obtenerUnFeedbackPorId(feedbackId) {
         let feedback = null;
         try {
-            feedback = this.storage.buscarFeedback(dni_atleta, titulo_clase);
+            feedback = this.storage.obtenerUnFeedbackPorId(feedbackId);
+        } catch(error) {
+            console.log(error);
+        }
+        return feedback;        
+    }
+
+    obtenerUnFeedback(dni_atleta, dni_coach) {
+        let feedback = null;
+        try {
+            feedback = this.storage.obtenerUnFeedback(dni_atleta, dni_coach);
         } catch(error) {
             console.log(error);
         }
