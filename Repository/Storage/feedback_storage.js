@@ -11,12 +11,12 @@ export default class FeedbackStorage{
         return await this.collection.insertOne(nuevoFeedback);
     }
 
-    async darFeedback(dni_atleta, devolucion) {
-        throw new NotImplemented("Este endpoint todavia no esta disponible")
+    async darFeedback(id_atleta, devolucion, cambioEstado) {
+        return await this.collection.updateOne({"_id": id_atleta}, {$set: {"estado": cambioEstado, "feedbackContent": devolucion}})
     }
 
-    async cerrarFeedback(dni_atleta) {
-        throw new NotImplemented("Este endpoint todavia no esta disponible")
+    async cerrarFeedback(id_atleta, cambioEstado) {
+        return await this.collection.updateOne({"_id": id_atleta}, {$set: {"estado": cambioEstado}})
     }
 
     async borrarFeedback(id) {

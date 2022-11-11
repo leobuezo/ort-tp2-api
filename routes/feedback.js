@@ -1,7 +1,7 @@
 import express from 'express'
 import { body, check } from 'express-validator'
 import FeedbackRepository from '../Repository/feedback_respository.js'
-import { obtenerFeedbacks, obtenerUnFeedbackPorAtleta, obtenerUnFeedbackPorCoach, obtenerUnFeedbackPorId, borrarFeedback, crearFeedback } from '../Services/FeedbackServices.js'
+import { obtenerFeedbacks, obtenerUnFeedbackPorAtleta, obtenerUnFeedbackPorCoach, obtenerUnFeedbackPorId, borrarFeedback, crearFeedback, darFeedback, cerrarFeedback } from '../Services/FeedbackServices.js'
 
 //Import this callback to validate if a feedback exists or not
 import { feedbackExists } from '../CustomValidators/FeedbackValidator.js';
@@ -29,11 +29,11 @@ router.get("/coach/:dni_coach", obtenerUnFeedbackPorCoach)
 //DELETE A FEEDBACK
 router.delete("/athlete/:dni_atleta", borrarFeedback)
 
-/*
+
 //ADD AN ARGUMENT TO A CERTAIN FEEDBACK
-router.put("/darFeedback", darFeedback)
+router.put("/giveFeedback/:dni_atleta", darFeedback)
 
 //CLOSE A CERTAIN FEEDBACK
-router.put("/cerrarFeedback", cerrarFeedback)
-*/
+router.put("/closeFeedback/:dni_atleta", cerrarFeedback)
+
 export default router

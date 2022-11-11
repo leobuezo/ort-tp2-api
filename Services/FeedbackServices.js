@@ -65,6 +65,38 @@ export const crearFeedback = async (req, res) => {
     const { dni_atleta, titulo_clase, dni_coach } = req.body
     const nuevoFeedback = new Feedback(dni_atleta, titulo_clase, dni_coach)
     const feedbackCreado = repositorio.crearFeedback(nuevoFeedback)
-//    const team = repositorioTeam.crearTeam(nombre, codigo)
     res.status(201).json(feedbackCreado)
+}
+
+export const darFeedback = async (req, res) => {
+    const cambioEstado = 'completed'
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+        return res.status(400).json({
+            mensaje: "Por favor, revisar los siguientes errores:",
+            errores: errors.array()
+        })
+    }
+    const { dni_atleta } = await req.params
+    const { devolucion } = await req.body
+    const responseDniObject = await repositorio.obtenerUnFeedbackPorAtleta(dni_atleta)
+    const { _id } = responseDniObject
+    const responseObject = await repositorio.darFeedback(_id, devolucion, cambioEstado)
+    return res.status(200).json(responseObject)
+}
+
+export const cerrarFeedback = async (req, res) => {
+    const cambioEstado = 'closed'
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+        return res.status(400).json({
+            mensaje: "Por favor, revisar los siguientes errores:",
+            errores: errors.array()
+        })
+    }
+    const { dni_atleta } = await req.params
+    const responseDniObject = await repositorio.obtenerUnFeedbackPorAtleta(dni_atleta)
+    const { _id } = responseDniObject
+    const responseObject = await repositorio.cerrarFeedback(_id, cambioEstado)
+    return res.status(200).json(responseObject)
 }

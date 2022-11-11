@@ -15,20 +15,29 @@ export default class FeedbackRepository {
         return feedback;
     }
 
-    darFeedback(dni_atleta, devolucion) {
+    darFeedback(id_atleta, devolucion, cambioEstado) {
         let feedback = null;
         try {
-            feedback = this.storage.darFeedback(dni_atleta, devolucion);
+            console.log(`
+            _id: ${id_atleta}
+            devolucion: ${devolucion}
+            estado: ${cambioEstado}
+            `)
+            feedback = this.storage.darFeedback(id_atleta, devolucion, cambioEstado);
         } catch(error) {
             console.log(error);
         }
         return feedback;
     }
 
-    cerrarFeedback(dni_atleta) {
+    cerrarFeedback(id_atleta, cambioEstado) {
         let feedback = null;
         try {
-            feedback = this.storage.cerrarFeedback(dni_atleta);
+            console.log(`
+            _id: ${id_atleta}
+            estado: ${cambioEstado}
+            `)
+            feedback = this.storage.cerrarFeedback(id_atleta, cambioEstado);
         } catch(error) {
             console.log(error);
         }
