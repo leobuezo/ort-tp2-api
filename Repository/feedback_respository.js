@@ -35,10 +35,10 @@ export default class FeedbackRepository {
         return feedback;
     }
 
-    borrarFeedback(dni_atleta, titulo_clase) {
+    borrarFeedback(id) {
         let feedback = null;
         try {
-            feedback = this.storage.borrarFeedback(dni_atleta, titulo_clase);
+            feedback = this.storage.borrarFeedback(id);
         } catch(error) {
             console.log(error);
         }
@@ -55,10 +55,20 @@ export default class FeedbackRepository {
         return feedback;        
     }
 
-    obtenerUnFeedback(dni_atleta) {
+    async obtenerUnFeedbackPorAtleta(dni_atleta) {
         let feedback = null;
         try {
-            feedback = this.storage.obtenerUnFeedback(dni_atleta);
+            feedback = await this.storage.obtenerUnFeedbackPorAtleta(dni_atleta);
+        } catch(error) {
+            console.log(error);
+        }
+        return feedback;        
+    }
+
+    obtenerUnFeedbackPorCoach(dni_coach) {
+        let feedback = null;
+        try {
+            feedback = this.storage.obtenerUnFeedbackPorCoach(dni_coach);
         } catch(error) {
             console.log(error);
         }

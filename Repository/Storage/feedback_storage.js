@@ -19,17 +19,22 @@ export default class FeedbackStorage{
         throw new NotImplemented("Este endpoint todavia no esta disponible")
     }
 
-    async borrarFeedback(dni_atleta, titulo_clase) {
-        return await this.collection.delete( {dni_atleta: dni_atleta, titulo_clase: titulo_clase} );
+    async borrarFeedback(id) {
+        return await this.collection.deleteOne( {_id: id } );
     }
 
     async obtenerUnFeedbackPorId(feedbackId) {
         return await this.collection.findOne( { id: feedbackId } );
     }
 
-    async obtenerUnFeedback(dni_del_atleta) {
+    async obtenerUnFeedbackPorAtleta(dni_del_atleta) {
         let el_dni = parseInt(dni_del_atleta)
         return await this.collection.findOne( { dni_atleta: el_dni } );
+    }
+
+    async obtenerUnFeedbackPorCoach(dni_del_coach) {
+        let el_dni = parseInt(dni_del_coach)
+        return await this.collection.find( { dni_coach: el_dni } ).toArray();
     }
 
     async obtenerFeedbacks() {
