@@ -8,10 +8,10 @@ import admin from "./routes/admin.js"
 import session from "./routes/session.js"
 import router from './routes/class.js'
 import feedback from './routes/feedback.js'
+import auth from './routes/auth.js'
 import { port } from './config.js';
 
 const app = express()
-
 
 //middleware
 app.use(express.json())
@@ -23,9 +23,10 @@ app.use("/admin", admin)
 app.use("/session", session)
 app.use("/class", router)
 app.use("/feedback", feedback)
+app.use("/auth", auth)
 
 app.get("/" , (req,res) => {
-    res.json({
+    res.status(200).json({
         status: 'API currently running'
     })
 })

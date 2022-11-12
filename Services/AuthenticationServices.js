@@ -18,9 +18,12 @@ export const loginGoogle = async (req, res, next) => {
                 return next()
             }
 
-            // creo un alumno vacio para despues pedirle que ingrese sus datos
-            // la primera vez que se registra
-            const defaultUser = new Alumno(
+            /*
+                creo un alumno vacio para despues pedirle que ingrese sus datos
+                la primera vez que se registra
+            */
+            
+                const defaultUser = new Alumno(
                 null, //nombre
                 null, //apellido
                 0, //dni
@@ -31,15 +34,20 @@ export const loginGoogle = async (req, res, next) => {
                 email, //email
                 id, //googleId
             )
+
             const { usuario, newUser } = await repositorio.buscarOAgregar(defaultUser)
                 .catch(err => {
                     console.log("Error al buscar o registrar al usuario con google", err)
+                    return res.status(500).json({
+                        message: "Hubo un error al buscar o registrar al usuario en Train IT. Por favor, reintente mas tarde",
+
+                    })
                 })
 
-            if (usuario) {
-                let responseObjectNew = JSON.parse(JSON.stringify(usuario))
-                responseObjectNew['newUser'] = newUser
-                return res.status(201).json(responseObjectNew)
+                if (usuario) {
+                let responseObject = JSON.parse(JSON.stringify(usuario))
+                responseObject['newUser'] = newUser                
+                return res.status(201).json(responseObject)
             }
 
             return next()
@@ -48,14 +56,14 @@ export const loginGoogle = async (req, res, next) => {
         .catch(err => {
             console.log(err)
             return res.status(500).json({
-                message: "Hubo un error al intentar iniciar sesion por google."
+                message: "Su usuario no es valido para registrase con google. Por favor, reintente mas tarde."
             })
         })
 
 }
 
-export const cb = (req, res) => {
+export const cb = (req, res, mensaje) => {
     return res.status(500).json({
-        message: "Hubo un error al iniciar sesion. Por favor, intente nuevamente"
+        message: "Hubo un error al iniciar sesion. Por favor, reintente mas tarde."
     })
 }
