@@ -4,17 +4,18 @@ import { Rol } from "./roles.js";
 import Feedback from '../models/feedback.js'
 
 export default class Alumno {
-    constructor(nombre, apellido, edad, dni, aptoFisico, team, rol, email) {
+    constructor(nombre, apellido, edad, dni, aptoFisico, team, rol, email, googleId) {
         this._id = uuidv4()
-        this.nombre = this.validateNombre(nombre)
-        this.apellido = this.validateApellido(apellido)
-        this.edad = this.validateEdad(edad)
-        this.dni = this.validateDni(dni)
+        this.nombre = nombre
+        this.apellido = apellido
+        this.edad = edad
+        this.dni = dni
         this.aptoFisico = aptoFisico
         this.team = team
         this.cuotaAlDia = true
-        this.rol = this.validateRol(rol)
+        this.rol = rol
         this.email = email
+        this.googleId = googleId
     }
 
     validateNombre(name) {
@@ -31,6 +32,9 @@ export default class Alumno {
     }
     validateEdad(edad) {
         if (!edad) {
+            if (edad === 0) {
+                return edad
+            }
             throw new InvalidProperty(`La edad es invalida. Por favor ingrese un numero mayor a 0`)
         }
         return edad
@@ -38,6 +42,9 @@ export default class Alumno {
 
     validateDni(dni) {
         if (!dni) {
+            if (dni === 0) {
+                return dni
+            }
             throw new InvalidProperty(`El dni es invalido. Por favor, ingrese un dato valido`)
         }
         return dni

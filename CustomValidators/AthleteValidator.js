@@ -11,9 +11,9 @@ export const validateUser = dni => {
     })
 }
 
-export const userExists = dni => {
+export const userExists = googleId => {
 
-    return repositorio.buscarUnAtleta(dni).then(usuario =>{
+    return repositorio.buscarUnAtleta(googleId).then(usuario =>{
         if (usuario.length === 0) {
             return Promise.reject(`El usuario enviado no existe`)
         }

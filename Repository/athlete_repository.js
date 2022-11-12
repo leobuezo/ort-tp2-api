@@ -9,8 +9,8 @@ export class AthleteRepository {
         return this.storage.crearAtleta(atleta)
     }
 
-    modificarAtleta(atleta) {
-        return this.storage.modificarAtleta(atleta)
+    modificarAtleta(googleId,dni,team) {
+        return this.storage.modificarAtleta(googleId,dni,team)
     }
 
     darFeedback(feedback) {
@@ -21,8 +21,8 @@ export class AthleteRepository {
         return await this.storage.borrarAtleta(dni)
     }
 
-    buscarUnAtleta(dni) {
-        return this.storage.buscarUnAtleta(dni)
+    buscarUnAtleta(googleId) {
+        return this.storage.buscarUnAtleta(googleId)
     }
 
     async buscarAtleta() {
@@ -31,5 +31,9 @@ export class AthleteRepository {
 
     async agregarTeam(dni, team) {
         return await this.storage.agregarTeam(dni, team)
+    }
+
+    async buscarOAgregar(atleta){
+        return await this.storage.buscarOAgregar(atleta)
     }
 }

@@ -11,21 +11,27 @@ export class AthleteStorage {
         return this.collection.insertOne(atleta)
     }
 
-    async modificarAtleta() {
-        throw new NotImplemented("Este endpoint todavia no esta disponible")
+    async modificarAtleta(id,dni,edad) {
+        //throw new NotImplemented("Este endpoint todavia no esta disponible")
+        return await this.collection.updateOne(
+            { googleId : id },
+            { $set : {
+                 dni : dni, edad : edad }
+            }
+        )
     }
 
     async darFeedback(feedback) {
         throw new NotImplemented("Este endpoint todavia no esta disponible")
     }
 
-    async borrarAtleta(dni) {
-        await this.collection.deleteOne({ dni: dni })
+    async borrarAtleta(googleId) {
+        await this.collection.deleteOne({ googleId: googleId })
     }
 
-    async buscarUnAtleta(dni) {
+    async buscarUnAtleta(googleId) {
         return this.collection.find({
-            dni: dni
+            googleId: googleId
         }).toArray()
     }
 
@@ -41,6 +47,17 @@ export class AthleteStorage {
                 team: equipo
             }
         })
+    }
+
+    async buscarOAgregar(atleta){
+        let usuario = await this.collection.findOne({googleId : atleta.googleId})
+        let newUser = false 
+        if (!usuario) {
+            await this.collection.insertOne(atleta)
+            newUser = true
+            usuario = await this.collection.findOne({googleId : atleta.googleId})
+        }
+        return {usuario, newUser}
     }
 
 }
