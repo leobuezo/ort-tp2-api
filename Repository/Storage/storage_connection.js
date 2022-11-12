@@ -1,8 +1,8 @@
 import { MongoClient } from "mongodb"
-
+import {databaseConnection} from '../../config.js'
 export class StorageConnection{
     constructor(dbName, collection){
-        this.connection = "mongodb+srv://trainit:comunidadort2022@cluster0.fxvbo5l.mongodb.net/?retryWrites=true&w=majority"
+        this.connection = databaseConnection
         this.dbName = dbName
         this.collectionName = collection
         this.client = new MongoClient(this.connection)
