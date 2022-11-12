@@ -7,27 +7,37 @@ export default class FeedbackStorage{
         this.collection = this.storageConnection.getCollection();
     }
 
-    async crearFeedback(feedback) {
-        return await this.client.insertOne(feedback);
+    async crearFeedback(nuevoFeedback) {
+        return await this.collection.insertOne(nuevoFeedback);
     }
 
-    async darFeedback(dni_atleta, titulo_clase, devolucion, estado_feedback) {
+    async darFeedback(dni_atleta, devolucion) {
         throw new NotImplemented("Este endpoint todavia no esta disponible")
     }
 
-    async cerrarFeedback(dni_atleta, titulo_clase, estado_feedback) {
+    async cerrarFeedback(dni_atleta) {
         throw new NotImplemented("Este endpoint todavia no esta disponible")
     }
 
-    async borrarFeedback(dni_atleta, titulo_clase) {
-        return await this.client.delete( {dni_atleta: dni_atleta, titulo_clase: titulo_clase} );
+    async borrarFeedback(id) {
+        return await this.collection.deleteOne( {_id: id } );
     }
 
-    async buscarFeedback(dni_atleta, titulo_clase) {
-        return await this.client.findOne( {dni_atleta: dni_atleta, titulo_clase: titulo_clase} ).toArray();
+    async obtenerUnFeedbackPorId(feedbackId) {
+        return await this.collection.findOne( { id: feedbackId } );
+    }
+
+    async obtenerUnFeedbackPorAtleta(dni_del_atleta) {
+        let el_dni = parseInt(dni_del_atleta)
+        return await this.collection.findOne( { dni_atleta: el_dni } );
+    }
+
+    async obtenerUnFeedbackPorCoach(dni_del_coach) {
+        let el_dni = parseInt(dni_del_coach)
+        return await this.collection.find( { dni_coach: el_dni } ).toArray();
     }
 
     async obtenerFeedbacks() {
-        return await this.client.find();
+        return await this.collection.find({}).toArray();
     }
 }

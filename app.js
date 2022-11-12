@@ -12,6 +12,7 @@ import coaches from "./routes/coaches.js"
 import admin from "./routes/admin.js"
 import session from "./routes/session.js"
 import router from './routes/class.js'
+import feedback from './routes/feedback.js'
 
 
 //middleware
@@ -25,7 +26,7 @@ app.use("/coaches", coaches)
 app.use("/admin", admin)
 app.use("/session", session)
 app.use("/class", router)
-
+app.use("/feedback", feedback)
 
 //routes
 app.get("/" , (req,res) => {

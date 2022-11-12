@@ -1,47 +1,39 @@
 import express from 'express'
 import { body, check } from 'express-validator'
-import { FeedbackRepository } from '../Repository/feedback_respository.js'
+import FeedbackRepository from '../Repository/feedback_respository.js'
+import { obtenerFeedbacks, obtenerUnFeedbackPorAtleta, obtenerUnFeedbackPorCoach, obtenerUnFeedbackPorId, borrarFeedback, crearFeedback } from '../Services/FeedbackServices.js'
 
-//Import this callback to validate if user exists or not
-import { validateUser, userExists } from '../CustomValidators/AthleteValidator.js'
+//Import this callback to validate if a feedback exists or not
+import { feedbackExists } from '../CustomValidators/FeedbackValidator.js';
 
 const router = express.Router()
 const respositorio = new FeedbackRepository()
 
+//POST A FEEDBACK WITH DNI_ATLETA, TITULO_CLASE AND DNI_COACH
+router.post("/", crearFeedback)
+
 //GET ALL FEEDBACKS
-router.get("/",
-    obtenerFeedbacks)
+router.get("/", obtenerFeedbacks)
 
-//GET A FEEDBACK BASED ON ITS ATHLETE DNI AND CLASS TITLE
-router.get("/:titulo_clase",
-    check('dni').custom(userExists),
-    obtenerUnFeedback)
+//GET A FEEDBACK BASED ON ITS ID
+router.get("/:_id", 
+    check('_id').custom(feedbackExists),
+    obtenerUnFeedbackPorId)
 
-//CREATE A FEEDBACK
-router.post("/",
-    check('edad').toInt(),
-    check('dni').custom(validateUser),
-    body('email').isEmail(),
-    body('aptoFisico').isBoolean(),
-    crearFeedback)
+//GET A FEEDBACK BASED ON ITS ATHLETE DNI
+router.get("/athlete/:dni_atleta", obtenerUnFeedbackPorAtleta)
+
+//GET A FEEDBACK BASED ON ITS COACH DNI
+router.get("/coach/:dni_coach", obtenerUnFeedbackPorCoach)
 
 //DELETE A FEEDBACK
-router.delete("/:dni",
-    check('dni').custom(userExists),
-    borrarFeedback)
+router.delete("/athlete/:dni_atleta", borrarFeedback)
 
+/*
 //ADD AN ARGUMENT TO A CERTAIN FEEDBACK
-router.put("/agregarTeam",
-    check('dni').custom(userExists),
-    darFeedback)
+router.put("/darFeedback", darFeedback)
 
 //CLOSE A CERTAIN FEEDBACK
-router.put("/agregarTeam",
-    check('dni').custom(userExists),
-    cerrarFeedback)
-
-
-//Chequear si alguien hace algun servicio para las clases, si no, 
-//lo hago para poder hacer el endpoint de darse de baja a una clase
-
+router.put("/cerrarFeedback", cerrarFeedback)
+*/
 export default router
