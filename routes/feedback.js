@@ -9,11 +9,33 @@ import { feedbackExists } from '../CustomValidators/FeedbackValidator.js';
 const router = express.Router()
 const respositorio = new FeedbackRepository()
 
+/**
+ * @swagger
+ *  tags:
+ *      name: Feedback
+ *      description: Manejo de Feedback API Train It
+ */
+
+/**
+ * @swagger
+ * /feedback:
+ *   get:
+ *     tags: [Feedback]
+ *     summary: Obtener todos los registros de feedback
+ *     description: Devuelve todos los registros de feedback registrados independientemente del estado de estos.
+ *     produces: 
+ *      - application/json
+ *     responses:
+ *       200:
+ *         description: Devolucion OK.
+ *       500:
+ *         description: Error de servidor
+ */
+router.get("/", obtenerFeedbacks)
+
 //POST A FEEDBACK WITH DNI_ATLETA, TITULO_CLASE AND DNI_COACH
 router.post("/", crearFeedback)
 
-//GET ALL FEEDBACKS
-router.get("/", obtenerFeedbacks)
 
 //GET A FEEDBACK BASED ON ITS ID
 router.get("/:_id", 
