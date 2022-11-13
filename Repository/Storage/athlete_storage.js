@@ -11,21 +11,43 @@ export class AthleteStorage {
         return this.collection.insertOne(atleta)
     }
 
-    async modificarAtleta() {
-        throw new NotImplemented("Este endpoint todavia no esta disponible")
+    async modificarAtleta(id,objectToModify) {
+        //throw new NotImplemented("Este endpoint todavia no esta disponible")
+
+        /* objectToModify contiente: 
+        nombreTemp
+        apellidoTemp 
+        dniTemp 
+        edadTemp
+        rolTemp */
+
+        return await this.collection.updateOne(
+            { googleId : id },
+            { $set : 
+                {
+                    nombre : objectToModify.nombreTemp,
+                    apellido : objectToModify.apellidoTemp,
+                    dni : objectToModify.dniTemp, 
+                    edad : objectToModify.edadTemp,
+                    aptoFisico : objectToModify.aptoFisicoTemp,
+                    rol : objectToModify.rolTemp,
+                    datosValidados: true
+                }
+            }
+        )
     }
 
     async darFeedback(feedback) {
         throw new NotImplemented("Este endpoint todavia no esta disponible")
     }
 
-    async borrarAtleta(dni) {
-        await this.collection.deleteOne({ dni: dni })
+    async borrarAtleta(googleId) {
+        await this.collection.deleteOne({ googleId: googleId })
     }
 
-    async buscarUnAtleta(dni) {
+    async buscarUnAtleta(googleId) {
         return this.collection.find({
-            dni: dni
+            googleId: googleId
         }).toArray()
     }
 
@@ -41,6 +63,28 @@ export class AthleteStorage {
                 team: equipo
             }
         })
+    }
+
+    async buscarOAgregar(atleta){
+
+        const {googleId} = atleta
+        
+        let obj = await this.collection.find({
+            googleId: googleId})
+            .toArray()
+
+        let newUser = false 
+        if (obj.length === 0) {
+            await this.collection.insertOne(atleta)
+            newUser = true
+            obj = await this.collection.find({
+                googleId: googleId})
+                .toArray()
+        }
+
+        const usuario = JSON.parse(JSON.stringify(obj[0]))
+        
+        return {usuario, newUser}
     }
 
 }

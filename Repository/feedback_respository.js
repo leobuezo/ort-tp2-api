@@ -1,55 +1,83 @@
-import { FeedbackStorage } from "./Storage/feedback_storage.js";
-import { Feedback } from "../models/feedback.js";
+import FeedbackStorage from "./Storage/feedback_storage.js";
 
 export default class FeedbackRepository {
     constructor() {
         this.storage = new FeedbackStorage()
     }
 
-    crearFeedback(dni_atleta, titulo_clase, dni_coach) {
+    crearFeedback(nuevoFeedback) {
         let feedback = null;
         try {
-            feedback = this.storage.crearFeedback( new Feedback(dni_atleta, titulo_clase, dni_coach) );
+            feedback = this.storage.crearFeedback(nuevoFeedback);
         } catch(error) {
             console.log(error);
         }
         return feedback;
     }
 
-    darFeedback(dni_atleta, titulo_clase, devolucion, estado_feedback) {
+    darFeedback(id_atleta, devolucion, cambioEstado) {
         let feedback = null;
         try {
-            feedback = this.storage.darFeedback(dni_atleta, titulo_clase, devolucion, estado_feedback);
+            console.log(`
+            _id: ${id_atleta}
+            devolucion: ${devolucion}
+            estado: ${cambioEstado}
+            `)
+            feedback = this.storage.darFeedback(id_atleta, devolucion, cambioEstado);
         } catch(error) {
             console.log(error);
         }
         return feedback;
     }
 
-    cerrarFeedback(dni_atleta, titulo_clase, estado_feedback) {
+    cerrarFeedback(id_atleta, cambioEstado) {
         let feedback = null;
         try {
-            feedback = this.storage.cerrarFeedback(dni_atleta, titulo_clase, estado_feedback);
+            console.log(`
+            _id: ${id_atleta}
+            estado: ${cambioEstado}
+            `)
+            feedback = this.storage.cerrarFeedback(id_atleta, cambioEstado);
         } catch(error) {
             console.log(error);
         }
         return feedback;
     }
 
-    borrarFeedback(dni_atleta, titulo_clase) {
+    borrarFeedback(id) {
         let feedback = null;
         try {
-            feedback = this.storage.borrarFeedback(dni_atleta, titulo_clase);
+            feedback = this.storage.borrarFeedback(id);
         } catch(error) {
             console.log(error);
         }
         return feedback;
     }
 
-    obtenerUnFeedback(dni_atleta, titulo_clase) {
+    obtenerUnFeedbackPorId(feedbackId) {
         let feedback = null;
         try {
-            feedback = this.storage.buscarFeedback(dni_atleta, titulo_clase);
+            feedback = this.storage.obtenerUnFeedbackPorId(feedbackId);
+        } catch(error) {
+            console.log(error);
+        }
+        return feedback;        
+    }
+
+    async obtenerUnFeedbackPorAtleta(dni_atleta) {
+        let feedback = null;
+        try {
+            feedback = await this.storage.obtenerUnFeedbackPorAtleta(dni_atleta);
+        } catch(error) {
+            console.log(error);
+        }
+        return feedback;        
+    }
+
+    obtenerUnFeedbackPorCoach(dni_coach) {
+        let feedback = null;
+        try {
+            feedback = this.storage.obtenerUnFeedbackPorCoach(dni_coach);
         } catch(error) {
             console.log(error);
         }
