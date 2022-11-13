@@ -12,7 +12,7 @@ export const loginGoogle = async (req, res, next) => {
     fetch(`${googleUrlAuth}${accessToken}`)
         .then(res => res.json())
         .then(async data => {
-            const { id, email, given_name, family_name, error } = data
+            const { id, email, error } = data
 
             if (error !== undefined) {
                 return next()
@@ -23,13 +23,14 @@ export const loginGoogle = async (req, res, next) => {
                 la primera vez que se registra
             */
             
-                const defaultUser = new Alumno(
+                const defaultUser = new Alumno( 
                 null, //nombre
                 null, //apellido
-                0, //dni
                 0, //edad
-                true, //aptoFisico
+                null, //dni
+                null, //aptoFisico
                 null, //Team
+                null, //cuotaAlDia
                 null, //rol
                 email, //email
                 id, //googleId

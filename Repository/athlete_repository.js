@@ -9,8 +9,8 @@ export class AthleteRepository {
         return this.storage.crearAtleta(atleta)
     }
 
-    modificarAtleta(googleId,dni,team) {
-        return this.storage.modificarAtleta(googleId,dni,team)
+    modificarAtleta(googleId,objectToModify) {
+        return this.storage.modificarAtleta(googleId,objectToModify)
     }
 
     darFeedback(feedback) {

@@ -8,7 +8,7 @@ const options= {
         info: {
             title: "Train-IT API",
             description: "Documentacion para consumir los metodos de la apilicacion Train It",
-            version: "1.0.0"
+            version: "1.1"
         },
         servers: [
             {
@@ -23,7 +23,6 @@ const options= {
 // Docs en JSON format
 const swaggerSpec= swaggerJSDoc(options);
 
-
 ///Function to setup our doc
 export const swaggerDocs= (app, port) => {
     app.use('/docs/api',swaggerUI.serve, swaggerUI.setup(swaggerSpec))
@@ -32,7 +31,7 @@ export const swaggerDocs= (app, port) => {
         res.send(swaggerSpec);
     });
 
-    console.log(`Version 1.0.0 de la documentacion esta disponible en: http://localhost:${port}/api-doc`);
+    console.log(`Version 1.0.0 de la documentacion esta disponible en: http://localhost:${port}/docs/api`);
 };
 
 

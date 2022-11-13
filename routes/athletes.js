@@ -4,7 +4,7 @@ import { AthleteRepository } from '../Repository/athlete_repository.js'
 import { obtenerAtletas, obtenerUnAtleta, crearAtleta, borrarAtleta, agregarAlTeam, modificarAtleta } from '../Services/AthleteServices.js'
 
 //Import this callback to validate if user exists or not
-import { validateUser, userExists } from '../CustomValidators/AthleteValidator.js'
+import { validateUser, userExists, validateInfoAthlete } from '../CustomValidators/AthleteValidator.js'
 
 const router = express.Router()
 const respositorio = new AthleteRepository()
@@ -23,6 +23,7 @@ const respositorio = new AthleteRepository()
  *              - edad
  *              - aptoFisico
  *              - rol
+ *              - googleId
  *          properties:
  *              nombre:
  *                  type: string
@@ -45,6 +46,9 @@ const respositorio = new AthleteRepository()
  *              team:
  *                  type: string
  *                  description: Nombre del team al que el atleta este registrado 
+ *              googleId:
+ *                  type: string
+ *                  description: Id correspondiente a google
  *          example:
  *              nombre: string
  *              apellido: string
@@ -54,6 +58,7 @@ const respositorio = new AthleteRepository()
  *              aptoFisico: false
  *              rol: string
  *              team: string
+ *              googleId: string
  */
 
 /**
@@ -83,18 +88,18 @@ router.get("/",
 
 /**
  * @swagger
- * /athletes/{dni}:
+ * /athletes/{googleId}:
  *   get:
  *     tags: [Athlete]
  *     summary: Obtener un atleta por su id
  *     description: Get an athlete based on their id
  *     parameters:
  *      - in: path
- *        name: dni
+ *        name: googleId
  *        schema: 
- *          type: integer
+ *          type: string
  *          required: true
- *          description: dni atleta 
+ *          description: ID correspondiente a la cuenta de google 
  *     responses:
  *       200:
  *         description: Devolucion OK.
@@ -133,7 +138,7 @@ router.get("/:googleId",
 
 router.post("/",
     check('edad').toInt(),
-    check('dni').custom(validateUser),
+    check('googleId').custom(validateUser),
     body('email').isEmail(),
     body('aptoFisico').isBoolean(),
     crearAtleta)
@@ -158,8 +163,8 @@ router.post("/",
  *       500:
  *         description: Error de servidor
  */
- router.delete("/:dni",
-    check('dni').custom(userExists),
+router.delete("/:googleId",
+    check('googleId').custom(userExists),
     borrarAtleta)
 
 /**
@@ -175,9 +180,9 @@ router.post("/",
  *       500:
  *         description: Error de servidor
  */
- router.put("/agregarTeam",
-//    (req, res) => validateTeam(req,res),
-    check('dni').custom(userExists),
+router.put("/agregarTeam",
+    //    (req, res) => validateTeam(req,res),
+    check('googleId').custom(userExists),
     agregarAlTeam)
 
 /**
@@ -194,10 +199,10 @@ router.post("/",
  *         description: Error de servidor
  */
 
-router.put("/",
+router.put("/finalizarRegistracion",
+    body('googleId').custom(userExists),
+    body('aptoFisico').isBoolean(),
+    validateInfoAthlete,
     modificarAtleta)
-
-//Chequear si alguien hace algun servicio para las clases, si no, 
-//lo hago para poder hacer el endpoint de darse de baja a una clase
 
 export default router

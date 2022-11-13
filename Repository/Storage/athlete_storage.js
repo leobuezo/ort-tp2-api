@@ -11,12 +11,28 @@ export class AthleteStorage {
         return this.collection.insertOne(atleta)
     }
 
-    async modificarAtleta(id,dni,edad) {
+    async modificarAtleta(id,objectToModify) {
         //throw new NotImplemented("Este endpoint todavia no esta disponible")
+
+        /* objectToModify contiente: 
+        nombreTemp
+        apellidoTemp 
+        dniTemp 
+        edadTemp
+        rolTemp */
+
         return await this.collection.updateOne(
             { googleId : id },
-            { $set : {
-                 dni : dni, edad : edad }
+            { $set : 
+                {
+                    nombre : objectToModify.nombreTemp,
+                    apellido : objectToModify.apellidoTemp,
+                    dni : objectToModify.dniTemp, 
+                    edad : objectToModify.edadTemp,
+                    aptoFisico : objectToModify.aptoFisicoTemp,
+                    rol : objectToModify.rolTemp,
+                    datosValidados: true
+                }
             }
         )
     }
@@ -50,13 +66,24 @@ export class AthleteStorage {
     }
 
     async buscarOAgregar(atleta){
-        let usuario = await this.collection.findOne({googleId : atleta.googleId})
+
+        const {googleId} = atleta
+        
+        let obj = await this.collection.find({
+            googleId: googleId})
+            .toArray()
+
         let newUser = false 
-        if (!usuario) {
+        if (obj.length === 0) {
             await this.collection.insertOne(atleta)
             newUser = true
-            usuario = await this.collection.findOne({googleId : atleta.googleId})
+            obj = await this.collection.find({
+                googleId: googleId})
+                .toArray()
         }
+
+        const usuario = JSON.parse(JSON.stringify(obj[0]))
+        
         return {usuario, newUser}
     }
 
