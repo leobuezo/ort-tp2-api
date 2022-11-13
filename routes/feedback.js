@@ -29,10 +29,18 @@ const respositorio = new FeedbackRepository()
  *              dni_coach:
  *                  type: integer
  *                  description: DNI del coach
+ *              estado:
+ *                  type: string
+ *                  description: estado del feedback (pending, completed, closed)
+ *              feedbackContent:
+ *                  type: string
+ *                  description: devolución que brinda el coach al atleta que le pidió feedback.
  *          example:
  *              dni_atleta: 12345685
  *              titulo_clase: Clase de Funcional
  *              dni_coach: 443337777
+ *              estado: completed
+ *              feedbackContent: El alumno viene mostrando un excelente progreso en los burpees. La técnica es cada vez mejor, le falta completar con el salto al final.
  */
 
 /**
@@ -158,14 +166,54 @@ router.get("/athlete/:dni_atleta", obtenerUnFeedbackPorAtleta)
  */
 router.get("/coach/:dni_coach", obtenerUnFeedbackPorCoach)
 
-//DELETE A FEEDBACK
+/**
+ * @swagger
+ * /feedback/{dni_atleta}:
+ *   delete:
+ *     tags: [Feedback]
+ *     summary: Borrar un feedback pasándole como parámetro el DNI de un atleta.
+ *     description: Delete a feddback by athlete Id.
+ *     responses:
+ *       200:
+ *         description: OK.
+ *       500:
+ *         description: Error de servidor
+ */
 router.delete("/athlete/:dni_atleta", borrarFeedback)
 
-
-//ADD AN ARGUMENT TO A CERTAIN FEEDBACK
+/**
+ * @swagger
+ * /feedback/giveFeedback/{dni_atleta}:
+ *   put:
+ *     tags: [Feedback]
+ *     summary: Asignar un contenido de devolución al feedback solicitado por un atleta.
+ *     description: Assign a content for the feedback requested by an athlete. The coach that has been requested to give it is who have to add that feedback content.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           devolucion: string
+ *     responses:
+ *       200:
+ *         description: Devolucion OK.
+ *       500:
+ *         description: Error de servidor
+ */
 router.put("/giveFeedback/:dni_atleta", darFeedback)
 
-//CLOSE A CERTAIN FEEDBACK
+/**
+ * @swagger
+ * /feedback/closeFeedback/{dni_atleta}:
+ *   put:
+ *     tags: [Feedback]
+ *     summary: Cambiar el esteado de un feedback cuando el atleta lo marque como leío.
+ *     description: Move a feedback state to closed when its athlete mark this as read.
+ *     responses:
+ *       200:
+ *         description: OK.
+ *       500:
+ *         description: Error de servidor
+ */
 router.put("/closeFeedback/:dni_atleta", cerrarFeedback)
 
 export default router
