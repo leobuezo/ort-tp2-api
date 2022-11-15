@@ -16,7 +16,8 @@ export default class Alumno {
         this.rol = rol
         this.email = email
         this.googleId = googleId,
-        this.datosValidados = false
+        this.datosValidados = false,
+        this.clases = []
     }
 
     solicitarFeedback(clase, entrenador) {

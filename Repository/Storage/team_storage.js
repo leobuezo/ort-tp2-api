@@ -6,7 +6,15 @@ export class TeamStorage{
         this.collection = this.storageRepository.getCollection()
     }
 
-    async buscarAtletaPorTeam(dni, team){
-        return await this.collection.find({dni : dni, team : team}).toArray()    
+    async buscarAtletaPorTeam(id, codigoTeam){
+        console.log(id, codigoTeam)
+        return await this.collection.find({
+            googleId : id,
+            team : codigoTeam
+        }).toArray()    
+    }
+
+    async agregarTeam(team){
+        return await this.collection.insertOne(team)
     }
 }

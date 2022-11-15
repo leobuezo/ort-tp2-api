@@ -57,7 +57,7 @@ export class AthleteStorage {
 
     async agregarTeam(identificador, equipo) {
         return await this.collection.updateOne({
-            dni: identificador
+            googleId: identificador
         }, {
             $set: {
                 team: equipo
@@ -87,4 +87,29 @@ export class AthleteStorage {
         return {usuario, newUser}
     }
 
+    async buscarAtletaPorTeam(googleId, codigoTeam){
+        return await this.collection.find({
+            googleId: googleId,
+            team : codigoTeam
+        }).toArray()
+    }
+
+    async darseDeBaja(googleId){
+        return await this.collection.updateOne({
+            googleId: googleId
+        },{
+            $set : {
+                team : null
+            }
+        }
+        )
+    }
+
+    async darseDeBajaClase(googleId,clase){
+
+    }
+
+    async unirseAClase(googleId,clase){
+
+    }
 }

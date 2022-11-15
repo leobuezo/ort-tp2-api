@@ -46,7 +46,7 @@ export const obtenerAtletas = async (req, res) => {
     responseObject.length > 0 ? res.status(200).json(responseObject) : res.status(204).json({ message: "No hay personas registradas" })
 }
 
-export const modificarAtleta = async (req, res) => {
+export const finalizazrRegistracion = async (req, res) => {
     //throw new NotImplemented("Este endpoint no esta siendo implementado")
 
     const errors = validationResult(req)
@@ -85,9 +85,9 @@ export const modificarAtleta = async (req, res) => {
 
 export const agregarAlTeam = async (req, res) => {
 
-    const { dni, team } = req.body
+    const { googleId, codigoTeam } = req.body
 
-    const responseObject = await agregarTeam(dni, team)
+    const responseObject = await agregarTeam(googleId, codigoTeam)
 
     responseObject ? res.status(200).json({ message: "El atleta ha sido agregado al team con exito" }) : res.status(400).json("No se pudo agregar al atleta al team")
 
@@ -111,4 +111,28 @@ export const borrarAtleta = async (req, res) => {
     res.status(204).json({
         message: `Se borro con exito al atleta ${nombre} ${apellido}`
     })
+}
+
+export const darseBaja = async (req, res) => {
+
+    const {googleId, codigoTeam} = req.body
+
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+        return res.status(400).json({
+            mensaje: "Por favor, revisar los siguientes errores:",
+            errores: errors.array()
+        })
+    }
+
+    await repositorio.darseDeBaja(googleId) 
+
+    res.status(204).json({
+        message: `Se dio de baja al atleta con exito del team`
+    })
+
+}
+
+export const darseDeBajaClase = (req, res) => {
+    //TODO
 }

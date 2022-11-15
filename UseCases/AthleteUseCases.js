@@ -1,19 +1,21 @@
 import { AthleteRepository } from "../Repository/athlete_repository.js"
+import { TeamRepository } from "../Repository/team_repository.js"
 
 const repositorio = new AthleteRepository()
+const repoTeam = new TeamRepository()
 
 export const crearAlumno = async (atleta) => {
     return await repositorio.crearAtleta(atleta)
 }
 
-export const agregarTeam = async (dni, team) => {
+export const agregarTeam = async (googleId, team) => {
 
     let response
     let pudo
-    const atleta = await repositorio.buscarUnAtleta(dni)
+    const atleta = await repositorio.buscarUnAtleta(googleId)
 
     if (atleta.length === 1) {
-        response = await repositorio.agregarTeam(atleta[0].dni, team)
+        response = await repositorio.agregarTeam(atleta[0].googleId, team)
         pudo = response.modifiedCount === 0 ? false : true
     }
 

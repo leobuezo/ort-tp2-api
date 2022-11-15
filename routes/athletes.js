@@ -1,14 +1,11 @@
 import express from 'express'
 import { body, check } from 'express-validator'
-import { AthleteRepository } from '../Repository/athlete_repository.js'
-import { obtenerAtletas, obtenerUnAtleta, crearAtleta, borrarAtleta, agregarAlTeam, modificarAtleta } from '../Services/AthleteServices.js'
+import { obtenerAtletas, obtenerUnAtleta, crearAtleta, borrarAtleta, agregarAlTeam, darseBaja, finalizazrRegistracion } from '../Services/AthleteServices.js'
 
 //Import this callback to validate if user exists or not
-import { validateUser, userExists, validateInfoAthlete } from '../CustomValidators/AthleteValidator.js'
+import { validateUser, userExists, validateInfoAthlete, addToTeam } from '../CustomValidators/AthleteValidator.js'
 
 const router = express.Router()
-const respositorio = new AthleteRepository()
-
 /**
  * @swagger
  * components:
@@ -54,6 +51,53 @@ const respositorio = new AthleteRepository()
  *              apellido: string
  *              dni: 0
  *              email: string
+ *              edad: 0
+ *              aptoFisico: false
+ *              rol: string
+ *              team: string
+ *              googleId: string
+ */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *      AthleteRegistration:
+ *          type: object
+ *          required: 
+ *              - nombre
+ *              - apellido
+ *              - dni
+ *              - edad
+ *              - aptoFisico
+ *              - rol
+ *              - googleId
+ *          properties:
+ *              nombre:
+ *                  type: string
+ *                  description: Nombre del atleta
+ *              apellido:
+ *                  type: string
+ *                  description: Apellido del atleta
+ *              dni:
+ *                  type: integer
+ *                  description: DNI del atleta       
+ *              edad:
+ *                  type: integer
+ *                  description: Edad del atleta
+ *              aptoFisico:
+ *                  type: boolean
+ *                  description: Si el atleta cuenta con el apto fisico al dia
+ *              team:
+ *                  type: string
+ *                  description: Nombre del team al que el atleta este registrado 
+ *              googleId:
+ *                  type: string
+ *                  description: Id correspondiente a google
+ *          example:
+ *              nombre: string
+ *              apellido: string
+ *              dni: 0
  *              edad: 0
  *              aptoFisico: false
  *              rol: string
@@ -152,11 +196,11 @@ router.post("/",
  *     description: Delete an athlete based on their id
  *     parameters:
  *      - in: path
- *        name: dni
+ *        name: googleId
  *        schema: 
- *          type: integer
+ *          type: string
  *          required: true
- *          description: dni atleta 
+ *          description: Id correspondiente a la cuenta de google 
  *     responses:
  *       200:
  *         description: Devolucion OK.
@@ -169,40 +213,70 @@ router.delete("/:googleId",
 
 /**
  * @swagger
- * /athletes/{id}:
+ * /athletes/agregarATeam:
  *   put:
  *     tags: [Athlete]
  *     summary: Agregar a un atleta a un team
  *     description: Adds an athlete to a team
+ *     parameters:
+ *      - in: path
+ *        name: googleId
+ *        schema:
+ *          type: string
+ *          required: true
+ *          description: Id correspondiente a la cuenta de google
+ *      - in: path
+ *        name: codigoTeam
+ *        schema:
+ *          type: string
+ *          required: true
+ *          description: Codigo del team al que se quiere agregar
  *     responses:
  *       200:
  *         description: Devolucion OK.
  *       500:
  *         description: Error de servidor
  */
-router.put("/agregarTeam",
-    //    (req, res) => validateTeam(req,res),
+router.put("/agregarATeam",
     check('googleId').custom(userExists),
+    addToTeam,
     agregarAlTeam)
 
 /**
  * @swagger
- * /athletes/{id}:
+ * /athletes/finalizarRegistracion:
  *   put:
  *     tags: [Athlete]
  *     summary: Modificar datos del atleta
  *     description: Modify data from an athlete
+ *     requestBody:
+ *      required: true
+ *      content: 
+ *          application/json:
+ *              schema:
+ *                  $ref : '#/components/schemas/AthleteRegistration'
  *     responses:
  *       200:
  *         description: Devolucion OK.
  *       500:
  *         description: Error de servidor
  */
-
+// nombre, apellido, dni, rol, edad
 router.put("/finalizarRegistracion",
     body('googleId').custom(userExists),
     body('aptoFisico').isBoolean(),
     validateInfoAthlete,
-    modificarAtleta)
+    finalizazrRegistracion)
+
+
+
+router.put("/darseBajaTeam",
+    body('googleId').custom(userExists),
+    darseBaja
+)
+
+router.put("/darseDeBajaClase",
+    body('googleId').custom(userExists),
+)
 
 export default router

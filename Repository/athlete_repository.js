@@ -36,4 +36,16 @@ export class AthleteRepository {
     async buscarOAgregar(atleta){
         return await this.storage.buscarOAgregar(atleta)
     }
+
+    async buscarAtletaPorTeam(googleId, team){
+        return await this.storage.buscarAtletaPorTeam(googleId, team)
+    }
+
+    async darseDeBaja(googleId){
+        return await this.storage.darseDeBaja(googleId)
+    }
+
+    async darseDeBajaClase(googleId){
+        return await this.storage.darseDeBajaClase(googleId)
+    }
 }
