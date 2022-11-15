@@ -1,6 +1,6 @@
 import express from 'express'
 import { NotImplemented } from '../ErrorHandling/NotImplementedApi.js'
-import { Entrenador } from '../models/team_coach.js'
+import Entrenador  from '../models/team_coach.js'
 import { AdminRepository } from '../Repository/admin_repository.js'
 import { CoachRepository } from '../Repository/coach_repository.js'
 
