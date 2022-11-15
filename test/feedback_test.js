@@ -2,7 +2,7 @@ import assert from 'assert';
 import chai from 'chai';
 import chalk from 'chalk';
 import Feedback from '../models/feedback.js';
-import {Entrenador} from '../models/team_coach.js';
+import Entrenador from '../models/team_coach.js';
 import Alumno from '../models/team_athlete.js'
 import Admin from '../models/team_admin.js'
 

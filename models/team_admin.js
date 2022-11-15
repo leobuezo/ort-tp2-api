@@ -1,6 +1,6 @@
 import chalk from "chalk";
 import Alumno from "../models/team_athlete.js";
-import {Entrenador} from "../models/team_coach.js";
+import Entrenador from "../models/team_coach.js";
 import { Rol } from "./roles.js";
 
 export default class AdministradorDelTeam {

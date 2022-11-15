@@ -3,9 +3,9 @@ import Clase from '../models/training_class.js'
 import { Rol } from './roles.js'
 import { ClassRepository } from "../Repository/class_repository.js";
 
-export class Entrenador {
+export default class Entrenador {
     constructor(nombre, apellido, edad, dni, rol, team, email){
-        this.nombre = nombre;
+        this.nombre = nombre
         this.apellido = apellido
         this.edad = edad
         this.dni = dni
