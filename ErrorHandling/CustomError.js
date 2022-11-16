@@ -31,3 +31,22 @@ export class InvalidProperty extends Error {
         super(message)
     }
 }
+
+export class ClassUseCaseError extends Error {
+
+    //Se debe usar este error para clasificar los error capturados en ClassUseCase
+
+    constructor(message) {
+        super(message)
+    }
+}
+
+
+export class MongoDBCannotFindError extends Error {
+
+    //Se debe usar este error para clasificar los errores capturados al realizar una busqueda en MongoDB
+
+    constructor(message) {
+        super(message)
+    }
+}
