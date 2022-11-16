@@ -7,7 +7,7 @@ export class ClassStorage{
         this.collection = this.storageConnection.getCollection()
     }
 
-    async buscarClase(){
+    async buscarClases(){
         return await this.client.find({}).toArray()
     }
     async buscarClase(clase){

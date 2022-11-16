@@ -1,24 +1,113 @@
 import express from 'express'
-import { NotImplemented } from '../ErrorHandling/NotImplementedApi.js'
-import { ClassRepository } from '../Repository/class_repository.js'
 
-const router = express.Router()
+import {obtenerClases} from '../Services/ClassServices.js';
 
-const repositorio = new ClassRepository()
+const router = express.Router();
 
-//
-router.put("/:id", (req,res) => {
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *      training_class:
+ *          type: object
+ *          required: 
+ *              - titulo
+ *              - cupo
+ *              - ubicacion
+ *              - diaActividad
+ *              - alumnos
+ *              - listaEspera
+ *              - esCancelada
+ *          properties:
+ *              titulo:
+ *                  type: string
+ *                  description: Titulo de la clase
+ *              cupo:
+ *                  type: int
+ *                  description: cupo del atleta
+ *              diaActividad:
+ *                  type: string
+ *                  description: diaActividad del atleta
+ *              alumnos:
+ *                  type: array
+ *                  description: E-Mail del atleta             
+ *              listaEspera:
+ *                  type: array
+ *                  description: listaEspera del atleta
+ *              esCancelada:
+ *                  type: boolean
+ *                  description: Si el atleta cuenta con el apto fisico al dia
+ *          example:
+ *              nombre: string
+ *              cupo: string
+ *              diaActividad: 0
+ *              alumnos: string
+ *              listaEspera: 0
+ *              esCancelada: false
+ */
 
-    throw new NotImplemented("El endpoint no esta siendo implementado al momento")
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *      ClassRegistration:
+ *          type: object
+ *          required: 
+ *              - nombre
+ *              - cupo
+ *              - diaActividad
+ *              - listaEspera
+ *              - esCancelada
+ *              - rol
+ *              - googleId
+ *          properties:
+ *              nombre:
+ *                  type: string
+ *                  description: Nombre del atleta
+ *              cupo:
+ *                  type: string
+ *                  description: cupo del atleta
+ *              diaActividad:
+ *                  type: integer
+ *                  description: diaActividad del atleta       
+ *              listaEspera:
+ *                  type: integer
+ *                  description: listaEspera del atleta
+ *              esCancelada:
+ *                  type: boolean
+ *                  description: Si el atleta cuenta con el apto fisico al dia
+ *          example:
+ *              nombre: string
+ *              cupo: string
+ *              diaActividad: 0
+ *              listaEspera: 0
+ *              esCancelada: false
+ *              rol: string
+ */
 
-    //Agregar el metodo buscarClase dentro del repositorio. Revisar funcionalidades de la clase
+/**
+ * @swagger
+ *  tags:
+ *      name: training_class
+ *      description: Manejo de training_class API Train It
+ */
 
-    const {id} = req.body
+/**
+ * @swagger
+ * /training_class:
+ *   get:
+ *     tags: [training_class]
+ *     summary: Obtener todas las clases
+ *     description: Devuelve todos las clases registrados
+ *     produces: 
+ *      - application/json
+ *     responses:
+ *       200:
+ *         description: Devolucion OK.
+ *       500:
+ *         description: Error de servidor
+ */router.get("/",obtenerClases)
 
-    const clase = repositorio.buscarClase(id)
-    
-    clase.length === 0 ? res.status(404).json(`No existe la clase buscada`) : res.status(200).json(`Se cancelo la clase con exito`)
-    
-})
+
 
 export default router

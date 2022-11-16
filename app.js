@@ -5,7 +5,7 @@ import {swaggerDocs} from './config/swagger.js'
 import atheles from "./routes/athletes.js"
 import coaches from "./routes/coaches.js"
 import admin from "./routes/admin.js"
-import router from './routes/class.js'
+import training_class from './routes/class.js'
 import feedback from './routes/feedback.js'
 import auth from './routes/auth.js'
 import { port } from './config.js';
@@ -19,7 +19,7 @@ app.use(express.json())
 app.use("/athletes", atheles)
 app.use("/coaches", coaches)
 app.use("/admin", admin)
-app.use("/class", router)
+app.use("/class", training_class)
 app.use("/feedback", feedback)
 app.use("/auth", auth)
 

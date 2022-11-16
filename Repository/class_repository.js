@@ -1,9 +1,20 @@
+import { MongoDBCannotFindError } from "../ErrorHandling/CustomError.js"
 import Clase from "../models/training_class.js"
+import { cannotFindError } from "./helpers/ErrorHelper.js"
 import { ClassStorage } from "./Storage/class_storage.js"
 
 export class ClassRepository{
     constructor(){
         this.storage = new ClassStorage()
+    }
+
+    buscarClases(){
+        try{
+            clases= this.storage.buscarClases()
+        }catch(error){
+            throw new MongoDBCannotFindError(cannotFindError + error.message)
+        }
+        return error;
     }
 
     crearClase(titulo,cupo){
