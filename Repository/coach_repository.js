@@ -9,24 +9,28 @@ export class CoachRepository{
         return this.storage.crearCoach(coach)
     }
 
-    modificarCoach(coach){
-        return this.storage.modificarCoach(coach)
+    modificarCoach(googleId, objectToModify){
+        return this.storage.modificarCoach(googleId, objectToModify)
     }
 
     darFeedback(feedback){
         return this.storage.darFeedback(feedback)
     }
 
-    borrarCoach(coach){
-        return this.storage.borrarCoach(coach)
+    borrarCoach(googleId){
+        return this.storage.borrarCoach(googleId)
     }
 
-    buscarUnCoach(dni){
-        return this.storage.buscarUnCoach(dni)
+    buscarUnCoach(googleId){
+        return this.storage.buscarUnCoach(googleId)
     }
 
     buscarCoach(){
         return this.storage.buscarCoach()
+    }
+
+    buscarCoachPorDni(dni){
+        return this.storage.buscarCoachPorDni(dni)
     }
 
     crearClase(clase){

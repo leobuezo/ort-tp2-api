@@ -4,7 +4,7 @@ import { Rol } from './roles.js'
 import { ClassRepository } from "../Repository/class_repository.js";
 
 export default class Entrenador {
-    constructor(nombre, apellido, edad, dni, rol, team, email){
+    constructor(nombre, apellido, edad, dni, rol, team, email, googleId){
         this.nombre = nombre
         this.apellido = apellido
         this.edad = edad
@@ -12,6 +12,9 @@ export default class Entrenador {
         this.rol = new Rol(rol)
         this.team = team
         this.email = email
+        this.googleId = googleId
+        this.datosValidados = false
+        this.clases = []
     }
 
     crearClase(titulo, cupo){
