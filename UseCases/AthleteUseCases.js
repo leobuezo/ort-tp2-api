@@ -1,3 +1,4 @@
+import Alumno from "../models/team_athlete.js"
 import { AthleteRepository } from "../Repository/athlete_repository.js"
 import { TeamRepository } from "../Repository/team_repository.js"
 
@@ -20,4 +21,18 @@ export const agregarTeam = async (googleId, team) => {
     }
 
     return pudo
+}
+
+export const crearAlumnoVacio = (googleId, email) => { 
+    return new Alumno(
+            null, //nombre
+            null, //apellido
+            0, //edad
+            null, //dni
+            null, //aptoFisico
+            null, //Team
+            'Atleta', //rol
+            email, //email
+            googleId, //googleId
+    )
 }
