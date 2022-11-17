@@ -57,15 +57,14 @@ export const finalizazrRegistracion = async (req, res) => {
         })
     }
 
-    const { googleId, nombre, apellido, dni, edad, aptoFisico, rol } = req.body
+    const { googleId, nombre, apellido, dni, edad, aptoFisico } = req.body
 
     const objectToModify = {
         nombreTemp: nombre,
         apellidoTemp: apellido,
         dniTemp: dni,
         edadTemp: edad,
-        aptoFisicoTemp: aptoFisico,
-        rolTemp: rol
+        aptoFisicoTemp: aptoFisico
     }
 
     repositorio.modificarAtleta(googleId, objectToModify)

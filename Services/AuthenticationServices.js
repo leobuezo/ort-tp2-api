@@ -1,57 +1,16 @@
-import Alumno from '../models/team_athlete.js';
-import { AthleteRepository } from '../Repository/athlete_repository.js';
-
+import { athleteAuthenticationUseCase, coachAuthenticationUseCase } from '../UseCases/AuthenticationUseCases.js';
 const fetch = (...args) =>
     import('node-fetch').then(({ default: fetch }) => fetch(...args));
 
 const googleUrlAuth = 'https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token='
-const repositorio = new AthleteRepository()
 
 export const loginGoogle = async (req, res, next) => {
     const accessToken = req.params.accessToken
     fetch(`${googleUrlAuth}${accessToken}`)
         .then(res => res.json())
         .then(async data => {
-            const { id, email, error } = data
-
-            if (error !== undefined) {
-                return next()
-            }
-
-            /*
-                creo un alumno vacio para despues pedirle que ingrese sus datos
-                la primera vez que se registra
-            */
-            
-                const defaultUser = new Alumno( 
-                null, //nombre
-                null, //apellido
-                0, //edad
-                null, //dni
-                null, //aptoFisico
-                null, //Team
-                null, //cuotaAlDia
-                null, //rol
-                email, //email
-                id, //googleId
-            )
-
-            const { usuario, newUser } = await repositorio.buscarOAgregar(defaultUser)
-                .catch(err => {
-                    console.log("Error al buscar o registrar al usuario con google", err)
-                    return res.status(500).json({
-                        message: "Hubo un error al buscar o registrar al usuario en Train IT. Por favor, reintente mas tarde",
-
-                    })
-                })
-
-                if (usuario) {
-                let responseObject = JSON.parse(JSON.stringify(usuario))
-                responseObject['newUser'] = newUser                
-                return res.status(201).json(responseObject)
-            }
-
-            return next()
+            const responseObject = await athleteAuthenticationUseCase(res, next, data)
+            return res.status(201).json(responseObject)
 
         })
         .catch(err => {
@@ -60,7 +19,23 @@ export const loginGoogle = async (req, res, next) => {
                 message: "Su usuario no es valido para registrase con google. Por favor, reintente mas tarde."
             })
         })
+}
 
+export const loginGoogleCoach = (req, res, next) => {
+    const accessToken = req.params.accessToken
+    fetch(`${googleUrlAuth}${accessToken}`)
+        .then(res => res.json())
+        .then(async data => {
+            const responseObject = await coachAuthenticationUseCase(res, next, data)
+            return res.stauts(201).json(responseObject)
+
+        })
+        .catch(err => {
+            console.log(err)
+            return res.status(500).json({
+                message: "Su usuario no es valido para registrase con google. Por favor, reintente mas tarde."
+            })
+        })
 }
 
 export const cb = (req, res, mensaje) => {

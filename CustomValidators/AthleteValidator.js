@@ -25,7 +25,7 @@ export const userExists = googleId => {
 
 export const validateInfoAthlete = async (req, res, next) => {
     const { googleId, nombre, apellido, dni, rol, edad } = req.body
-
+    console.log( googleId, nombre, apellido, dni, rol, edad )
     const user = await repositorio.buscarUnAtleta(googleId)
 
     const datosValidados = user[0].datosValidados
@@ -34,7 +34,7 @@ export const validateInfoAthlete = async (req, res, next) => {
         return res.status(401).json({ message: "No se pueden modificar los datos que ya fueron cargados." })
     }
 
-    const isInvalid = (!nombre || !apellido || !dni || rol !== "Athlete" || typeof edad != 'number')
+    const isInvalid = (!nombre || !apellido || !dni)
 
     if (isInvalid) {
         return res.status(400).json({

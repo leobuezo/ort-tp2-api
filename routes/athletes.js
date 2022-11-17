@@ -244,7 +244,7 @@ router.put("/agregarATeam",
 
 /**
  * @swagger
- * /athletes/finalizarRegistracion:
+ * /athletes/finalizar-registracion:
  *   put:
  *     tags: [Athlete]
  *     summary: Modificar datos del atleta
@@ -262,20 +262,21 @@ router.put("/agregarATeam",
  *         description: Error de servidor
  */
 // nombre, apellido, dni, rol, edad
-router.put("/finalizarRegistracion",
+router.put("/finalizar-registracion",
     body('googleId').custom(userExists),
-    body('aptoFisico').isBoolean(),
+    //body('aptoFisico').isBoolean(),
     validateInfoAthlete,
     finalizazrRegistracion)
 
+router.put("/anotarse-a-clase")
 
 
-router.put("/darseBajaTeam",
+router.put("/darse-de-baja-team",
     body('googleId').custom(userExists),
     darseBaja
 )
 
-router.put("/darseDeBajaClase",
+router.put("/darse-de-baja-clase",
     body('googleId').custom(userExists),
 )
 

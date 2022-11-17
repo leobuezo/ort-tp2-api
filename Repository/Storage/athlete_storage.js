@@ -20,6 +20,7 @@ export class AthleteStorage {
         dniTemp 
         edadTemp
         rolTemp */
+        console.log(id,objectToModify)
 
         return await this.collection.updateOne(
             { googleId : id },
@@ -30,7 +31,6 @@ export class AthleteStorage {
                     dni : objectToModify.dniTemp, 
                     edad : objectToModify.edadTemp,
                     aptoFisico : objectToModify.aptoFisicoTemp,
-                    rol : objectToModify.rolTemp,
                     datosValidados: true
                 }
             }
