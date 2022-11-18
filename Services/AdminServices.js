@@ -53,3 +53,9 @@ export const crearCoach =  async (req, res) => {
 
     throw new DeprecatedEndpoint("Este endpoint ya no esta disponible. Por favor usar /Coaches")
 }
+
+//LLAMAR A SERVICE DE COACH Y ATLETAS PARA LISTAR USUARIOS PENDIENTES
+export const usuariosPendientes = async (req,res) => {
+     throw new NotImplemented("El endpoint no esta siendo implementado al momento")
+
+} 

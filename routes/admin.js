@@ -22,4 +22,7 @@ router.post("/registrarCoach" , crearCoach)
 //CREATE AN ADMIN
 router.post("/" , crearAdmin)  
 
+
+//router.get("/pendientes", usuariosPendientes)
+
 export default router
