@@ -18,8 +18,8 @@ export const crearCoach = async (req, res) => {
         })
     }
 
-    const {nombre, apellido, edad, dni, rol, team, email} = req.body
-    const responseObject = new Entrenador(nombre, apellido, edad, dni, rol, team, email)
+    const {nombre, apellido, fechaNacimiento, dni, rol, team, email} = req.body
+    const responseObject = new Entrenador(nombre, apellido, fechaNacimiento, dni, rol, team, email)
     const response = crearCoach(responseObject)
     return res.status(200).json(responseObject)
 
@@ -108,12 +108,12 @@ export const registrarse = async (req,res) => {
             errores: errors.array()
         })
     }
-    const {googleId, nombre, apellido, edad, dni, rol, team, email} = req.params
+    const {googleId, nombre, apellido, fechaNacimiento, dni, rol, team, email} = req.params
 
     const coachARegistrar = {
         nombreTemp: nombre,
         apellidoTemp: apellido,
-        edadTemp: edad,
+        fechaNacimientoTemp: fechaNacimiento,
         dniTemp: dni,
         rolTemp: rol,
         teamTemp: team,
