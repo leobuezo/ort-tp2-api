@@ -27,7 +27,7 @@ export const crearAlumnoVacio = (googleId, email) => {
     return new Alumno(
             null, //nombre
             null, //apellido
-            0, //edad
+            null, //fechaNacimiento
             null, //dni
             null, //aptoFisico
             null, //Team

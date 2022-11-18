@@ -4,8 +4,10 @@ import { crearAlumno, agregarTeam } from "../UseCases/AthleteUseCases.js"
 import { AthleteRepository } from "../Repository/athlete_repository.js"
 import { validationResult } from "express-validator"
 import { response } from "express"
+import { ClassRepository } from "../Repository/class_repository.js"
 
 const repositorio = new AthleteRepository()
+const repositorioClase = new ClassRepository()
 
 export const crearAtleta = async (req, res) => {
 
@@ -17,9 +19,9 @@ export const crearAtleta = async (req, res) => {
         })
     }
 
-    const { nombre, apellido, edad, dni, aptoFisico, team, rol, email } = req.body
+    const { nombre, apellido, fechaNacimiento, dni, aptoFisico, team, rol, email } = req.body
 
-    const responseObject = new Alumno(nombre, apellido, edad, dni, aptoFisico, team, rol, email)
+    const responseObject = new Alumno(nombre, apellido, fechaNacimiento, dni, aptoFisico, team, rol, email)
     const response = crearAlumno(responseObject)
 
     return res.status(200).json(responseObject)
@@ -57,29 +59,28 @@ export const finalizazrRegistracion = async (req, res) => {
         })
     }
 
-    const { googleId, nombre, apellido, dni, edad, aptoFisico } = req.body
+    const { googleId, nombre, apellido, dni, fechaNacimiento, aptoFisico } = req.body
 
     const objectToModify = {
         nombreTemp: nombre,
         apellidoTemp: apellido,
         dniTemp: dni,
-        edadTemp: edad,
+        fechaNacimiento: fechaNacimiento,
         aptoFisicoTemp: aptoFisico
     }
 
-    repositorio.modificarAtleta(googleId, objectToModify)
-        .then(() => {
-            return res.status(200).json({
-                message: "Se modificaron con exito los datos del atleta"
-            })
+    const response = await repositorio.modificarAtleta(googleId, objectToModify)
+        
+    if(response.modifiedCount === 1 ){
+        const responseObject = await repositorio.buscarUnAtleta(googleId)
+        return res.status(200).json(responseObject)
+    } else{
+        return res.status(500).json({
+            message : "No se pudieron modificar los datos del atleta. Por favor revisarlo"
         })
-        .catch(err => {
-            console.log(err)
-            return res.status(500).json({
-                message: "No se pudo modificar al atleta, por favor revise los errores",
-                errores: err
-            })
-        })
+    }
+
+        
 }
 
 export const agregarAlTeam = async (req, res) => {
@@ -133,5 +134,37 @@ export const darseBaja = async (req, res) => {
 }
 
 export const darseDeBajaClase = (req, res) => {
-    //TODO
+    const {googleId, idClase} = req.body
+
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+        return res.status(400).json({
+            mensaje: "Por favor, revisar los siguientes errores:",
+            errores: errors.array()
+        })
+    }
+
+    repositorioClase.darDeBajaAlumno(googleId, idClase)
+    .catch(err => {
+        console.log(err)
+        return res.status(500).json({
+            message : "No se pudo eliminar al alumno de la clase"
+        })
+    })
+    repositorio.darseDeBajaClase(googleId, idClase)
+    .then(result => {
+        return res.status(200).json({
+            message: "Se dio de baja con exito de la clase."
+        })
+    })
+    .catch(err => {
+        console.log(err)
+        return res.status(500).json({
+            message : "Hubo un error al darse de baja a la clase."
+        })
+    })
+}
+
+export const unirseAClase = (req,res) => {
+
 }

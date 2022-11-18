@@ -24,8 +24,7 @@ export const userExists = googleId => {
 }
 
 export const validateInfoAthlete = async (req, res, next) => {
-    const { googleId, nombre, apellido, dni, rol, edad } = req.body
-    console.log( googleId, nombre, apellido, dni, rol, edad )
+    const { googleId, nombre, apellido, dni, rol, fechaNacimiento } = req.body
     const user = await repositorio.buscarUnAtleta(googleId)
 
     const datosValidados = user[0].datosValidados
@@ -45,7 +44,7 @@ export const validateInfoAthlete = async (req, res, next) => {
                 apellido: apellido,
                 dni: dni,
                 rol: rol,
-                edad: edad
+                fechaNacimiento: fechaNacimiento
             }
         })
     }

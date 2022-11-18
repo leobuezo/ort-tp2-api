@@ -45,7 +45,7 @@ export class AthleteRepository {
         return await this.storage.darseDeBaja(googleId)
     }
 
-    async darseDeBajaClase(googleId){
-        return await this.storage.darseDeBajaClase(googleId)
+    async darseDeBajaClase(googleId, idClase){
+        await this.storage.darseDeBajaClase(googleId)
     }
 }
