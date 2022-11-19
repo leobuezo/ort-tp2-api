@@ -14,15 +14,11 @@ export class ClassStorage{
         return await this.client.find({id : clase.Id}).toArray()
     }
 
-    async crearClase(clase){
-        return this.collection.insertOne(clase)
+    async agregarClase(clase){
+        return await this.collection.insertOne(clase)
     }
 
     async modificarClase(clase){
-        throw new NotImplemented("Este endpoint todavia no esta disponible")
-    }
-
-    async cancelarClase(clase){
         throw new NotImplemented("Este endpoint todavia no esta disponible")
     }
 

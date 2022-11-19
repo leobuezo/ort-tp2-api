@@ -1,6 +1,7 @@
-import { MongoDBCannotFindError } from "../ErrorHandling/CustomError.js"
+import { response } from "express"
+import { MongoDBCannotFindError, MongoDBCannotInsertError } from "../ErrorHandling/CustomError.js"
 import Clase from "../models/training_class.js"
-import { cannotFindError } from "./helpers/ErrorHelper.js"
+import { cannotFindError, cannotInsertError } from "./helpers/ErrorHelper.js"
 import { ClassStorage } from "./Storage/class_storage.js"
 
 export class ClassRepository{
@@ -8,7 +9,7 @@ export class ClassRepository{
         this.storage = new ClassStorage()
     }
 
-    buscarClases(){
+    buscarTodasLasClases(){
         try{
             clases= this.storage.buscarClases()
         }catch(error){
@@ -17,14 +18,22 @@ export class ClassRepository{
         return error;
     }
 
-    crearClase(titulo,cupo){
-        let clase 
-        try {
-            clase = this.storage.crearClase(new Clase(titulo,cupo))     
-        } catch (error) {
-            console.log(error)
+    buscarClase(clase){
+        try{
+            verificador= this.storage.buscarClase(clase);
+        }catch(error){
+            throw new MongoDBCannotFindError(cannotFindError + error.message)
         }
-        return clase
+        return error;
+    }
+
+    crearClase(clase){
+        try {
+            response = this.storage.crearClase(clase)   
+        } catch (error) {
+            throw new MongoDBCannotInsertError(cannotInsertError+ error);
+        }
+        return response;
     }
 
     modificarClase(clase,usuario){
