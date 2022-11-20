@@ -4,14 +4,10 @@ import Entrenador from "../models/team_coach.js";
 import { Rol } from "./roles.js";
 
 export default class AdministradorDelTeam {
-    constructor(nombre, apellido, edad, team, rol, dni, email){
-        this._id = 'abcde12345' //generateUUID()
-        this.nombre = nombre
-        this.apellido = apellido,
-        this.edad = edad
+    constructor(team, rol, email, googleId){
+        this.googleId = googleId
         this.team = team
-        this.rol = new Rol(rol)
-        this.dni = dni
+        this.rol = rol
         this.email = email
     }
 

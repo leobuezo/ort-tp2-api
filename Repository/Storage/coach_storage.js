@@ -11,20 +11,45 @@ export class CoachStorage{
         return this.collection.insertOne(coach)
     }
 
-    async modificarCoach(coach){
-        throw new NotImplemented("Este endpoint todavia no esta disponible")
+    async modificarCoach(id, coachAModificar){
+        //throw new NotImplemented("Este endpoint todavia no esta disponible")
+        return await this.collection.updateOne(
+            { googleId : id },
+            { $set : 
+                {
+                    nombre : coachAModificar.nombreTemp,
+                    apellido : coachAModificar.apellidoTemp,
+                    edad : coachAModificar.edadTemp,
+                    dni : coachAModificar.dniTemp,
+                    rol : coachAModificar.rolTemp,
+                    team: coachAModificar.teamTemp,
+                    email: coachAModificar.emailTemp,
+                }
+            }
+        )
     }
 
     async darFeedback(feedback){
         throw new NotImplemented("Este endpoint todavia no esta disponible")
     }
 
-    async borrarCoach(coach){
-        await this.collection.deleteMany({id : coach.Id})
+    async borrarCoach(googleId){
+        await this.collection.updateOne(
+            {googleId : googleId},
+            {$set : 
+                {
+                    team: null,   
+                }
+            }
+        )
     }
 
-    async buscarUnCoach(dni){
-        return await this.collection.find({dni : dni}).toArray()    
+    async buscarUnCoach(googleId){
+        return this.collection.find({ googleId: googleId }).toArray()   
+    }
+
+    async buscarCoachPorDni(dni){
+        return this.collection.find({ dni : dni}).toArray()
     }
 
     async buscarCoach(){

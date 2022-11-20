@@ -29,8 +29,8 @@ export class AthleteRepository {
         return await this.storage.buscarAtleta()
     }
 
-    async agregarTeam(dni, team) {
-        return await this.storage.agregarTeam(dni, team)
+    async agregarTeam(googleId, team) {
+        return await this.storage.agregarTeam(googleId, team)
     }
 
     async buscarOAgregar(atleta){
@@ -45,7 +45,7 @@ export class AthleteRepository {
         return await this.storage.darseDeBaja(googleId)
     }
 
-    async darseDeBajaClase(googleId){
-        return await this.storage.darseDeBajaClase(googleId)
+    async darseDeBajaClase(googleId, idClase){
+        await this.storage.darseDeBajaClase(googleId)
     }
 }

@@ -1,4 +1,4 @@
-import express from 'express'
+import express, { Router } from 'express'
 import { NotImplemented } from '../ErrorHandling/NotImplementedApi.js'
 import Entrenador  from '../models/team_coach.js'
 import { AdminRepository } from '../Repository/admin_repository.js'

@@ -11,26 +11,17 @@ export class AthleteStorage {
         return this.collection.insertOne(atleta)
     }
 
-    async modificarAtleta(id,objectToModify) {
-        //throw new NotImplemented("Este endpoint todavia no esta disponible")
-
-        /* objectToModify contiente: 
-        nombreTemp
-        apellidoTemp 
-        dniTemp 
-        edadTemp
-        rolTemp */
-
+    async modificarAtleta(id, objectToModify) {
         return await this.collection.updateOne(
-            { googleId : id },
-            { $set : 
+            { googleId: id },
+            {
+                $set:
                 {
-                    nombre : objectToModify.nombreTemp,
-                    apellido : objectToModify.apellidoTemp,
-                    dni : objectToModify.dniTemp, 
-                    edad : objectToModify.edadTemp,
-                    aptoFisico : objectToModify.aptoFisicoTemp,
-                    rol : objectToModify.rolTemp,
+                    nombre: objectToModify.nombreTemp,
+                    apellido: objectToModify.apellidoTemp,
+                    dni: objectToModify.dniTemp,
+                    fechaNacimiento: objectToModify.fechaNacimiento,
+                    aptoFisico: objectToModify.aptoFisicoTemp,
                     datosValidados: true
                 }
             }
@@ -55,61 +46,68 @@ export class AthleteStorage {
         return this.collection.find({}).toArray()
     }
 
-    async agregarTeam(identificador, equipo) {
+    async agregarTeam(googleId, team) {
         return await this.collection.updateOne({
-            googleId: identificador
+            googleId: googleId
         }, {
             $set: {
-                team: equipo
+                team: team
             }
         })
     }
 
-    async buscarOAgregar(atleta){
+    async buscarOAgregar(atleta) {
 
-        const {googleId} = atleta
-        
+        const { googleId } = atleta
+
         let obj = await this.collection.find({
-            googleId: googleId})
+            googleId: googleId
+        })
             .toArray()
 
-        let newUser = false 
+        let newUser = false
         if (obj.length === 0) {
             await this.collection.insertOne(atleta)
             newUser = true
             obj = await this.collection.find({
-                googleId: googleId})
+                googleId: googleId
+            })
                 .toArray()
         }
 
         const usuario = JSON.parse(JSON.stringify(obj[0]))
-        
-        return {usuario, newUser}
+
+        return { usuario, newUser }
     }
 
-    async buscarAtletaPorTeam(googleId, codigoTeam){
+    async buscarAtletaPorTeam(googleId, team) {
         return await this.collection.find({
             googleId: googleId,
-            team : codigoTeam
+            team: team
         }).toArray()
     }
 
-    async darseDeBaja(googleId){
+    async darseDeBaja(googleId) {
         return await this.collection.updateOne({
             googleId: googleId
-        },{
-            $set : {
-                team : null
+        }, {
+            $set: {
+                team: null
             }
         }
         )
     }
 
-    async darseDeBajaClase(googleId,clase){
-
+    async darseDeBajaClase(googleId, idClase) {
+        await this.collection.updateOne(
+            { googleId: googleId },
+            {
+                $pull: { clases: { $in: [idClase] } }
+            }
+        )
     }
 
-    async unirseAClase(googleId,clase){
+    async unirseAClase(googleId, clase) {
 
     }
 }

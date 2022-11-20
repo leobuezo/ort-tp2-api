@@ -14,7 +14,7 @@ export const validateUser = dni => {
 }
 
 export const userExists = googleId => {
-
+    
     return repositorio.buscarUnAtleta(googleId).then(usuario => {
         if (usuario.length === 0) {
             return Promise.reject(`El usuario enviado no existe`)
@@ -24,8 +24,7 @@ export const userExists = googleId => {
 }
 
 export const validateInfoAthlete = async (req, res, next) => {
-    const { googleId, nombre, apellido, dni, rol, edad } = req.body
-
+    const { googleId, nombre, apellido, dni, rol, fechaNacimiento } = req.body
     const user = await repositorio.buscarUnAtleta(googleId)
 
     const datosValidados = user[0].datosValidados
@@ -34,7 +33,7 @@ export const validateInfoAthlete = async (req, res, next) => {
         return res.status(401).json({ message: "No se pueden modificar los datos que ya fueron cargados." })
     }
 
-    const isInvalid = (!nombre || !apellido || !dni || rol !== "Athlete" || typeof edad != 'number')
+    const isInvalid = (!nombre || !apellido || !dni)
 
     if (isInvalid) {
         return res.status(400).json({
@@ -45,7 +44,7 @@ export const validateInfoAthlete = async (req, res, next) => {
                 apellido: apellido,
                 dni: dni,
                 rol: rol,
-                edad: edad
+                fechaNacimiento: fechaNacimiento
             }
         })
     }

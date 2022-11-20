@@ -1,6 +1,6 @@
 import express from 'express'
 import { body, check } from 'express-validator'
-import { obtenerAtletas, obtenerUnAtleta, crearAtleta, borrarAtleta, agregarAlTeam, darseBaja, finalizazrRegistracion } from '../Services/AthleteServices.js'
+import { obtenerAtletas, obtenerUnAtleta, crearAtleta, borrarAtleta, agregarAlTeam, darseBaja, finalizazrRegistracion, unirseAClase } from '../Services/AthleteServices.js'
 
 //Import this callback to validate if user exists or not
 import { validateUser, userExists, validateInfoAthlete, addToTeam } from '../CustomValidators/AthleteValidator.js'
@@ -17,7 +17,7 @@ const router = express.Router()
  *              - apellido
  *              - dni
  *              - email
- *              - edad
+ *              - fechaNacimiento
  *              - aptoFisico
  *              - rol
  *              - googleId
@@ -34,7 +34,7 @@ const router = express.Router()
  *              email:
  *                  type: string
  *                  description: E-Mail del atleta             
- *              edad:
+ *              fechaNacimiento:
  *                  type: integer
  *                  description: Edad del atleta
  *              aptoFisico:
@@ -51,7 +51,7 @@ const router = express.Router()
  *              apellido: string
  *              dni: 0
  *              email: string
- *              edad: 0
+ *              fechaNacimiento: 0
  *              aptoFisico: false
  *              rol: string
  *              team: string
@@ -68,9 +68,8 @@ const router = express.Router()
  *              - nombre
  *              - apellido
  *              - dni
- *              - edad
+ *              - fechaNacimiento
  *              - aptoFisico
- *              - rol
  *              - googleId
  *          properties:
  *              nombre:
@@ -82,15 +81,12 @@ const router = express.Router()
  *              dni:
  *                  type: integer
  *                  description: DNI del atleta       
- *              edad:
+ *              fechaNacimiento:
  *                  type: integer
  *                  description: Edad del atleta
  *              aptoFisico:
  *                  type: boolean
  *                  description: Si el atleta cuenta con el apto fisico al dia
- *              team:
- *                  type: string
- *                  description: Nombre del team al que el atleta este registrado 
  *              googleId:
  *                  type: string
  *                  description: Id correspondiente a google
@@ -98,11 +94,30 @@ const router = express.Router()
  *              nombre: string
  *              apellido: string
  *              dni: 0
- *              edad: 0
+ *              fechaNacimiento: 0
  *              aptoFisico: false
- *              rol: string
- *              team: string
  *              googleId: string
+ */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *      AthleteClassSchema:
+ *          type: object
+ *          required: 
+ *              - googleId
+ *              - classId
+ *          properties:
+ *              googleId:
+ *                  type: string
+ *                  description: Id correspondiente a google
+ *              classId:
+ *                  type: string
+ *                  description: Id correspondiente de la clase
+ *          example:
+ *              googleId: string
+ *              classId: string
  */
 
 /**
@@ -128,7 +143,8 @@ const router = express.Router()
  *         description: Error de servidor
  */
 router.get("/",
-    obtenerAtletas)
+    obtenerAtletas
+)
 
 /**
  * @swagger
@@ -154,7 +170,8 @@ router.get("/",
  */
 router.get("/:googleId",
     check('googleId').custom(userExists),
-    obtenerUnAtleta)
+    obtenerUnAtleta
+)
 
 /**
  * @swagger
@@ -181,15 +198,16 @@ router.get("/:googleId",
  */
 
 router.post("/",
-    check('edad').toInt(),
+    //check('fechaNacimiento').toInt(),
     check('googleId').custom(validateUser),
     body('email').isEmail(),
     body('aptoFisico').isBoolean(),
-    crearAtleta)
+    crearAtleta
+)
 
 /**
  * @swagger
- * /athletes/{id}:
+ * /athletes/{googleId}:
  *   delete:
  *     tags: [Athlete]
  *     summary: Borrar un atleta
@@ -209,7 +227,8 @@ router.post("/",
  */
 router.delete("/:googleId",
     check('googleId').custom(userExists),
-    borrarAtleta)
+    borrarAtleta
+)
 
 /**
  * @swagger
@@ -240,11 +259,12 @@ router.delete("/:googleId",
 router.put("/agregarATeam",
     check('googleId').custom(userExists),
     addToTeam,
-    agregarAlTeam)
+    agregarAlTeam
+)
 
 /**
  * @swagger
- * /athletes/finalizarRegistracion:
+ * /athletes/finalizar-registracion:
  *   put:
  *     tags: [Athlete]
  *     summary: Modificar datos del atleta
@@ -261,21 +281,62 @@ router.put("/agregarATeam",
  *       500:
  *         description: Error de servidor
  */
-// nombre, apellido, dni, rol, edad
-router.put("/finalizarRegistracion",
+router.put("/finalizar-registracion",
     body('googleId').custom(userExists),
     body('aptoFisico').isBoolean(),
-    validateInfoAthlete,
-    finalizazrRegistracion)
+    finalizazrRegistracion
+)
+
+/**
+* @swagger
+* /athletes/anotarse-a-clase:
+*   put:
+*     tags: [Athlete]
+*     summary: Anotar a un atleta a una clase
+*     description: Anotar al atleta a una clase en particular
+*     requestBody:
+*      required: true
+*      content: 
+*          application/json:
+*              schema:
+*                  $ref : '#/components/schemas/AthleteClassSchema'
+*     responses:
+*       200:
+*         description: Devolucion OK.
+*       500:
+*         description: Error de servidor
+*/
+router.put("/anotarse-a-clase",
+    body('googleId').custom(userExists),
+    unirseAClase
+)
 
 
-
-router.put("/darseBajaTeam",
+router.put("/darse-de-baja-team",
     body('googleId').custom(userExists),
     darseBaja
 )
 
-router.put("/darseDeBajaClase",
+/**
+* @swagger
+* /athletes/anotarse-a-clase:
+*   put:
+*     tags: [Athlete]
+*     summary: Anotar a un atleta a una clase
+*     description: Anotar al atleta a una clase en particular
+*     requestBody:
+*      required: true
+*      content: 
+*          application/json:
+*              schema:
+*                  $ref : '#/components/schemas/AthleteClassSchema'
+*     responses:
+*       200:
+*         description: Devolucion OK.
+*       500:
+*         description: Error de servidor
+*/
+router.put("/darse-de-baja-clase",
     body('googleId').custom(userExists),
 )
 
