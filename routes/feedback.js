@@ -183,7 +183,7 @@ router.delete("/athlete/:dni_atleta", borrarFeedback)
 
 /**
  * @swagger
- * /feedback/giveFeedback/{dni_atleta}:
+ * /feedback/give-feedback/{dni_atleta}:
  *   put:
  *     tags: [Feedback]
  *     summary: Asignar un contenido de devolución al feedback solicitado por un atleta.
@@ -199,11 +199,11 @@ router.delete("/athlete/:dni_atleta", borrarFeedback)
  *       500:
  *         description: Error de servidor
  */
-router.put("/giveFeedback/:dni_atleta", darFeedback)
+router.put("/give-feedback/:dni_atleta", darFeedback)
 
 /**
  * @swagger
- * /feedback/closeFeedback/{dni_atleta}:
+ * /feedback/close-feedback/{dni_atleta}:
  *   put:
  *     tags: [Feedback]
  *     summary: Cambiar el esteado de un feedback cuando el atleta lo marque como leío.
@@ -214,6 +214,6 @@ router.put("/giveFeedback/:dni_atleta", darFeedback)
  *       500:
  *         description: Error de servidor
  */
-router.put("/closeFeedback/:dni_atleta", cerrarFeedback)
+router.put("/close-feedback/:dni_atleta", cerrarFeedback)
 
 export default router
