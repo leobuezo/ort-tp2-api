@@ -46,12 +46,12 @@ export class AthleteStorage {
         return this.collection.find({}).toArray()
     }
 
-    async agregarTeam(identificador, equipo) {
+    async agregarTeam(googleId, team) {
         return await this.collection.updateOne({
-            googleId: identificador
+            googleId: googleId
         }, {
             $set: {
-                team: equipo
+                team: team
             }
         })
     }
@@ -80,10 +80,10 @@ export class AthleteStorage {
         return { usuario, newUser }
     }
 
-    async buscarAtletaPorTeam(googleId, codigoTeam) {
+    async buscarAtletaPorTeam(googleId, team) {
         return await this.collection.find({
             googleId: googleId,
-            team: codigoTeam
+            team: team
         }).toArray()
     }
 

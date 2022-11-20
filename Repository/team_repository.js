@@ -6,8 +6,12 @@ export class TeamRepository{
         this.storage = new TeamStorage()
     }
 
-    buscarAtletaPorTeam(dni, team){
-        return this.storage.buscarAtletaPorTeam(dni, team)
+    buscarAtletaPorTeam(googleId){
+        return this.storage.buscarAtletaPorTeam(googleId)
+    }
+
+    buscarCoachPorTeam(googleId, team){
+        return this.storage.buscarCoachPorTeam(googleId, team)
     }
 
     cargarTeam(gppgleId, team){

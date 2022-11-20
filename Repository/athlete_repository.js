@@ -29,8 +29,8 @@ export class AthleteRepository {
         return await this.storage.buscarAtleta()
     }
 
-    async agregarTeam(dni, team) {
-        return await this.storage.agregarTeam(dni, team)
+    async agregarTeam(googleId, team) {
+        return await this.storage.agregarTeam(googleId, team)
     }
 
     async buscarOAgregar(atleta){

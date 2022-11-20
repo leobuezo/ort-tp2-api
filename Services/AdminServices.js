@@ -3,23 +3,50 @@ import Alumno from "../models/team_athlete.js"
 import AdministradorDelTeam from '../models/team_admin.js'
 import { AdminRepository } from '../Repository/admin_repository.js'
 import { TeamRepository } from '../Repository/team_repository.js'
+import { validationResult } from "express-validator"
+import { AthleteRepository } from "../Repository/athlete_repository.js"
+import { CoachRepository } from "../Repository/coach_repository.js"
+const fetch = (...args) =>
+    import('node-fetch').then(({ default: fetch }) => fetch(...args));
 
 const repositorioTeam = new TeamRepository()
 const repositorio = new AdminRepository()
+const repositorioAtleta = new AthleteRepository()
+const repositorioCoach = new CoachRepository()
 
 export const crearAdmin = async (req, res) => {
 
-    //throw new NotImplemented("El endpoint no esta siendo implementado al momento")
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+        return res.status(400).json({
+            mensaje: "Por favor, revisar los siguientes errores:",
+            errores: errors.array()
+        })
+    }
 
-    const {nombre, nombreTeam, dni} = req.body
+    const googleUrlAuth = 'https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token='
 
-    const administrador = new AdministradorDelTeam(nombre, nombreTeam, "Administrador", dni)
+    const accessToken = req.params.accessToken
 
-    const admin = repositorio.crearAdmin(administrador)
+    fetch(`${googleUrlAuth}${accessToken}`)
+        .then(res => res.json())
+        .then(async data => {
 
-//    const team = repositorioTeam.crearTeam(nombre, codigo)
+            const {email, id} = data
+            
+            const administrador = new AdministradorDelTeam( "equipo1", "Administrador", email, id)
 
-    res.status(201).json(admin)
+            const admin = await repositorio.crearAdmin(administrador)
+            return res.status(201).json(admin)
+            //return res.status(201).json(responseObject)
+
+        })
+        .catch(err => {
+            console.log(err)
+            return res.status(500).json({
+                message: "Su usuario no es valido para registrase con google. Por favor, reintente mas tarde."
+            })
+        })
 
 }
 
@@ -27,31 +54,42 @@ export const crearAtleta = async (req, res) => {
     
     //throw new NotImplemented("El endpoint no esta siendo implementado al momento")
 
-    const {nombre, apellido, edad, dni, aptoFisico, team, rol} = req.body
-
-    const existeEnTeam = repositorioTeam.buscarAtletaPorTeam(dni,team)
-
-    if (existeEnTeam.length === 1) {
-        res.status(409).send(`El Atleta ${nombre} ya esta registrado al team ${team} `)
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+        return res.status(400).json({
+            mensaje: "Por favor, revisar los siguientes errores:",
+            errores: errors.array()
+        })
     }
 
-    if (!aptoFisico) {
-        res.status(400).send(`El atleta ${nombre} no puede ser registrado ya que no tiene el apto fisico al dia`)
-    } 
-    
-    if(edad <18){
-        res.status(400).send(`El atleta ${nombre} no puede ser registrado ya que no tiene la edad requerida`)
-    } else {
-        const atleta = new Alumno(nombre, apellido, edad, dni, aptoFisico, team, rol)
-        repositorio.registrarAtleta(atleta)
-    
-        res.status(201).send(`Se creo exitosamente al atleta al team`)
+    const { googleId, team } = req.body
+
+    const modify = await repositorioAtleta.agregarTeam(googleId, team)
+    if(modify.modifiedCount == 1){
+        return res.status(201).send(`Se creo exitosamente al atleta al team`)
+    }else{
+        return res.status(400).send(`No se pudo registrar el atleta al team`)
     }
 }
 
 export const crearCoach =  async (req, res) => {
 
-    throw new DeprecatedEndpoint("Este endpoint ya no esta disponible. Por favor usar /Coaches")
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+        return res.status(400).json({
+            mensaje: "Por favor, revisar los siguientes errores:",
+            errores: errors.array()
+        })
+    }
+
+    const { googleId, team } = req.body
+
+    const modify = await repositorioCoach.registrarCoachAlTeam(googleId, team)
+    if(modify.modifiedCount == 1){
+        return res.status(201).send(`Se creo exitosamente al coach al team`)
+    }else{
+        return res.status(400).send(`No se pudo registrar el coach al team`)
+    }
 }
 
 //LLAMAR A SERVICE DE COACH Y ATLETAS PARA LISTAR USUARIOS PENDIENTES
