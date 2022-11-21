@@ -13,10 +13,6 @@ export class CoachRepository{
         return this.storage.modificarCoach(googleId, objectToModify)
     }
 
-    darFeedback(feedback){
-        return this.storage.darFeedback(feedback)
-    }
-
     borrarCoach(googleId){
         return this.storage.borrarCoach(googleId)
     }
@@ -29,11 +25,16 @@ export class CoachRepository{
         return this.storage.buscarCoach()
     }
 
+    async buscarCoachPorTeam(googleId, team){
+        return await this.storage.buscarCoachPorTeam(googleId, team)
+    }
+
+    async registrarCoachAlTeam(googleId, team) {
+        return await this.storage.registrarCoachAlTeam(googleId, team)
+    }
+
     buscarCoachPorDni(dni){
         return this.storage.buscarCoachPorDni(dni)
     }
 
-    crearClase(clase){
-        this.storage.crearClase(clase)
-    }
 }
