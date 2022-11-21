@@ -10,7 +10,7 @@ export const validateCoach = () => {
     }
 }
 
-export const userExists = googleId => {
+export const userCoachExists = googleId => {
 
     return repositorioCoach.buscarUnCoach(googleId).then(usuario => {
         if (usuario.length === 0) {
