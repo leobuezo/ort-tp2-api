@@ -1,5 +1,5 @@
 import { response } from "express"
-import { MongoDBCannotFindError, MongoDBCannotInsertError } from "../ErrorHandling/CustomError.js"
+import { MongoDBCannotFindError, MongoDBCannotInsertError,MongoDBInstanceUpdateError } from "../ErrorHandling/CustomError.js"
 import Clase from "../models/training_class.js"
 import { cannotFindError, cannotInsertError } from "./helpers/ErrorHelper.js"
 import { ClassStorage } from "./Storage/class_storage.js"
@@ -11,34 +11,44 @@ export class ClassRepository{
 
     buscarTodasLasClases(){
         try{
-            clases= this.storage.buscarClases()
+            response= this.storage.buscarClases()
         }catch(error){
-            throw new MongoDBCannotFindError(cannotFindError + error.message)
-        }
-        return error;
-    }
-
-    buscarClase(clase){
-        try{
-            verificador= this.storage.buscarClase(clase);
-        }catch(error){
-            throw new MongoDBCannotFindError(cannotFindError + error.message)
-        }
-        return error;
-    }
-
-    crearClase(clase){
-        try {
-            response = this.storage.crearClase(clase)   
-        } catch (error) {
-            throw new MongoDBCannotInsertError(cannotInsertError+ error);
+            throw new MongoDBCannotFindError(error.message, cannotFindError)
         }
         return response;
     }
 
-    modificarClase(clase,usuario){
+    buscarClasesPorNombre(nombreClase){
+        try{
+            response= this.storage.buscarClase(nombreClase);
+        }catch(error){
+            throw new MongoDBCannotFindError(error.message, cannotFindError)
+        }
+        return response;
+    }
+
+    buscarClasesPorFecha(fechaClase){
+        try{
+            response= this.storage.buscarClase(fechaClase);
+        }catch(error){
+            throw new MongoDBCannotFindError(error.message, cannotFindError)
+        }
+        return response;
+    }
+
+    agregarClase(clase){
         try {
-            if (usuario.rol.descripcionRol() !== "Entrenador") {
+            response = this.storage.agregarClase(clase)   
+        } catch (error) {
+            throw new MongoDBCannotInsertError(error.message, cannotInsertError);
+        }
+        return response;
+    }
+
+
+    modificarClase(clase,coach){
+        try {
+            if (coach.rol.descripcionRol() !== "Entrenador") {
                 throw new Error("Solamente los entrenadores pueden modificar clases")
             } else {
                 this.storage.modificarClase(clase)
@@ -48,11 +58,12 @@ export class ClassRepository{
         }
     }
 
+
     cancelarClase(clase){
         try {
             this.storage.cancelarClase(clase) 
         } catch (error) {
-            console.log(error)
+            throw new MongoDBInstanceUpdateError(error.message,)
         }
     }
 
@@ -66,5 +77,14 @@ export class ClassRepository{
         } catch (error) {
             console.log(error)
         }
+    }
+
+    buscarClasesPorCoachYFecha(coach,fecha){
+        try{
+            verificador= this.storage.buscarClasePorCoachYFecha(coach,fechaClase);
+        }catch(error){
+            throw new MongoDBCannotFindError(error.message, cannotFindError)
+        }
+        return response;
     }
 }

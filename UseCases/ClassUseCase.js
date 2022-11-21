@@ -1,6 +1,7 @@
 import { response } from "express";
+import { GenericError, InvalidProperty, NotImplemented, } from "../ErrorHandling/CustomError.js";
 import { ClassRepository } from "../Repository/class_repository.js";
-import { usaCaseError } from "../Repository/helpers/ErrorHelper.js";
+import { cannotUpdateError, InvalidPropertyError, notAuthorized, notAuthorizedTitle, usaCaseError } from "../Repository/helpers/ErrorHelper.js";
 
 const repositorio= new ClassRepository();
 
@@ -8,26 +9,75 @@ export const buscarClases= async () => {
     try{
         const clases=  await repositorio.buscarTodasLasClases();
     }catch(error){
-        throw new ClassUseCaseError(usaCaseError + error);
+        if(!error instanceof GenericError()){
+            throw new GenericError(error.message);
+        }
     }
     return clases;
 }
 
-export const buscarClase= async (clase) => {
+export const buscarClasesPorNombre= async (req) => {
     try{
-        const clases=  await repositorio.buscarClase(clase);
+        
+        const clases=  await repositorio.buscarClasesPorNombre(nombreClase);
     }catch(error){
-        throw new ClassUseCaseError(usaCaseError + error);
+        if(!error instanceof GenericError()){
+            throw new GenericError(error.message);
+        }
     }
     return clases;
 }
 
-export const crearClase= async (clase) => {
+export const registrarAlumnoAClase= async (alumno) => {
+    throw new NotImplemented("clase no implementada", "metodo en desarrollo", 501);
+
+}
+
+export const crearClase= async (titulo, cupo, ubicacion, diaActividad, coachId) => {
     try {
-        verificador= repositorio.buscarClase(clase)
-        (verificador != null && verificador == undefined && verificador == "") ?   clase= this.storage.crearClase(clase) : clase = undefined
+
+        const {acknowledge}= this.repositorio.crearClase(clase);
+        return acknowledge;
     } catch (error) {
-        throw new ClassUseCaseError(usaCaseError + error);
+        if(!error instanceof GenericError()){
+            throw new GenericError(error.message);
+        }
     }
-    return clase
+    
+}
+
+export const cancelarClase= async (claseId, coach)=>{
+    try {
+        if(coach.rol.descripcionRol() !== "Entrenador") {
+            throw new Error("Solamente los entrenadores pueden modificar clases")
+        }
+        response= this.repositorio.cancelarClase(claseId);
+    } catch (error) {
+        if(!error instanceof GenericError()){
+            throw new GenericError(error.message,cannotUpdateError);
+        }
+    }
+}
+
+const verificador = (param) => {
+    if(param == null && param == undefined && param == ""){
+        throw new InvalidProperty(InvalidPropertyError,invalidParam,400);
+    }}
+
+const verificadorCoach= (coach) => {
+    if (coach.rol.descripcionRol() !== "Entrenador") {
+        throw new Error(notAuthorized,notAuthorizedTitle,401)
+    }
+}
+
+
+const buscarClasePorCoachYFecha= async(coach, fecha) =>{
+    try{
+        const clases=  await repositorio.buscarClasesPorCoachYFecha(coach,fecha);
+    }catch(error){
+        if(!error instanceof GenericError()){
+            throw new GenericError(error.message);
+        }
+    }
+    return clases;
 }
