@@ -1,6 +1,5 @@
 import { response } from "express"
-import { MongoDBCannotFindError, MongoDBCannotInsertError,MongoDBInstanceUpdateError } from "../ErrorHandling/CustomError.js"
-import Clase from "../models/training_class.js"
+import { MongoDBCannotFindError, MongoDBInstanceInsertError,MongoDBInstanceUpdateError } from "../ErrorHandling/CustomError.js"
 import { cannotFindError, cannotInsertError } from "./helpers/ErrorHelper.js"
 import { ClassStorage } from "./Storage/class_storage.js"
 
@@ -27,6 +26,17 @@ export class ClassRepository{
         return response;
     }
 
+    buscarClasesPorId(claseId){
+        try{
+            response= this.storage.buscarClasePorId(claseId);
+        }catch(error){
+            throw new MongoDBCannotFindError(error.message, cannotFindError)
+        }
+        return response;
+    }
+    
+
+
     buscarClasesPorFecha(fechaClase){
         try{
             response= this.storage.buscarClase(fechaClase);
@@ -40,7 +50,7 @@ export class ClassRepository{
         try {
             response = this.storage.agregarClase(clase)   
         } catch (error) {
-            throw new MongoDBCannotInsertError(error.message, cannotInsertError);
+            throw new MongoDBInstanceInsertError(error.message, cannotInsertError);
         }
         return response;
     }
@@ -59,11 +69,11 @@ export class ClassRepository{
     }
 
 
-    cancelarClase(clase){
+    cancelarClase(claseId){
         try {
-            this.storage.cancelarClase(clase) 
+            return this.storage.cancelarClase(claseId) 
         } catch (error) {
-            throw new MongoDBInstanceUpdateError(error.message,)
+            throw new MongoDBInstanceUpdateError(error.message)
         }
     }
 
@@ -79,12 +89,29 @@ export class ClassRepository{
         }
     }
 
+    actualizarAlumnosDeClase(claseId,alumnos){
+        try {
+            return this.storage.actualizarAtletasAsistentes(claseId,alumnos); 
+        } catch (error) {
+            throw new MongoDBInstanceUpdateError(error.message)
+        }
+    }
+
+    actualizarListaDeEspera(claseId,listaEspera){
+        try {
+            return this.storage.actualizarlistaEspera(claseId,listaEspera); 
+        } catch (error) {
+            throw new MongoDBInstanceUpdateError(error.message)
+        }
+    }
+
     buscarClasesPorCoachYFecha(coach,fecha){
         try{
             verificador= this.storage.buscarClasePorCoachYFecha(coach,fechaClase);
         }catch(error){
             throw new MongoDBCannotFindError(error.message, cannotFindError)
         }
-        return response;
+        return verificador;
     }
+
 }
