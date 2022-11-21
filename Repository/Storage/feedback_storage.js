@@ -27,17 +27,32 @@ export default class FeedbackStorage{
         return await this.collection.findOne( { id: feedbackId } );
     }
 
-    async obtenerUnFeedbackPorAtleta(dni_del_atleta) {
+    async obtenerFeedbacksPorAtleta(dni_del_atleta) {
         let el_dni = parseInt(dni_del_atleta)
-        return await this.collection.findOne( { dni_atleta: el_dni } );
+        return await this.collection.find( { dni_atleta: el_dni } ).toArray();
     }
 
-    async obtenerUnFeedbackPorCoach(dni_del_coach) {
+    async obtenerFeedbacksPorCoach(dni_del_coach) {
         let el_dni = parseInt(dni_del_coach)
         return await this.collection.find( { dni_coach: el_dni } ).toArray();
     }
 
     async obtenerFeedbacks() {
         return await this.collection.find({}).toArray();
+    }
+
+    async obtenerFeedbackEnCurso(dni_del_atleta) {
+        let el_dni = parseInt(dni_del_atleta)
+        return await this.collection.findOne( { dni_coach: el_dni, estado: {$nin : "closed"} } );
+    }
+
+    async obtenerFeedbackPendienteAtleta(dni_del_atleta) {
+        let el_dni = parseInt(dni_del_atleta)
+        return await this.collection.findOne( { dni_del_atleta: el_dni, estado: "pending" } );
+    }
+
+    async obtenerFeedbackCompletadoAtleta(dni_del_atleta) {
+        let el_dni = parseInt(dni_del_atleta)
+        return await this.collection.findOne( { dni_del_atleta: el_dni, estado: "completed" } );
     }
 }

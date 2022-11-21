@@ -1,7 +1,9 @@
 import express from 'express'
 import { body, check } from 'express-validator'
+import { userExists } from '../CustomValidators/AthleteValidator.js'
+import { userCoachExists } from '../CustomValidators/CoachValidator.js'
 import FeedbackRepository from '../Repository/feedback_respository.js'
-import { obtenerFeedbacks, obtenerUnFeedbackPorAtleta, obtenerUnFeedbackPorCoach, obtenerUnFeedbackPorId, borrarFeedback, crearFeedback, darFeedback, cerrarFeedback } from '../Services/FeedbackServices.js'
+import { obtenerFeedbacks, obtenerFeedbacksPorAtleta, obtenerFeedbacksPorCoach, obtenerUnFeedbackPorId, borrarFeedback, crearFeedback, darFeedback, cerrarFeedback } from '../Services/FeedbackServices.js'
 
 //Import this callback to validate if a feedback exists or not
 import { feedbackExists } from '../CustomValidators/FeedbackValidator.js';
@@ -90,7 +92,10 @@ router.get("/", obtenerFeedbacks)
  *       500:
  *         description: Error de servidor.
  */
-router.post("/", crearFeedback)
+router.post("/", 
+body('dni_atleta').custom(userExists),
+body('dni_coach').custom(userCoachExists),
+crearFeedback)
 
 /**
  * @swagger
@@ -140,7 +145,7 @@ router.get("/:_id",
  *       500:
  *         description: Error de servidor
  */
-router.get("/athlete/:dni_atleta", obtenerUnFeedbackPorAtleta)
+router.get("/athlete/:dni_atleta", obtenerFeedbacksPorAtleta)
 
 /**
  * @swagger
@@ -164,7 +169,7 @@ router.get("/athlete/:dni_atleta", obtenerUnFeedbackPorAtleta)
  *       500:
  *         description: Error de servidor
  */
-router.get("/coach/:dni_coach", obtenerUnFeedbackPorCoach)
+router.get("/coach/:dni_coach", obtenerFeedbacksPorCoach)
 
 /**
  * @swagger
