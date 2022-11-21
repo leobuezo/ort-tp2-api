@@ -1,9 +1,9 @@
 import express from 'express'
 import { body, check } from 'express-validator'
-import { obtenerAtletas, obtenerUnAtleta, crearAtleta, borrarAtleta, agregarAlTeam, darseBaja, finalizazrRegistracion, unirseAClase } from '../Services/AthleteServices.js'
+import { obtenerAtletas, obtenerUnAtleta, crearAtleta, borrarAtleta, finalizazrRegistracion, unirseAClase, darseDeBajaClase } from '../Services/AthleteServices.js'
 
 //Import this callback to validate if user exists or not
-import { validateUser, userExists, validateInfoAthlete, addToTeam } from '../CustomValidators/AthleteValidator.js'
+import { validateUser, userExists, validateInfoAthlete } from '../CustomValidators/AthleteValidator.js'
 
 const router = express.Router()
 /**
@@ -230,37 +230,37 @@ router.delete("/:googleId",
     borrarAtleta
 )
 
-/**
- * @swagger
- * /athletes/agregarATeam:
- *   put:
- *     tags: [Athlete]
- *     summary: Agregar a un atleta a un team
- *     description: Adds an athlete to a team
- *     parameters:
- *      - in: path
- *        name: googleId
- *        schema:
- *          type: string
- *          required: true
- *          description: Id correspondiente a la cuenta de google
- *      - in: path
- *        name: codigoTeam
- *        schema:
- *          type: string
- *          required: true
- *          description: Codigo del team al que se quiere agregar
- *     responses:
- *       200:
- *         description: Devolucion OK.
- *       500:
- *         description: Error de servidor
- */
-router.put("/agregarATeam",
-    check('googleId').custom(userExists),
-    addToTeam,
-    agregarAlTeam
-)
+// /**
+//  * @swagger
+//  * /athletes/agregarATeam:
+//  *   put:
+//  *     tags: [Athlete]
+//  *     summary: Agregar a un atleta a un team
+//  *     description: Adds an athlete to a team
+//  *     parameters:
+//  *      - in: path
+//  *        name: googleId
+//  *        schema:
+//  *          type: string
+//  *          required: true
+//  *          description: Id correspondiente a la cuenta de google
+//  *      - in: path
+//  *        name: codigoTeam
+//  *        schema:
+//  *          type: string
+//  *          required: true
+//  *          description: Codigo del team al que se quiere agregar
+//  *     responses:
+//  *       200:
+//  *         description: Devolucion OK.
+//  *       500:
+//  *         description: Error de servidor
+//  */
+// router.put("/agregarATeam",
+//     check('googleId').custom(userExists),
+//     addToTeam,
+//     agregarAlTeam
+// )
 
 /**
  * @swagger
@@ -284,6 +284,7 @@ router.put("/agregarATeam",
 router.put("/finalizar-registracion",
     body('googleId').custom(userExists),
     body('aptoFisico').isBoolean(),
+    validateInfoAthlete,
     finalizazrRegistracion
 )
 
@@ -312,14 +313,9 @@ router.put("/anotarse-a-clase",
 )
 
 
-router.put("/darse-de-baja-team",
-    body('googleId').custom(userExists),
-    darseBaja
-)
-
 /**
 * @swagger
-* /athletes/anotarse-a-clase:
+* /athletes/darse-de-baja-clase:
 *   put:
 *     tags: [Athlete]
 *     summary: Anotar a un atleta a una clase
@@ -338,6 +334,7 @@ router.put("/darse-de-baja-team",
 */
 router.put("/darse-de-baja-clase",
     body('googleId').custom(userExists),
+    darseDeBajaClase
 )
 
 export default router
