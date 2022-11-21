@@ -1,9 +1,7 @@
-import { NotImplemented } from "../ErrorHandling/CustomError.js"
 import Alumno from "../models/team_athlete.js"
-import { crearAlumno, agregarTeam } from "../UseCases/AthleteUseCases.js"
+import { crearAlumno } from "../UseCases/AthleteUseCases.js"
 import { AthleteRepository } from "../Repository/athlete_repository.js"
 import { validationResult } from "express-validator"
-import { response } from "express"
 import { ClassRepository } from "../Repository/class_repository.js"
 
 const repositorio = new AthleteRepository()
@@ -22,9 +20,16 @@ export const crearAtleta = async (req, res) => {
     const { nombre, apellido, fechaNacimiento, dni, aptoFisico, team, rol, email } = req.body
 
     const responseObject = new Alumno(nombre, apellido, fechaNacimiento, dni, aptoFisico, team, rol, email)
-    const response = crearAlumno(responseObject)
+    try {
+        const response = await crearAlumno(responseObject)
+        return res.status(201).json(responseObject)
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({
+            message: "Hubo un error al crear una persona"
+        })
+    }
 
-    return res.status(200).json(responseObject)
 }
 
 export const obtenerUnAtleta = async (req, res) => {
@@ -38,18 +43,35 @@ export const obtenerUnAtleta = async (req, res) => {
     }
 
     const { googleId } = req.params
-    const responseObject = await repositorio.buscarUnAtleta(googleId)
 
-    return res.status(200).json(responseObject)
+    try {
+        const responseObject = await repositorio.buscarUnAtleta(googleId)
+        return res.status(200).json(responseObject)
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({
+            message: "Hubo un error al buscar a una persona"
+        })
+    }
+
 }
 
 export const obtenerAtletas = async (req, res) => {
-    const responseObject = await repositorio.buscarAtleta()
-    responseObject.length > 0 ? res.status(200).json(responseObject) : res.status(204).json({ message: "No hay personas registradas" })
+
+    try {
+        const responseObject = await repositorio.buscarAtleta()
+        responseObject.length > 0 ? res.status(200).json(responseObject) : res.status(204).json({ message: "No hay personas registradas" })
+
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({
+            message: "Hubo un error al buscar atletas"
+        })
+    }
+
 }
 
 export const finalizazrRegistracion = async (req, res) => {
-    //throw new NotImplemented("Este endpoint no esta siendo implementado")
 
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
@@ -69,28 +91,18 @@ export const finalizazrRegistracion = async (req, res) => {
         aptoFisicoTemp: aptoFisico
     }
 
-    const response = await repositorio.modificarAtleta(googleId, objectToModify)
-        
-    if(response.modifiedCount === 1 ){
-        const responseObject = await repositorio.buscarUnAtleta(googleId)
-        return res.status(200).json(responseObject)
-    } else{
+    try {
+        const response = await repositorio.modificarAtleta(googleId, objectToModify)
+        if (response.modifiedCount === 1) {
+            const responseObject = await repositorio.buscarUnAtleta(googleId)
+            return res.status(200).json(responseObject)
+        }
+    } catch (error) {
+        console.log(error)
         return res.status(500).json({
-            message : "No se pudieron modificar los datos del atleta. Por favor revisarlo"
+            message: "No se pudieron modificar los datos del atleta. Por favor revisarlo"
         })
     }
-
-        
-}
-
-export const agregarAlTeam = async (req, res) => {
-
-    const { googleId, codigoTeam } = req.body
-
-    const responseObject = await agregarTeam(googleId, codigoTeam)
-
-    responseObject ? res.status(200).json({ message: "El atleta ha sido agregado al team con exito" }) : res.status(400).json("No se pudo agregar al atleta al team")
-
 }
 
 export const borrarAtleta = async (req, res) => {
@@ -102,20 +114,30 @@ export const borrarAtleta = async (req, res) => {
             errores: errors.array()
         })
     }
-    const responseObject = await repositorio.buscarUnAtleta(googleId)
-    const nombre = responseObject[0].nombre
-    const apellido = responseObject[0].apellido
 
-    repositorio.borrarAtleta(googleId)
+    try {
+        const responseObject = await repositorio.buscarUnAtleta(googleId)
+        const nombre = responseObject[0].nombre
+        const apellido = responseObject[0].apellido
 
-    res.status(204).json({
-        message: `Se borro con exito al atleta ${nombre} ${apellido}`
-    })
+        repositorio.borrarAtleta(googleId)
+
+        res.status(200).json({
+            message: `Se borro con exito al atleta ${nombre} ${apellido}`
+        })
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({
+            message: "Hubo un error al borrar al atleta"
+        })
+    }
+
+
 }
 
 export const darseBaja = async (req, res) => {
 
-    const {googleId, codigoTeam} = req.body
+    const { googleId, codigoTeam } = req.body
 
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
@@ -125,7 +147,7 @@ export const darseBaja = async (req, res) => {
         })
     }
 
-    await repositorio.darseDeBaja(googleId) 
+    await repositorio.darseDeBaja(googleId)
 
     res.status(204).json({
         message: `Se dio de baja al atleta con exito del team`
@@ -133,9 +155,7 @@ export const darseBaja = async (req, res) => {
 
 }
 
-export const darseDeBajaClase = (req, res) => {
-    const {googleId, idClase} = req.body
-
+export const darseDeBajaClase = async (req, res) => {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
         return res.status(400).json({
@@ -144,27 +164,57 @@ export const darseDeBajaClase = (req, res) => {
         })
     }
 
-    repositorioClase.darDeBajaAlumno(googleId, idClase)
-    .catch(err => {
-        console.log(err)
+    const { googleId, idClase } = req.body
+    try {
+        // repositorioClase.darDeBajaAlumno(googleId, idClase)
+        //     .catch(err => {
+        //         console.log(err)
+        //         return res.status(500).json({
+        //             message: "No se pudo eliminar al alumno de la clase"
+        //         })
+        //     })
+
+        const pudo = await repositorio.darseDeBajaClase(googleId, idClase)
+        if (pudo.modifiedCount > 0) {
+            return res.status(200).json({
+                message: "Se dio de baja al alumno con exito"
+            })
+        }
+
+    } catch (error) {
+        console.log(error)
         return res.status(500).json({
-            message : "No se pudo eliminar al alumno de la clase"
+            message: "No se pudo dar de baja al atleta"
         })
-    })
-    repositorio.darseDeBajaClase(googleId, idClase)
-    .then(result => {
-        return res.status(200).json({
-            message: "Se dio de baja con exito de la clase."
-        })
-    })
-    .catch(err => {
-        console.log(err)
-        return res.status(500).json({
-            message : "Hubo un error al darse de baja a la clase."
-        })
-    })
+    }
 }
 
-export const unirseAClase = (req,res) => {
+export const unirseAClase = async (req, res) => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+        return res.status(400).json({
+            mensaje: "Por favor, revisar los siguientes errores:",
+            errores: errors.array()
+        })
+    }
+    const { googleId, idClase } = req.body
+
+    try {
+        const pudo = await repositorio.unirseAClase(googleId, idClase)
+        if (pudo.modifiedCount > 0) {
+            return res.status(200).json({
+                message: "Se modifico con exito al atleta"
+            })
+        } else {
+            return res.status(204).json({
+                message: "No se pudo agregar al atleta a la clase"
+            })
+        }
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({
+            message: "Hubo un error al agregar al atleta a una clase"
+        })
+    }
 
 }

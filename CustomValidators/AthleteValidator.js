@@ -1,20 +1,26 @@
 
 import { AthleteRepository } from '../Repository/athlete_repository.js'
-import { TeamRepository } from '../Repository/team_repository.js'
 
 const repositorio = new AthleteRepository()
-const teamRepo = new TeamRepository()
-export const validateUser = dni => {
+export const validateUser = googleId => {
 
-    return repositorio.buscarUnAtleta(dni).then(usuario => {
+    return repositorio.buscarUnAtleta(googleId).then(usuario => {
         if (usuario.length > 0) {
             return Promise.reject(`El usuario ${usuario[0].nombre} ${usuario[0].apellido} ya existe`)
         }
     })
 }
 
+export const validateDni = dni => {
+    return repositorio.buscarUnAtleta(dni).then(usuario => {
+        if (usuario.length === 0) {
+            return Promise.reject(`El usuario enviado no existe`)
+        }
+    })
+}
+
 export const userExists = googleId => {
-    
+
     return repositorio.buscarUnAtleta(googleId).then(usuario => {
         if (usuario.length === 0) {
             return Promise.reject(`El usuario enviado no existe`)

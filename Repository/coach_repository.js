@@ -33,6 +33,10 @@ export class CoachRepository{
         return await this.storage.registrarCoachAlTeam(googleId, team)
     }
 
+    async buscarOAgregar(coach){
+        return await this.storage.buscarOAgregar(coach)
+    }
+
     buscarCoachPorDni(dni){
         return this.storage.buscarCoachPorDni(dni)
     }

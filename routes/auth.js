@@ -8,8 +8,8 @@ const router = express.Router()
  * /auth/v1/login-athlete/google/{accessToken}:
  *   get:
  *     tags: [Authentication]
- *     summary: Iniciar sesion por Google SSO
- *     description: Iniciar sesion por Google SSO
+ *     summary: Inicia la sesion con Google SSO
+ *     description: Inicia la sesion del atleta con Google SSO, y en el caso que ese atleta no existe, lo registra y lo devuelva
  *     parameters:
  *      - in: path
  *        name: Access Token
@@ -36,8 +36,8 @@ router.get(
  * /auth/v1/login-coach/google/{accessToken}:
  *   get:
  *     tags: [Authentication]
- *     summary: Iniciar sesion por Google SSO
- *     description: Iniciar sesion por Google SSO
+ *     summary: Inicia la sesion con Google SSO
+ *     description: Inicia la sesion del coach con Google SSO, y en el caso que ese coach no existe, lo registra y lo devuelva
  *     parameters:
  *      - in: path
  *        name: Access Token

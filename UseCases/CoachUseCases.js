@@ -1,14 +1,15 @@
 import Entrenador from "../models/team_coach.js"
 
 export const crearCoachVacio = (googleId, email) => {
+    //nombre, apellido, email, dni, rol, team, fechaNacimiento, googleId
     return new Entrenador(
         null, //nombre
         null, //apellido
-        0, //edad
-        null, //dni
-        'Coach', //rol
-        null, //team
         email, //email
-        googleId, //googleId
+        null, //dni
+        "Coach", //rol
+        null, //team 
+        null, //fechaNacimiento
+        googleId //googleId
     )
 }
