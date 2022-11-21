@@ -1,6 +1,6 @@
 import express from 'express'
-
-import {obtenerClases} from '../Services/ClassServices.js';
+import { body, check } from 'express-validator'
+import {obtenerClases, crearClase, buscarClase} from '../Services/ClassServices.js';
 
 const router = express.Router();
 
@@ -108,6 +108,40 @@ const router = express.Router();
  *         description: Error de servidor
  */router.get("/",obtenerClases)
 
-
+/**
+ * @swagger
+ * /training_class:
+ *   get:
+ *     tags: [training_class]
+ *     summary: Crear una nueva clases
+ *     description: Crea una clase a partir de los datos pasados por parametros
+ *     produces: 
+ *      - application/json
+ *     responses:
+ *       200:
+ *         description: Devolucion OK.
+ *       500:
+ *         description: Error de servidor
+ */router.post("/",
+        check('titulo').isString,
+        check('diaActividad').isDate,
+        crearClase)
+/*
+/**
+ * @swagger
+ * /training_class:
+ *   get:
+ *     tags: [training_class]
+ *     summary: Obtiene una clase por id
+ *     description: Devuelve una clase registrada filtrada por id
+ *     produces: 
+ *      - application/json
+ *     responses:
+ *       200:
+ *         description: Devolucion OK.
+ *       500:
+ *         description: Error de servidor
+ */router.get("/",
+         buscarClase)
 
 export default router

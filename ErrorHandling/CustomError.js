@@ -50,3 +50,22 @@ export class MongoDBCannotFindError extends Error {
         super(message)
     }
 }
+
+
+export class MongoDBCannotInsertError extends Error {
+
+    //Se debe usar este error para clasificar los errores capturados al realizar una insert en MongoDB
+
+    constructor(message) {
+        super(message)
+    }
+}
+
+export class ValidationResultError extends Error {
+
+    //Se debe usar este error para clasificar los errores capturados al validar las request de la capa de servicios
+
+    constructor(message) {
+        super(message)
+    }
+}
