@@ -99,15 +99,20 @@ export class AthleteStorage {
     }
 
     async darseDeBajaClase(googleId, idClase) {
-        await this.collection.updateOne(
+        return await this.collection.updateOne(
             { googleId: googleId },
             {
-                $pull: { clases: { $in: [idClase] } }
+                $pull: { clases: {idClase} }
             }
         )
     }
 
-    async unirseAClase(googleId, clase) {
-
+    async unirseAClase(googleId, idClase) {
+        return await this.collection.updateOne(
+            { googleId : googleId },
+            {
+                $push : {clases : {idClase}}
+            }
+            )
     }
 }
