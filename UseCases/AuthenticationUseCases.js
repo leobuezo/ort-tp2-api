@@ -9,42 +9,48 @@ const repositorioCoach = new CoachRepository()
 export const athleteAuthenticationUseCase = async (res, next, data) => {
     const { id, email, error } = data
 
-    //const existe = await repositorioCoach.buscarUnCoach(id)
-
+    const existe = await repositorioCoach.buscarUnCoach(id)
+    if (existe.length > 0) {
+        return next()
+    }
     if (error !== undefined) {
         return next()
     }
-    const defaultUser = crearAlumnoVacio(id,email)
-    const { usuario, newUser } = await repositorioAthlete.buscarOAgregar(defaultUser)
-        .catch(err => {
-            console.log("Error al buscar o registrar al usuario con google", err)
-            return res.status(500).json({
-                message: "Hubo un error al buscar o registrar al usuario en Train IT. Por favor, reintente mas tarde",
 
-            })
+    const defaultUser = crearAlumnoVacio(id, email)
+
+    try {
+        const { usuario, newUser } = await repositorioAthlete.buscarOAgregar(defaultUser)
+        if (usuario) {
+            let responseObject = JSON.parse(JSON.stringify(usuario))
+            responseObject['newUser'] = newUser
+            return responseObject
+        } else {
+            return next()
+        }
+    } catch (error) {
+        console.log("Error al buscar o registrar al usuario con google", error)
+        return res.status(500).json({
+            message: "Hubo un error al buscar o registrar al usuario en Train IT. Por favor, reintente mas tarde",
+
         })
-
-    if (usuario) {
-        let responseObject = JSON.parse(JSON.stringify(usuario))
-        responseObject['newUser'] = newUser
-        return responseObject
-    } else {
-        return next()
     }
 }
 
 export const coachAuthenticationUseCase = async (res, next, data) => {
+
     const { id, email, error } = data
+    const existe = await repositorioAthlete.buscarUnAtleta(id)
 
-    // const existe = await repositorioAthlete.buscarUnAthlete(id)
-
+    if (existe.length > 0) {
+        return next()
+    }
     if (error !== undefined) {
         return next()
     }
 
-    const defaultUser = crearCoachVacio(id,email)
-
-    const { coach, newUser } = await repositorioCoach.buscarOAgregar(defaultUser)
+    const defaultUser = crearCoachVacio(id, email)
+    const { usuario, newUser } = await repositorioCoach.buscarOAgregar(defaultUser)
         .catch(err => {
             console.log("Error al buscar o registrar al coach con google", err)
             return res.status(500).json({
@@ -52,9 +58,8 @@ export const coachAuthenticationUseCase = async (res, next, data) => {
 
             })
         })
-
-    if (coach) {
-        let responseObject = JSON.parse(JSON.stringify(coach))
+    if (usuario) {
+        let responseObject = JSON.parse(JSON.stringify(usuario))
         responseObject['newUser'] = newUser
         return responseObject
     } else {
