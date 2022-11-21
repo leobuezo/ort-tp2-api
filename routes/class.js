@@ -1,6 +1,6 @@
 import express from 'express'
-import { body, check } from 'express-validator'
-import {obtenerClases, crearClase, buscarClase} from '../Services/ClassServices.js';
+import { body } from 'express-validator'
+import {obtenerClases, crearClase, obtenerClasesPorNombre} from '../Services/ClassServices.js';
 
 const router = express.Router();
 
@@ -123,8 +123,11 @@ const router = express.Router();
  *       500:
  *         description: Error de servidor
  */router.post("/",
-        check('titulo').isString,
-        check('diaActividad').isDate,
+        body('titulo').exists().isString(),
+        body('diaActividad').exists().isDate(),
+        body('cupo').exists().isNumeric(),
+        body('ubicacion').exists(),
+        body('coachId').exists(),
         crearClase)
 /*
 /**
@@ -142,6 +145,7 @@ const router = express.Router();
  *       500:
  *         description: Error de servidor
  */router.get("/",
-         buscarClase)
+         body('nombre').exists().isString(),
+         obtenerClasesPorNombre)
 
 export default router
