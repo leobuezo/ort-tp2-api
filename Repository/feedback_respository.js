@@ -44,16 +44,6 @@ export default class FeedbackRepository {
         return feedback;
     }
 
-    borrarFeedback(id) {
-        let feedback = null;
-        try {
-            feedback = this.storage.borrarFeedback(id);
-        } catch(error) {
-            console.log(error);
-        }
-        return feedback;
-    }
-
     obtenerUnFeedbackPorId(feedbackId) {
         let feedback = null;
         try {

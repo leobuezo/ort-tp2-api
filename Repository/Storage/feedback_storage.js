@@ -19,10 +19,6 @@ export default class FeedbackStorage{
         return await this.collection.updateOne({"_id": id_atleta}, {$set: {"estado": cambioEstado}})
     }
 
-    async borrarFeedback(id) {
-        return await this.collection.deleteOne( {_id: id } );
-    }
-
     async obtenerUnFeedbackPorId(feedbackId) {
         return await this.collection.findOne( { id: feedbackId } );
     }
@@ -43,16 +39,17 @@ export default class FeedbackStorage{
 
     async obtenerFeedbackEnCurso(dni_del_atleta) {
         let el_dni = parseInt(dni_del_atleta)
-        return await this.collection.findOne( { dni_coach: el_dni, estado: {$nin : "closed"} } );
+//        return await this.collection.find( { dni_atleta: el_dni, estado: {$nin : "closed"} } ).toArray();
+        return await this.collection.find( { dni_atleta: el_dni, estado: {$in : ["pending", "completed"] }} ).toArray();
     }
 
     async obtenerFeedbackPendienteAtleta(dni_del_atleta) {
         let el_dni = parseInt(dni_del_atleta)
-        return await this.collection.findOne( { dni_del_atleta: el_dni, estado: "pending" } );
+        return await this.collection.findOne( { dni_atleta: el_dni, estado: "pending" } );
     }
 
     async obtenerFeedbackCompletadoAtleta(dni_del_atleta) {
         let el_dni = parseInt(dni_del_atleta)
-        return await this.collection.findOne( { dni_del_atleta: el_dni, estado: "completed" } );
+        return await this.collection.findOne( { dni_atleta: el_dni, estado: "completed" } );
     }
 }

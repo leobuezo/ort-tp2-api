@@ -93,8 +93,8 @@ router.get("/", obtenerFeedbacks)
  *         description: Error de servidor.
  */
 router.post("/", 
-body('dni_atleta').custom(userExists),
-body('dni_coach').custom(userCoachExists),
+//body('dni_atleta').custom(userExists),
+//body('dni_coach').custom(userCoachExists),
 crearFeedback)
 
 /**
@@ -170,21 +170,6 @@ router.get("/athlete/:dni_atleta", obtenerFeedbacksPorAtleta)
  *         description: Error de servidor
  */
 router.get("/coach/:dni_coach", obtenerFeedbacksPorCoach)
-
-/**
- * @swagger
- * /feedback/{dni_atleta}:
- *   delete:
- *     tags: [Feedback]
- *     summary: Borrar un feedback pasándole como parámetro el DNI de un atleta.
- *     description: Delete a feddback by athlete Id.
- *     responses:
- *       200:
- *         description: OK.
- *       500:
- *         description: Error de servidor
- */
-router.delete("/athlete/:dni_atleta", borrarFeedback)
 
 /**
  * @swagger
