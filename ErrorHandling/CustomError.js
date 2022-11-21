@@ -62,9 +62,9 @@ export class MongoDBCannotFindError extends GenericError {
 }
 
 
-export class MongoDBCannotInsertError extends GenericError {
+export class notAuthorizedError extends GenericError {
 
-    //Se debe usar este error para clasificar los errores capturados al realizar una insert en MongoDB
+    //Se debe usar este error para cuando se detecta una accion con un rol no autorizado
 
     constructor(message,title,status) {
         super(message,title,status)

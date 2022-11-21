@@ -32,16 +32,38 @@ export class ClassStorage{
         return await this.collection.insertOne(clase)
     }
 
-    async cancelarClase(clase){
-        return await this.collection.update(
-            { _id : clase._id },
+    async cancelarClase(claseId){
+        return await this.collection.updateOne(
+            { _id : claseId},
             { $set : 
                 {
-                   esCancelada: clase.esCancelada
+                   esCancelada: true
                 }
             }
-        )    }
+        )    
+    }
 
+    async actualizarAtletasAsistentes(claseId,alumnos){
+        return await this.collection.updateOne(
+            { _id : claseId},
+            { $set : 
+                {
+                    alumnos: alumnos
+                }
+            }
+        )    
+    }
+
+    async actualizarListaEspera(claseId,listaEspera){
+        return await this.collection.updateOne(
+            { _id : claseId},
+            { $set : 
+                {
+                    listaEspera: listaEspera
+                }
+            }
+        )    
+    }
     async borrarClase(clase){
         this.collection.deleteMany({ id : clase.Id})
     }
