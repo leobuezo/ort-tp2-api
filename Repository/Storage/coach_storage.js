@@ -66,4 +66,28 @@ export class CoachStorage{
         return await this.collection.find({}).toArray()
     }
 
+    async buscarOAgregar(coach) {
+
+        const { googleId } = coach
+
+        let obj = await this.collection.find({
+            googleId: googleId
+        })
+            .toArray()
+
+        let newUser = false
+        if (obj.length === 0) {
+            await this.collection.insertOne(coach)
+            newUser = true
+            obj = await this.collection.find({
+                googleId: googleId
+            })
+                .toArray()
+        }
+
+        const usuario = JSON.parse(JSON.stringify(obj[0]))
+
+        return { usuario, newUser }
+    }
+    
 }
