@@ -2,6 +2,7 @@ import express from 'express'
 import { body, check } from 'express-validator'
 import { atletaValidoParaTeam, atletaExisteEnTeam, coachExisteEnTeam, validarAdminUnico} from '../CustomValidators/AdminValidator.js'
 import { userExists } from '../CustomValidators/AthleteValidator.js'
+import { userExists as userExistsCoach } from '../CustomValidators/CoachValidator.js'
 import { AdminRepository } from '../Repository/admin_repository.js'
 import { AthleteRepository } from '../Repository/athlete_repository.js'
 import { CoachRepository } from '../Repository/coach_repository.js'
@@ -43,13 +44,15 @@ router.use(express.json())
  *          example:
  *              nombre: string
  *              apellido: string
+ *              edad: 0
+ *              email: string
  */
 
 /**
  * @swagger
  * components:
  *   schemas:
- *      AdminRegistration:
+ *      RegistrarAtletaTeam:
  *          type: object
  *          required: 
  *              - accessToken
@@ -58,12 +61,13 @@ router.use(express.json())
  *                  type: string
  *                  description: Id correspondiente a google
  *              Team: 
- *                  type: object
+ *                  type: string
  *                  description: Team donde se quiere agregar el Atleta
  *          example:
  *              googleId: string
  *              Team: Object
  */
+
 /**
  * @swagger
  *  tags:
@@ -85,7 +89,7 @@ router.use(express.json())
  *      content: 
  *          application/json:
  *              schema:
- *                  $ref : '#/components/schemas/Admin'
+ *                  $ref : '#/components/schemas/RegistrarAtletaTeam'
  *     responses:
  *       200:
  *         description: Devolucion OK.
@@ -116,7 +120,7 @@ router.put("/registrar-atleta",
  *      content: 
  *          application/json:
  *              schema:
- *                  $ref : '#/components/schemas/Admin'
+ *                  $ref : '#/components/schemas/RegistrarAtletaTeam'
  *     responses:
  *       200:
  *         description: Devolucion OK.
@@ -127,9 +131,9 @@ router.put("/registrar-atleta",
  *       500:
  *         description: Error de servidor.
  */
-router.post("/registrar-coach" , 
+router.put("/registrar-coach" , 
     //modificar metodo para que busque en coachs
-    body('googleId').custom(userExists),
+    body('googleId').custom(userExistsCoach),
     coachExisteEnTeam,
     crearCoach)
 
