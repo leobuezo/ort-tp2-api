@@ -27,8 +27,7 @@ export const loginGoogleCoach = (req, res, next) => {
         .then(res => res.json())
         .then(async data => {
             const responseObject = await coachAuthenticationUseCase(res, next, data)
-            return res.stauts(201).json(responseObject)
-
+            return res.status(201).json(responseObject)
         })
         .catch(err => {
             console.log(err)
@@ -40,6 +39,6 @@ export const loginGoogleCoach = (req, res, next) => {
 
 export const cb = (req, res, mensaje) => {
     return res.status(500).json({
-        message: "Hubo un error al iniciar sesion. Por favor, reintente mas tarde."
+        message: "No pudo iniciar sesion correctamente, por favor vuelva a intentarlo"
     })
 }

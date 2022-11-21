@@ -9,20 +9,6 @@ export const crearAlumno = async (atleta) => {
     return await repositorio.crearAtleta(atleta)
 }
 
-export const agregarTeam = async (googleId, team) => {
-
-    let response
-    let pudo
-    const atleta = await repositorio.buscarUnAtleta(googleId)
-
-    if (atleta.length === 1) {
-        response = await repositorio.agregarTeam(atleta[0].googleId, team)
-        pudo = response.modifiedCount === 0 ? false : true
-    }
-
-    return pudo
-}
-
 export const crearAlumnoVacio = (googleId, email) => { 
     return new Alumno(
             null, //nombre
