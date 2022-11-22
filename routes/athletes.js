@@ -152,7 +152,7 @@ router.get("/",
  *   get:
  *     tags: [Athlete]
  *     summary: Obtener un atleta por su id
- *     description: Get an athlete based on their id
+ *     description: Devuelve un solo atleta en base al Google Id enviado
  *     parameters:
  *      - in: path
  *        name: googleId
@@ -179,7 +179,7 @@ router.get("/:googleId",
  *   post:
  *     tags: [Athlete]
  *     summary: Crear un atleta nuevo
- *     description: Creates a new Athlete
+ *     description: Crea un nuevo atleta
  *     requestBody:
  *      required: true
  *      content: 
@@ -198,7 +198,6 @@ router.get("/:googleId",
  */
 
 router.post("/",
-    //check('fechaNacimiento').toInt(),
     check('googleId').custom(validateUser),
     body('email').isEmail(),
     body('aptoFisico').isBoolean(),
@@ -211,7 +210,7 @@ router.post("/",
  *   delete:
  *     tags: [Athlete]
  *     summary: Borrar un atleta
- *     description: Delete an athlete based on their id
+ *     description: Borra un atleta de la app en base a su Google Id
  *     parameters:
  *      - in: path
  *        name: googleId
@@ -230,45 +229,13 @@ router.delete("/:googleId",
     borrarAtleta
 )
 
-// /**
-//  * @swagger
-//  * /athletes/agregarATeam:
-//  *   put:
-//  *     tags: [Athlete]
-//  *     summary: Agregar a un atleta a un team
-//  *     description: Adds an athlete to a team
-//  *     parameters:
-//  *      - in: path
-//  *        name: googleId
-//  *        schema:
-//  *          type: string
-//  *          required: true
-//  *          description: Id correspondiente a la cuenta de google
-//  *      - in: path
-//  *        name: codigoTeam
-//  *        schema:
-//  *          type: string
-//  *          required: true
-//  *          description: Codigo del team al que se quiere agregar
-//  *     responses:
-//  *       200:
-//  *         description: Devolucion OK.
-//  *       500:
-//  *         description: Error de servidor
-//  */
-// router.put("/agregarATeam",
-//     check('googleId').custom(userExists),
-//     addToTeam,
-//     agregarAlTeam
-// )
-
 /**
  * @swagger
  * /athletes/finalizar-registracion:
  *   put:
  *     tags: [Athlete]
  *     summary: Modificar datos del atleta
- *     description: Modify data from an athlete
+ *     description: Completa la registracion del atleta y actualiza sus datos
  *     requestBody:
  *      required: true
  *      content: 
@@ -319,7 +286,7 @@ router.put("/anotarse-a-clase",
 *   put:
 *     tags: [Athlete]
 *     summary: Anotar a un atleta a una clase
-*     description: Anotar al atleta a una clase en particular
+*     description: Dar de baja a un atleta a una clase en particular
 *     requestBody:
 *      required: true
 *      content: 
