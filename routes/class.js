@@ -1,6 +1,6 @@
 import express from 'express'
-import { body } from 'express-validator'
-import {obtenerClases, crearClase, obtenerClasesPorNombre} from '../Services/ClassServices.js';
+import { body, check } from 'express-validator'
+import {obtenerClases, crearNuevaClase, obtenerClasesPorNombre, registrarAlumnoAclases, bajaDeAtleta} from '../Services/ClassServices.js';
 
 const router = express.Router();
 
@@ -8,26 +8,27 @@ const router = express.Router();
  * @swagger
  * components:
  *   schemas:
- *      training_class:
+ *      Class:
  *          type: object
  *          required: 
  *              - titulo
  *              - cupo
  *              - ubicacion
  *              - diaActividad
- *              - alumnos
- *              - listaEspera
- *              - esCancelada
+ *              - coach
  *          properties:
  *              titulo:
  *                  type: string
  *                  description: Titulo de la clase
  *              cupo:
- *                  type: int
+ *                  type: integer
  *                  description: cupo del atleta
  *              diaActividad:
  *                  type: string
  *                  description: diaActividad del atleta
+ *              coach:
+ *                  type: object
+ *                  description: coach de la clase
  *              alumnos:
  *                  type: array
  *                  description: E-Mail del atleta             
@@ -41,6 +42,7 @@ const router = express.Router();
  *              nombre: string
  *              cupo: string
  *              diaActividad: 0
+ *              coach: object
  *              alumnos: string
  *              listaEspera: 0
  *              esCancelada: false
@@ -56,22 +58,25 @@ const router = express.Router();
  *              - nombre
  *              - cupo
  *              - diaActividad
- *              - listaEspera
- *              - esCancelada
- *              - rol
- *              - googleId
+ *              - coach
  *          properties:
- *              nombre:
+ *              titulo:
  *                  type: string
- *                  description: Nombre del atleta
+ *                  description: Nombre de la clase
  *              cupo:
- *                  type: string
+ *                  type: integer
  *                  description: cupo del atleta
  *              diaActividad:
- *                  type: integer
+ *                  type: string
  *                  description: diaActividad del atleta       
+ *              coach:
+ *                  type: object
+ *                  description: coach de la clase
+ *              alumnos:
+ *                  type: array
+ *                  description: E-Mail del atleta             
  *              listaEspera:
- *                  type: integer
+ *                  type: array
  *                  description: listaEspera del atleta
  *              esCancelada:
  *                  type: boolean
@@ -80,15 +85,13 @@ const router = express.Router();
  *              nombre: string
  *              cupo: string
  *              diaActividad: 0
- *              listaEspera: 0
- *              esCancelada: false
- *              rol: string
+ *              coach: object
  */
 
 /**
  * @swagger
  *  tags:
- *      name: training_class
+ *      name: Class
  *      description: Manejo de training_class API Train It
  */
 
@@ -96,7 +99,7 @@ const router = express.Router();
  * @swagger
  * /training_class:
  *   get:
- *     tags: [training_class]
+ *     tags: [Class]
  *     summary: Obtener todas las clases
  *     description: Devuelve todos las clases registrados
  *     produces: 
@@ -111,12 +114,16 @@ const router = express.Router();
 /**
  * @swagger
  * /training_class:
- *   get:
- *     tags: [training_class]
+ *   post:
+ *     tags: [Class]
  *     summary: Crear una nueva clases
  *     description: Crea una clase a partir de los datos pasados por parametros
- *     produces: 
- *      - application/json
+ *     requestBody:
+ *      required: true
+ *      content: 
+ *          application/json:
+ *              schema:
+ *                  $ref : '#/components/schemas/Class'
  *     responses:
  *       200:
  *         description: Devolucion OK.
@@ -124,28 +131,81 @@ const router = express.Router();
  *         description: Error de servidor
  */router.post("/",
         body('titulo').exists().isString(),
-        body('diaActividad').exists().isDate(),
+        body('diaActividad').exists().isString(),
         body('cupo').exists().isNumeric(),
         body('ubicacion').exists(),
         body('coachId').exists(),
-        crearClase)
-/*
+        crearNuevaClase)
+
 /**
  * @swagger
  * /training_class:
- *   get:
- *     tags: [training_class]
- *     summary: Obtiene una clase por id
- *     description: Devuelve una clase registrada filtrada por id
- *     produces: 
- *      - application/json
+ *   put:
+ *     tags: [Class]
+ *     summary: Registra un nueva Alumno
+ *     description: Inserta un atleta en la lista de alumnos o lista de espera
+ *     requestBody:
+ *      required: true
+ *      content: 
+ *          application/json:
+ *              schema:
+ *                  $ref : '#/components/schemas/Class'
  *     responses:
  *       200:
  *         description: Devolucion OK.
  *       500:
  *         description: Error de servidor
- */router.get("/",
-         body('nombre').exists().isString(),
+ */router.put("/registrarAlumnoAclases",
+ body('claseId').exists().isString(),
+ body('alumnoId').exists().isString(),
+ registrarAlumnoAclases)
+
+
+/**
+ * @swagger
+ * /training_class:
+ *   put:
+ *     tags: [Class]
+ *     summary: Da de baja a un alumno de clase
+ *     description: Da de baja a un atleta en la lista de alumnos y gestiona el ingreso de la primera persona en lista de espera a la clase
+ *     requestBody:
+ *      required: true
+ *      content: 
+ *          application/json:
+ *              schema:
+ *                  $ref : '#/components/schemas/Class'
+ *     responses:
+ *       200:
+ *         description: Devolucion OK.
+ *       500:
+ *         description: Error de servidor
+ */router.put("/darBajaAtleta",
+ body('claseId').exists().isString(),
+ body('alumnoId').exists().isString(),
+ bajaDeAtleta)
+
+
+/**
+ * @swagger
+ * /training_class/{nombre}:
+ *   get:
+ *     tags: [Class]
+ *     summary: Obtiene una clase por nombre
+ *     description: Devuelve una clase registrada filtrada por nombre
+*     parameters:
+ *      - in: path
+ *        name: nombre
+ *        schema: 
+ *          type: string
+ *          required: true
+ *          description: nombre correspondiente a la clase a buscar 
+ *     responses:
+ *       200:
+ *         description: Devolucion OK.
+ *       500:
+ *         description: Error de servidor
+ */router.get("/:nombre",
+         check('nombre').exists().isString(),
          obtenerClasesPorNombre)
 
 export default router

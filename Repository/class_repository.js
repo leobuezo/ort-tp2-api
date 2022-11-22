@@ -10,49 +10,46 @@ export class ClassRepository{
 
     buscarTodasLasClases(){
         try{
-            response= this.storage.buscarClases()
+            console.log("buscar en repository")
+            return this.storage.buscarClases();
         }catch(error){
-            throw new MongoDBCannotFindError(error.message, cannotFindError)
+            throw new MongoDBCannotFindError(error.message, cannotFindError);
         }
-        return response;
     }
 
     buscarClasesPorNombre(nombreClase){
         try{
-            response= this.storage.buscarClase(nombreClase);
+            return this.storage.buscarClase(nombreClase);
         }catch(error){
             throw new MongoDBCannotFindError(error.message, cannotFindError)
         }
-        return response;
     }
 
     buscarClasesPorId(claseId){
         try{
-            response= this.storage.buscarClasePorId(claseId);
+            return this.storage.buscarClasePorId(claseId);
         }catch(error){
             throw new MongoDBCannotFindError(error.message, cannotFindError)
         }
-        return response;
     }
     
 
 
     buscarClasesPorFecha(fechaClase){
         try{
-            response= this.storage.buscarClase(fechaClase);
+            return this.storage.buscarClase(fechaClase);
         }catch(error){
             throw new MongoDBCannotFindError(error.message, cannotFindError)
         }
-        return response;
+
     }
 
     agregarClase(clase){
         try {
-            response = this.storage.agregarClase(clase)   
+            return  this.storage.agregarClase(clase)   
         } catch (error) {
             throw new MongoDBInstanceInsertError(error.message, cannotInsertError);
         }
-        return response;
     }
 
 
@@ -78,40 +75,67 @@ export class ClassRepository{
     }
 
     borrarClase(clase,usuario){
-        try {
-            if (usuario.Rol !== "Entrenador") {
-                throw new Error("Solamente los entrenadores pueden crear clases")
-            } else {
-                this.storage.borrarClase(clase)
-            }        
-        } catch (error) {
+        try{
+            return  this.storage.borrarClase(clase)      
+        }catch (error) {
             console.log(error)
         }
     }
 
-    actualizarAlumnosDeClase(claseId,alumnos){
+    ingresarAtletaEnClase(claseId,atletaId){
         try {
-            return this.storage.actualizarAtletasAsistentes(claseId,alumnos); 
+            return this.storage.ingresarAtletaAListaAlumnos(claseId,atletaId); 
         } catch (error) {
             throw new MongoDBInstanceUpdateError(error.message)
         }
     }
 
-    actualizarListaDeEspera(claseId,listaEspera){
+    darBajadeClase(claseId, atletaId){
         try {
-            return this.storage.actualizarlistaEspera(claseId,listaEspera); 
+            return this.storage.sacarAtletaDeListaAlumnos(claseId,atletaId)
         } catch (error) {
             throw new MongoDBInstanceUpdateError(error.message)
         }
     }
 
-    buscarClasesPorCoachYFecha(coach,fecha){
+    darBajadelistaDeEsperaClase(claseId, atletaId){
+        try {
+            return this.storage.sacarAtletaDeListaEspera(claseId,atletaId)
+        } catch (error) {
+            throw new MongoDBInstanceUpdateError(error.message)
+        }
+    }
+
+    agregarAListaDeEspera(claseId,atletaId){
+        try {
+            return this.storage.ingresarAtletaAListaEspera(claseId,atletaId); 
+        } catch (error) {
+            throw new MongoDBInstanceUpdateError(error.message)
+        }
+    }
+
+    buscarClasesPorCoachIdYFecha(coachId,fecha){
         try{
-            verificador= this.storage.buscarClasePorCoachYFecha(coach,fechaClase);
+            return this.storage.buscarClasePorCoachIdYFecha(coachId,fechaClase);
         }catch(error){
             throw new MongoDBCannotFindError(error.message, cannotFindError)
         }
-        return verificador;
+    }
+
+    buscarAlumnoEnClase(claseId, alumnoId){
+        try{
+            return this.storage.buscarAlumnoEnClase(claseId, alumnoId)
+        }catch(error){
+            throw new MongoDBCannotFindError(error.message, cannotFindError)
+        }
+    }
+
+    buscarAlumnoEnListaEspera(claseId, alumnoId){
+        try{
+            return this.storage.buscarAlumnoEnListaEspera(claseId, alumnoId)
+        }catch(error){
+            throw new MongoDBCannotFindError(error.message, cannotFindError)
+        }
     }
 
 }

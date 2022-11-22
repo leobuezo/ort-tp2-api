@@ -1,7 +1,7 @@
 
 
 export default class Clase{
-    constructor(titulo, cupo, ubicacion, diaActividad, coach){
+    constructor(titulo, cupo, ubicacion, diaActividad, coachId){
         this.titulo = titulo;
         this.cupo = cupo;
         this.ubicacion = ubicacion;
@@ -9,7 +9,7 @@ export default class Clase{
         this.alumnos = [];
         this.listaEspera = [];
         this.esCancelada = false;
-        this.coach= coach;
+        this.coachId= coachId;
     }
  
     darBaja(alumno, motivo){
