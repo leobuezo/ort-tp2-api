@@ -42,6 +42,12 @@ export class AthleteStorage {
         }).toArray()
     }
 
+    async buscarUnAtletaPorDni(dni) {
+        return await this.collection.find({
+            dni: dni
+        }).toArray()
+    }
+
     async buscarAtleta() {
         return this.collection.find({}).toArray()
     }

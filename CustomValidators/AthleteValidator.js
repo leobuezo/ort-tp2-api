@@ -11,15 +11,15 @@ export const validateUser = googleId => {
     })
 }
 
-export const validateDni = dni => {
-    return repositorio.buscarUnAtleta(dni).then(usuario => {
+export const validateDni = async dni => {
+    return repositorio.buscarUnAtletaPorDni(dni).then(usuario => {
         if (usuario.length === 0) {
-            return Promise.reject(`El usuario enviado no existe`)
+            return Promise.reject(`No existe un atleta registrado con el dni ${dni}`)
         }
     })
 }
 
-export const userExists = googleId => {
+export const userExists = async googleId => {
 
     return repositorio.buscarUnAtleta(googleId).then(usuario => {
         if (usuario.length === 0) {

@@ -59,7 +59,6 @@ export const crearFeedback = async (req, res) => {
         })
     }
     const { dni_atleta, titulo_clase, dni_coach } = req.body
-    // validar que no haya ningún feedback pendiente ni completado para ese atleta
     const nuevoFeedback = new Feedback(dni_atleta, titulo_clase, dni_coach)
     const hayFeedbackEnCurso = await repositorio.obtenerFeedbackEnCurso(dni_atleta)
     console.log('hay feedback en curso: ', hayFeedbackEnCurso)
