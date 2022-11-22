@@ -37,8 +37,8 @@ export class CoachRepository{
         return await this.storage.buscarOAgregar(coach)
     }
 
-    buscarCoachPorDni(dni){
-        return this.storage.buscarCoachPorDni(dni)
+    async buscarCoachPorDni(dni){
+        return await this.storage.buscarCoachPorDni(dni)
     }
 
 }

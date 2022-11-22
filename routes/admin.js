@@ -2,7 +2,7 @@ import express from 'express'
 import { body, check } from 'express-validator'
 import { atletaValidoParaTeam, atletaExisteEnTeam, coachExisteEnTeam, validarAdminUnico} from '../CustomValidators/AdminValidator.js'
 import { userExists } from '../CustomValidators/AthleteValidator.js'
-import { userExists as userExistsCoach } from '../CustomValidators/CoachValidator.js'
+import { userCoachExists } from '../CustomValidators/CoachValidator.js'
 import { AdminRepository } from '../Repository/admin_repository.js'
 import { AthleteRepository } from '../Repository/athlete_repository.js'
 import { CoachRepository } from '../Repository/coach_repository.js'
@@ -133,7 +133,7 @@ router.put("/registrar-atleta",
  */
 router.put("/registrar-coach" , 
     //modificar metodo para que busque en coachs
-    body('googleId').custom(userExistsCoach),
+    body('googleId').custom(userCoachExists),
     coachExisteEnTeam,
     crearCoach)
 

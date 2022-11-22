@@ -59,7 +59,8 @@ export class CoachStorage{
     }
 
     async buscarCoachPorDni(dni){
-        return this.collection.find({ dni : dni}).toArray()
+        console.log('el_dni ', dni)
+        return await this.collection.find({ dni : dni }).toArray()
     }
 
     async buscarCoach(){

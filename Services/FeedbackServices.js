@@ -19,7 +19,7 @@ export const obtenerUnFeedbackPorId = async (req, res) => {
     return res.status(200).json(responseObject)
 }
 
-export const obtenerUnFeedbackPorAtleta = async (req, res) => {
+export const obtenerFeedbacksPorAtleta = async (req, res) => {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
         return res.status(400).json({
@@ -28,11 +28,11 @@ export const obtenerUnFeedbackPorAtleta = async (req, res) => {
         })
     }
     const { dni_atleta } = req.params
-    const responseObject = await repositorio.obtenerUnFeedbackPorAtleta(dni_atleta)
+    const responseObject = await repositorio.obtenerFeedbacksPorAtleta(dni_atleta)
     return res.status(200).json(responseObject)
 }
 
-export const obtenerUnFeedbackPorCoach = async (req, res) => {
+export const obtenerFeedbacksPorCoach = async (req, res) => {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
         return res.status(400).json({
@@ -41,7 +41,7 @@ export const obtenerUnFeedbackPorCoach = async (req, res) => {
         })
     }
     const { dni_coach } = req.params
-    const responseObject = await repositorio.obtenerUnFeedbackPorCoach(dni_coach)
+    const responseObject = await repositorio.obtenerFeedbacksPorCoach(dni_coach)
     return res.status(200).json(responseObject)
 }
 
@@ -50,20 +50,24 @@ export const obtenerFeedbacks = async (req, res) => {
     responseObject.length ? res.status(200).json(responseObject) : res.status().json({ message: "No hay personas registradas" })
 }
 
-export const borrarFeedback = async (req, res) => {
-    const { dni_atleta } = req.params
-    console.log('deleting: ', dni_atleta)
-    const responseObject = await repositorio.obtenerUnFeedbackPorAtleta(dni_atleta)
-    console.log(responseObject)
-    const id = responseObject._id
-    const responseDeleteObject = await repositorio.borrarFeedback(id)
-    console.log('responseDeleteObject: ', responseDeleteObject)
-    return res.status(200).json({message : `Se borro con exito el feedback con id: ${id}`});
-}
-
 export const crearFeedback = async (req, res) => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+        return res.status(400).json({
+            mensaje: "Por favor, revisar los siguientes errores:",
+            errores: errors.array()
+        })
+    }
     const { dni_atleta, titulo_clase, dni_coach } = req.body
     const nuevoFeedback = new Feedback(dni_atleta, titulo_clase, dni_coach)
+    const hayFeedbackEnCurso = await repositorio.obtenerFeedbackEnCurso(dni_atleta)
+    console.log('hay feedback en curso: ', hayFeedbackEnCurso)
+    if(hayFeedbackEnCurso.length > 0) {
+        return res.status(400).json({
+            mensaje: "Aún hay feedback en curso",
+            errores: errors.array()
+        })
+    }
     const feedbackCreado = repositorio.crearFeedback(nuevoFeedback)
     res.status(201).json(feedbackCreado)
 }
@@ -79,7 +83,7 @@ export const darFeedback = async (req, res) => {
     }
     const { dni_atleta } = await req.params
     const { devolucion } = await req.body
-    const responseDniObject = await repositorio.obtenerUnFeedbackPorAtleta(dni_atleta)
+    const responseDniObject = await repositorio.obtenerFeedbackPendienteAtleta(dni_atleta)
     const { _id } = responseDniObject
     const responseObject = await repositorio.darFeedback(_id, devolucion, cambioEstado)
     return res.status(200).json(responseObject)
@@ -95,7 +99,7 @@ export const cerrarFeedback = async (req, res) => {
         })
     }
     const { dni_atleta } = await req.params
-    const responseDniObject = await repositorio.obtenerUnFeedbackPorAtleta(dni_atleta)
+    const responseDniObject = await repositorio.obtenerFeedbackCompletadoAtleta(dni_atleta)
     const { _id } = responseDniObject
     const responseObject = await repositorio.cerrarFeedback(_id, cambioEstado)
     return res.status(200).json(responseObject)

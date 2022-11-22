@@ -25,6 +25,10 @@ export class AthleteRepository {
         return this.storage.buscarUnAtleta(googleId)
     }
 
+    async buscarUnAtletaPorDni(dni) {
+        return await this.storage.buscarUnAtletaPorDni(dni)
+    }
+
     async buscarAtleta() {
         return await this.storage.buscarAtleta()
     }

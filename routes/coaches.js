@@ -1,7 +1,7 @@
 import express, { Router } from 'express'
 import { body, check } from 'express-validator'
 import { borrarCoach, crearCoach, obtenerCoaches, obtenerUnCoach, registrarse } from '../Services/CoachServices.js'
-import { userExists, validateCoach } from '../CustomValidators/CoachValidator.js'
+import { userCoachExists, validateCoach } from '../CustomValidators/CoachValidator.js'
 
 const router = express.Router()
 /**
@@ -137,7 +137,7 @@ const router = express.Router()
  *         description: Error de servidor
  */
 router.get("/:googleId",
-    check('googleId').custom(userExists),
+    check('googleId').custom(userCoachExists),
     obtenerUnCoach
 )
 
@@ -212,7 +212,7 @@ router.get("/",
  *         description: Error de servidor
  */
  router.delete("/:googleId",
- check('googleId').custom(userExists),
+ check('googleId').custom(userCoachExists),
  borrarCoach
 )
 
@@ -237,7 +237,7 @@ router.get("/",
  *         description: Error de servidor
  */
 router.put("/finalizar-registracion",
-    body('googleId').custom(userExists),
+    body('googleId').custom(userCoachExists),
     registrarse
 )
 

@@ -1,7 +1,9 @@
 import express from 'express'
 import { body, check } from 'express-validator'
+import { validateDni } from '../CustomValidators/AthleteValidator.js'
+import { validateCoach } from '../CustomValidators/CoachValidator.js'
 import FeedbackRepository from '../Repository/feedback_respository.js'
-import { obtenerFeedbacks, obtenerUnFeedbackPorAtleta, obtenerUnFeedbackPorCoach, obtenerUnFeedbackPorId, borrarFeedback, crearFeedback, darFeedback, cerrarFeedback } from '../Services/FeedbackServices.js'
+import { obtenerFeedbacks, obtenerFeedbacksPorAtleta, obtenerFeedbacksPorCoach, obtenerUnFeedbackPorId, crearFeedback, darFeedback, cerrarFeedback } from '../Services/FeedbackServices.js'
 
 //Import this callback to validate if a feedback exists or not
 import { feedbackExists } from '../CustomValidators/FeedbackValidator.js';
@@ -90,7 +92,10 @@ router.get("/", obtenerFeedbacks)
  *       500:
  *         description: Error de servidor.
  */
-router.post("/", crearFeedback)
+router.post("/", 
+body('dni_atleta').custom(validateDni),
+body('dni_coach').custom(validateCoach),
+crearFeedback)
 
 /**
  * @swagger
@@ -140,7 +145,9 @@ router.get("/:_id",
  *       500:
  *         description: Error de servidor
  */
-router.get("/athlete/:dni_atleta", obtenerUnFeedbackPorAtleta)
+router.get("/athlete/:dni_atleta", 
+body('dni_atleta').custom(validateDni),
+obtenerFeedbacksPorAtleta)
 
 /**
  * @swagger
@@ -164,22 +171,9 @@ router.get("/athlete/:dni_atleta", obtenerUnFeedbackPorAtleta)
  *       500:
  *         description: Error de servidor
  */
-router.get("/coach/:dni_coach", obtenerUnFeedbackPorCoach)
-
-/**
- * @swagger
- * /feedback/{dni_atleta}:
- *   delete:
- *     tags: [Feedback]
- *     summary: Borrar un feedback pasándole como parámetro el DNI de un atleta.
- *     description: Delete a feddback by athlete Id.
- *     responses:
- *       200:
- *         description: OK.
- *       500:
- *         description: Error de servidor
- */
-router.delete("/athlete/:dni_atleta", borrarFeedback)
+router.get("/coach/:dni_coach", 
+body('dni_coach').custom(validateCoach),
+obtenerFeedbacksPorCoach)
 
 /**
  * @swagger
@@ -199,7 +193,10 @@ router.delete("/athlete/:dni_atleta", borrarFeedback)
  *       500:
  *         description: Error de servidor
  */
-router.put("/give-feedback/:dni_atleta", darFeedback)
+router.put("/give-feedback/:dni_atleta", 
+check('dni_atleta').custom(validateDni),
+check('devolucion').not().isEmpty(),
+darFeedback)
 
 /**
  * @swagger
@@ -214,6 +211,8 @@ router.put("/give-feedback/:dni_atleta", darFeedback)
  *       500:
  *         description: Error de servidor
  */
-router.put("/close-feedback/:dni_atleta", cerrarFeedback)
+router.put("/close-feedback/:dni_atleta", 
+check('dni_atleta').custom(validateDni),
+cerrarFeedback)
 
 export default router
