@@ -150,8 +150,8 @@ export const darseDeBajaClase = async (req, res) => {
 
 
         const pudo = await repositorio.darseDeBajaClase(googleId, idClase)
-        const borradoDeClase = darBajaAtleta(idClase, googleId)
-        if (pudo.modifiedCount > 0 && borradoDeClase) {
+        //const borradoDeClase = darBajaAtleta(idClase, googleId)
+        if (pudo.modifiedCount > 0) {
             return res.status(200).json({
                 message: "Se dio de baja al alumno con exito"
             })
