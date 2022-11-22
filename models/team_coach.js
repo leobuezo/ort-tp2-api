@@ -9,7 +9,7 @@ export default class Entrenador {
         this.apellido = apellido
         this.email = email
         this.dni = dni
-        this.rol = new Rol(rol)
+        this.rol = rol
         this.team = team
         this.fechaNacimiento = fechaNacimiento
         this.googleId = googleId

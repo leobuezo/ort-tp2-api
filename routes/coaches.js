@@ -1,6 +1,6 @@
 import express, { Router } from 'express'
 import { body, check } from 'express-validator'
-import { borrarCoach, crearCoach, obtenerCoaches, obtenerUnCoach, registrarse } from '../Services/CoachServices.js'
+import { borrarCoach, crearCoach, obtenerCoaches, obtenerUnCoach, registrarse, cancelarClase, crearClaseCoach } from '../Services/CoachServices.js'
 import { userCoachExists, validateCoach } from '../CustomValidators/CoachValidator.js'
 
 const router = express.Router()
@@ -242,6 +242,14 @@ router.put("/finalizar-registracion",
 )
 
 //CREAR CLASE
+router.put("/crear-clase",
+    crearClaseCoach
+)
 
+//CANCELAR CLASE
+
+router.put("/cancelar-clase/:idClase",
+    cancelarClase
+)
 
 export default router

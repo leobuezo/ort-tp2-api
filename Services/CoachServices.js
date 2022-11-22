@@ -4,7 +4,8 @@ import {validationResult} from "express-validator"
 import { NotImplemented } from "../ErrorHandling/CustomError.js"
 import { ClassRepository } from "../Repository/class_repository.js"
 import FeedbackRepository from "../Repository/feedback_respository.js"
-//import { crearClase } from "../UseCases/ClassUseCase"
+import { crearClase } from "../UseCases/ClassUseCase.js"
+import Clase from "../models/training_class.js"
 
 const repositorioCoach = new CoachRepository()
 const repositorioClase = new ClassRepository()
@@ -66,21 +67,6 @@ export const obtenerCoaches = async (req,res) => {
     responseObject.length ? res.status(200).json(responseObject) : res.status().json({ message: "No hay coaches registrados" })
 }
 
-//se va a usar??
-export const buscarCoachPorDni = async (req,res) => {
-    const{dni} = req.params
-    const errors = validationResult(req)
-
-    if(!errors.isEmpty()){
-        return res.status(400).json({
-            mensaje: "Por favor, revisar los siguientes errores:",
-            errores: errors.array()
-        })
-    }
-
-    const responseObject = await repositorioCoach.buscarCoachPorDni(dni)
-    return res.status(200).json(responseObject)
-}
 
 export const registrarse = async (req,res) => {
     
@@ -92,7 +78,7 @@ export const registrarse = async (req,res) => {
             errores: errors.array()
         })
     }
-    const {googleId, nombre, apellido, fechaNacimiento, dni} = req.params
+    const {googleId, nombre, apellido, fechaNacimiento, dni} = req.body
 
     const coachARegistrar = {
         nombreTemp: nombre,
@@ -101,31 +87,28 @@ export const registrarse = async (req,res) => {
         dniTemp: dni,
     }
 
-    repositorioCoach.modificarCoach(googleId, coachARegistrar)
-        .then(() => {
-            return res.status(200).json({
-                message: "Se registro con exito al coach"
-            })
-        })
-        .catch(err => {
-            console.log(error)
-            return res.status(500).json({
-                message: "No se pudo completar los datos del coach, por favor revise los errores",
-                errores: error
-            })
-        })
     
+    try {
+        const response = await repositorioCoach.modificarCoach(googleId, coachARegistrar)
         if(response.modifiedCount === 1 ){
-            const responseObject = await repositorio.buscarUnCoach(googleId)
+            const responseObject = await repositorioCoach.buscarUnCoach(googleId)
             return res.status(200).json(responseObject)
         } else{
             return res.status(500).json({
-                message : "No se pudieron modificar los datos del coach. Por favor revisarlo"
-            })
+                 message : "No se pudieron modificar los datos del coach. Por favor revisarlo"
+                })
+            }    
+        } catch (error) {
+            console.log(error)
+            return res.status(500).json({
+                message: "Revisar el error"
+            })        
         }
+    
+        
 }
-/*
-export const crearClase = async (req,res) => {
+
+export const crearClaseCoach = async (req,res) => {
 
     const errors = validationResult(req)
     
@@ -136,34 +119,17 @@ export const crearClase = async (req,res) => {
         })
     }
 
-    const {titulo, cupo, ubicacion, diaActividad} = req.body
-    const responseObject = new Clase (titulo, cupo, ubicacion, diaActividad)
+    const {titulo, cupo, ubicacion, diaActividad, coachId} = req.body
+    const responseObject = new Clase (titulo, cupo, ubicacion, diaActividad, coachId)
     crearClase(responseObject)
 
     return res.status(200).json(responseObject)   
 }
-*/
-export const darFeedback = async (req,res) => {
 
-    const errors = validationResult(req)
-
-    if(!errors.isEmpty()){
-        return res.status(400).json({
-            mensaje: "Por favor, revisar los siguientes errores:",
-            errores: errors.array()
-        })
-    }
-//CAMBIAR A GOOGLEID
-    const { dni_atleta, titulo_clase, dni_coach } = req.body
-    const responseObject = new Feedback (dni_atleta, titulo_clase, dni_coach)
-    repositorioFeedback.darFeedback(responseObject)
-
-    return res.status(200).json(responseObject)   
-}
 
 export const cancelarClase = async (req,res) => {
     
-    const {idClase} = req.body
+    const {idClase} = req.params
 
     repositorioClase.cancelarClase(idClase)
 

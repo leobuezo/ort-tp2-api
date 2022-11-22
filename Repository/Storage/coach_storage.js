@@ -21,20 +21,14 @@ export class CoachStorage{
                     apellido : coachAModificar.apellidoTemp,
                     fechaNacimiento : coachAModificar.fechaNacimientoTemp,
                     dni : coachAModificar.dniTemp,
+                    datosValidados : true
                 }
             }
         )
     }
 
     async borrarCoach(googleId){
-        await this.collection.updateOne(
-            {googleId : googleId},
-            {$set : 
-                {
-                    team: null,   
-                }
-            }
-        )
+        await this.collection.deleteOne({ googleId: googleId })
     }
 
     async buscarUnCoach(googleId){
