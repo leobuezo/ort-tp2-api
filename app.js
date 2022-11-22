@@ -19,7 +19,7 @@ app.use(express.json())
 app.use("/athletes", atheles)
 app.use("/coaches", coaches)
 app.use("/admin", admin)
-app.use("/class", training_class)
+app.use("/training_class", training_class)
 app.use("/feedback", feedback)
 app.use("/auth", auth)
 

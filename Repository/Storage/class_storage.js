@@ -1,3 +1,4 @@
+import { ObjectId } from "mongodb"
 import { NotImplemented } from "../../ErrorHandling/NotImplementedApi.js"
 import { StorageConnection } from "./storage_connection.js"
 
@@ -11,30 +12,39 @@ export class ClassStorage{
         return await this.collection.find({}).toArray()
     }
 
+    async buscarAlumnoEnClase(claseId, alumnoId){
+        return await this.collection.find({_id : ObjectId(claseId), alumnos:{$in:[alumnoId]}}).toArray()
+    }
+
+    async buscarAlumnoEnListaEspera(claseId, alumnoId){
+        return await this.collection.find({_id : ObjectId(claseId), listaEspera:{$in:[alumnoId]}}).toArray()
+    }
+
     async buscarClasePorId(claseId){
-        return await this.collection.find({id : claseId}).toArray()
+        console.log(claseId);
+        return await this.collection.find({_id : ObjectId(claseId)}).toArray()
     }
 
     async buscarClasePorNombre(nombreClase){
-        return await this.collection.find({id : nombreClase}).toArray()
+        return await this.collection.find({titulo : nombreClase}).toArray()
     }
 
     async buscarClasePorFecha(fecha){
         return await this.collection.find( {diaActividad : fecha}).toArray()
     }
     
-    async buscarClasePorCoachYFecha(coach, fecha){
+    async buscarClasePorCoachIdYFecha(coachId, fecha){
         return await this.collection.find( {diaActividad : fecha,
-                                        coach:{googleId: coach.googleId}}).toArray()
+                                            coachId: coachId}).toArray()
     }
 
     async agregarClase(clase){
-        return await this.collection.insertOne(clase)
+        return this.collection.insertOne(clase)
     }
 
     async cancelarClase(claseId){
         return await this.collection.updateOne(
-            { _id : claseId},
+            { _id : ObjectId(claseId)},
             { $set : 
                 {
                    esCancelada: true
@@ -43,27 +53,51 @@ export class ClassStorage{
         )    
     }
 
-    async actualizarAtletasAsistentes(claseId,alumnos){
+    async sacarAtletaDeListaAlumnos(claseId,alumnoId){
         return await this.collection.updateOne(
-            { _id : claseId},
-            { $set : 
+            { _id : ObjectId(claseId)},
+            { $pull : 
                 {
-                    alumnos: alumnos
+                    alumnos: {alumnoId}
                 }
             }
         )    
     }
 
-    async actualizarListaEspera(claseId,listaEspera){
+    async ingresarAtletaAListaAlumnos(claseId, atletaId){
         return await this.collection.updateOne(
-            { _id : claseId},
-            { $set : 
+            { _id :  ObjectId(claseId)},
+            { $push : 
                 {
-                    listaEspera: listaEspera
+                    alumnos: {atletaId}
                 }
             }
         )    
     }
+
+    async sacarAtletaDeListaEspera(claseId,alumnoId){
+        return await this.collection.updateOne(
+            { _id :  ObjectId(claseId)},
+            { $pull : 
+                {
+                    listaEspera: {alumnoId}
+                }
+            }
+        )    
+    }
+
+    async ingresarAtletaAListaEspera(claseId, atletaId){
+        return await this.collection.updateOne(
+            { _id :  ObjectId(claseId)},
+            { $push : 
+                {
+                    listaEspera: {atletaId}
+                }
+            }
+        )    
+    }
+
+    
     async borrarClase(clase){
         this.collection.deleteMany({ id : clase.Id})
     }
