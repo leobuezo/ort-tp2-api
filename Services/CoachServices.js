@@ -1,15 +1,12 @@
 import Entrenador from "../models/team_coach.js"
 import {CoachRepository} from "../Repository/coach_repository.js"
 import {validationResult} from "express-validator"
-import { NotImplemented } from "../ErrorHandling/CustomError.js"
 import { ClassRepository } from "../Repository/class_repository.js"
-import FeedbackRepository from "../Repository/feedback_respository.js"
 import { crearClase } from "../UseCases/ClassUseCase.js"
-import Clase from "../models/training_class.js"
+
 
 const repositorioCoach = new CoachRepository()
 const repositorioClase = new ClassRepository()
-const repositorioFeedback = new FeedbackRepository()
 
 export const crearCoach = async (req, res) => {
     
@@ -118,19 +115,36 @@ export const crearClaseCoach = async (req,res) => {
             errores: errors.array()
         })
     }
+    const {titulo, cupo, ubicacion, diaActividad, googleId} = req.body
 
-    const {titulo, cupo, ubicacion, diaActividad, coachId} = req.body
-    const responseObject = new Clase (titulo, cupo, ubicacion, diaActividad, coachId)
-    crearClase(responseObject)
+    try {
+        const clase = await crearClase(titulo, cupo, ubicacion, diaActividad, googleId)
+        const sePudo = await repositorioCoach.crearClase(googleId, clase)
+        if (sePudo.modifiedCount > 0) {
+            return res.status(200).json(clase)   
+        } else {
+            return res.status(204).json({ message: "No se pudo crear la clase correctamente" })
+        }
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({
+            message: "Revisar el error"
+        })        
+    }
 
-    return res.status(200).json(responseObject)   
 }
 
 
 export const cancelarClase = async (req,res) => {
     
     const {idClase} = req.params
+    const cancelacion = await repositorioClase.buscarClasesPorId(idClase)
+    const {esCancelada} = cancelacion[0] 
+    if (esCancelada) {
+        return res.status(400).json({ message : "La clase ya se encuentra cancelada"})
+    }
 
     repositorioClase.cancelarClase(idClase)
+    res.status(200).json({message: "Se cancelo la clase"})
 
 }

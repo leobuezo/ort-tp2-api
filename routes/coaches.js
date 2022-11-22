@@ -1,7 +1,7 @@
 import express, { Router } from 'express'
 import { body, check } from 'express-validator'
 import { borrarCoach, crearCoach, obtenerCoaches, obtenerUnCoach, registrarse, cancelarClase, crearClaseCoach } from '../Services/CoachServices.js'
-import { userCoachExists, validateCoach } from '../CustomValidators/CoachValidator.js'
+import { userCoachExists, validateCoach, validadorInformacionCoach } from '../CustomValidators/CoachValidator.js'
 
 const router = express.Router()
 /**
@@ -105,7 +105,41 @@ const router = express.Router()
  *              fechaNacimiento: 0
  *              googleId: string
  */
-
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *      CreateClass:
+ *          type: object
+ *          required: 
+ *              - titulo
+ *              - cupo
+ *              - ubicacion
+ *              - diaActividad
+ *              - coachId
+ *          properties:
+ *              titulo:
+ *                  type: string
+ *                  description: Titulo de la clase
+ *              cupo:
+ *                  type: integer
+ *                  description: Cupo maximo para la clase
+ *              ubicacion:
+ *                  type: string
+ *                  description: Ubicacion de la clase 
+ *              diaActividad:
+ *                  type: string
+ *                  description: Fecha de la clase  
+ *              coachId:
+ *                  type: string
+ *                  description: Id correspondiente al coach
+ *          example:
+ *              titulo: string
+ *              cupo: 0
+ *              ubicacion: string
+ *              diaActividad: string
+ *              coachId: string
+ */
 /**
  * @swagger
  *  tags:
@@ -186,8 +220,8 @@ router.get("/",
  *         description: Error de servidor.
  */
  router.post("/",
- check('googleId').custom(validateCoach),
- crearCoach
+    check('googleId').custom(validateCoach),
+    crearCoach
 )
 
 //BORRAR UN COACH
@@ -212,8 +246,8 @@ router.get("/",
  *         description: Error de servidor
  */
  router.delete("/:googleId",
- check('googleId').custom(userCoachExists),
- borrarCoach
+    check('googleId').custom(userCoachExists),
+    borrarCoach
 )
 
 //TERMINAR DE REGISTRARSE
@@ -238,16 +272,52 @@ router.get("/",
  */
 router.put("/finalizar-registracion",
     body('googleId').custom(userCoachExists),
+    validadorInformacionCoach,
     registrarse
 )
 
 //CREAR CLASE
+/**
+ * @swagger
+ * /coaches/crear-clase:
+ *   put:
+ *     tags: [Coach]
+ *     summary: Crear una clase
+ *     description: Crea una clase nueva
+ *     requestBody:
+ *      required: true
+ *      content: 
+ *          application/json:
+ *              schema:
+ *                  $ref : '#/components/schemas/CreateClass'
+ *     responses:
+ *       200:
+ *         description: Devolucion OK.
+ *       500:
+ *         description: Error de servidor
+ */
 router.put("/crear-clase",
+//    body('googleId').custom(userCoachExists),
     crearClaseCoach
 )
 
 //CANCELAR CLASE
-
+/**
+ * @swagger
+ * /coaches/cancelar-clase/{id_clase}:
+ *   put:
+ *     tags: [Coach]
+ *     summary: Cancelar una clase
+ *     description: Cambia el estado de una clase a cancelada
+ *     parameters:
+ *      - in: path
+ *        name: id_clase
+ *     responses:
+ *       200:
+ *         description: OK.
+ *       500:
+ *         description: Error de servidor
+ */
 router.put("/cancelar-clase/:idClase",
     cancelarClase
 )

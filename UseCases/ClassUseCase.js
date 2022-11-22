@@ -92,9 +92,9 @@ export const crearClase= async (titulo, cupo, ubicacion, diaActividad, coachId) 
         console.log("voy a crear la clase")
         const clase= new Clase(titulo,cupo,ubicacion,diaActividad,coachId);
         console.log(clase);
-        const {insertedId:_id}= await repoClass.agregarClase(clase);
-        console.log(_id);
-        return _id;    
+        const id = await repoClass.agregarClase(clase);
+        console.log(id.insertedId);
+        return id.insertedId;    
     } catch (error) {
         if(!error instanceof GenericError){
             throw new GenericError("useCase"+error.message);

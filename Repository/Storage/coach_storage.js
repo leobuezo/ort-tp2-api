@@ -53,7 +53,6 @@ export class CoachStorage{
     }
 
     async buscarCoachPorDni(dni){
-        console.log('el_dni ', dni)
         return await this.collection.find({ dni : dni }).toArray()
     }
 
@@ -85,4 +84,12 @@ export class CoachStorage{
         return { usuario, newUser }
     }
     
+    async crearClase(googleId, claseId) {
+        return await this.collection.updateOne(
+            { googleId: googleId },
+            {
+                $push: { clases: { claseId } }
+            }
+        )
+    }
 }

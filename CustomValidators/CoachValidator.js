@@ -22,3 +22,32 @@ export const userCoachExists = googleId => {
     })
 
 }
+
+export const validadorInformacionCoach = async (req, res, next) => {
+    const { googleId, nombre, apellido, fechaNacimiento, dni, rol } = req.body
+    const coach = await repositorioCoach.buscarUnCoach(googleId)
+    if(coach){
+        const isInvalid = (!nombre || !apellido || !dni)
+
+        if (isInvalid) {
+            return res.status(400).json({
+            message: "Alguno de los siguientes datos enviados no son validos. Por favor, revielos:",
+
+            errors: {
+                nombre: nombre,
+                apellido: apellido,
+                dni: dni,
+                rol: rol,
+                fechaNacimiento: fechaNacimiento
+            }
+        })
+    } 
+    else {
+        next()
+    }
+    } else {
+        return res.status(400).json({message: "El coach no existe."})
+    }
+    
+
+}

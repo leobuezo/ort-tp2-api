@@ -41,4 +41,7 @@ export class CoachRepository{
         return await this.storage.buscarCoachPorDni(dni)
     }
 
+    async crearClase(googleId, claseId) {
+        return await this.storage.crearClase(googleId, claseId)
+    }
 }
