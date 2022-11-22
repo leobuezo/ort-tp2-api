@@ -44,13 +44,15 @@ router.use(express.json())
  *          example:
  *              nombre: string
  *              apellido: string
+ *              edad: 0
+ *              email: string
  */
 
 /**
  * @swagger
  * components:
  *   schemas:
- *      AdminRegistration:
+ *      RegistrarAtletaTeam:
  *          type: object
  *          required: 
  *              - accessToken
@@ -59,12 +61,13 @@ router.use(express.json())
  *                  type: string
  *                  description: Id correspondiente a google
  *              Team: 
- *                  type: object
+ *                  type: string
  *                  description: Team donde se quiere agregar el Atleta
  *          example:
  *              googleId: string
  *              Team: Object
  */
+
 /**
  * @swagger
  *  tags:
@@ -86,7 +89,7 @@ router.use(express.json())
  *      content: 
  *          application/json:
  *              schema:
- *                  $ref : '#/components/schemas/Admin'
+ *                  $ref : '#/components/schemas/RegistrarAtletaTeam'
  *     responses:
  *       200:
  *         description: Devolucion OK.
@@ -117,7 +120,7 @@ router.put("/registrar-atleta",
  *      content: 
  *          application/json:
  *              schema:
- *                  $ref : '#/components/schemas/Admin'
+ *                  $ref : '#/components/schemas/RegistrarAtletaTeam'
  *     responses:
  *       200:
  *         description: Devolucion OK.
@@ -128,7 +131,7 @@ router.put("/registrar-atleta",
  *       500:
  *         description: Error de servidor.
  */
-router.post("/registrar-coach" , 
+router.put("/registrar-coach" , 
     //modificar metodo para que busque en coachs
     body('googleId').custom(userCoachExists),
     coachExisteEnTeam,
