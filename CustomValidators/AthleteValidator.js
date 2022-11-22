@@ -33,31 +33,36 @@ export const userExists = async googleId => {
 export const validateInfoAthlete = async (req, res, next) => {
     const { googleId, nombre, apellido, dni, rol, fechaNacimiento } = req.body
     const user = await repositorio.buscarUnAtleta(googleId)
+    if (user.length > 0) {
+        const datosValidados = user[0].datosValidados
 
-    const datosValidados = user[0].datosValidados
+        if (datosValidados) {
+            return res.status(401).json({ message: "No se pueden modificar los datos que ya fueron cargados." })
+        }
 
-    if (datosValidados) {
-        return res.status(401).json({ message: "No se pueden modificar los datos que ya fueron cargados." })
-    }
+        const isInvalid = (!nombre || !apellido || !dni)
 
-    const isInvalid = (!nombre || !apellido || !dni)
+        if (isInvalid) {
+            return res.status(400).json({
+                message: "Alguno de los siguientes datos enviados no son validos. Por favor, revielos:",
 
-    if (isInvalid) {
-        return res.status(400).json({
-            message: "Alguno de los siguientes datos enviados no son validos. Por favor, revielos:",
+                errors: {
+                    nombre: nombre,
+                    apellido: apellido,
+                    dni: dni,
+                    rol: rol,
+                    fechaNacimiento: fechaNacimiento
+                }
+            })
+        }
+        else {
+            next()
+        }
 
-            errors: {
-                nombre: nombre,
-                apellido: apellido,
-                dni: dni,
-                rol: rol,
-                fechaNacimiento: fechaNacimiento
-            }
-        })
-    }
-    else {
+    } else {
         next()
     }
+
 
 }
 
@@ -105,16 +110,16 @@ export const userIsInClass = async (req, res, next) => {
     }
 }
 
-export const notInTeam = async (req,res,next) => {
-    const {googleId} = req.body
+export const notInTeam = async (req, res, next) => {
+    const { googleId } = req.body
     const user = await repositorio.buscarUnAtleta(googleId)
     const { team } = user[0]
     if (!team) {
         return res.status(400).json({
-            message : "El atleta no esta registrado en el team"
+            message: "El atleta no esta registrado en el team"
         })
-    } else{
+    } else {
         next()
     }
-    
+
 }
