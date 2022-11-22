@@ -31,7 +31,7 @@ export const swaggerDocs= (app, port) => {
         res.send(swaggerSpec);
     });
 
-    console.log(`Version 1.0.0 de la documentacion esta disponible en: http://localhost:${port}/docs/api`);
+    console.log(`La documentacion del API de Train-IT esta disponible en: http://localhost:${port}/docs/api`);
 };
 
 
