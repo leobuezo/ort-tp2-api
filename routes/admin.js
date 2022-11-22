@@ -79,7 +79,7 @@ router.use(express.json())
 //REGISTER AN ATHLETE TO THE TEAM
 /**
  * @swagger
- * /registrar-atleta:
+ * /Admin/registrar-atleta:
  *   put:
  *     tags: [Admin]
  *     summary: Registrar un Atleta a un Team
@@ -102,15 +102,13 @@ router.use(express.json())
  */
 router.put("/registrar-atleta", 
     body('googleId').custom(userExists),
-    atletaExisteEnTeam,
-    atletaValidoParaTeam,
-    // validarEdad,
+    check("googleId").custom(atletaValidoParaTeam),
     crearAtleta)
 
 //REGISTER A COACH TO THE TEAM  DEPRECATED. USE POST /COACHES TO CREATE A COACH
 /**
  * @swagger
- * /registrar-coach:
+ * /Admin/registrar-coach:
  *   put:
  *     tags: [Admin]
  *     summary: Registrar un Coach a un Team
@@ -140,31 +138,30 @@ router.put("/registrar-coach" ,
 //CREATE AN ADMIN
 /**
  * @swagger
- * /:
+ * /Admin/{AccessToken}:
  *   get:
  *     tags: [Admin]
- *     summary: Recibir/Registrar un Admin 
- *     description: Registra un Admin si no existe y lo devuelve
- *     requestBody:
- *      required: true
- *      content: 
- *          application/json:
- *              schema:
- *                  $ref : '#/components/schemas/Admin'
+ *     summary: Inicia la sesion con Google SSO
+ *     description: Inicia la sesion del Admin con Google SSO, y en el caso que ese Admin no existe, lo registra y lo devuelva
+ *     parameters:
+ *      - in: path
+ *        name: Access Token
+ *        schema: 
+ *          type: string
+ *          required: true
+ *          description: Access Token obtenido por Google 
  *     responses:
  *       200:
  *         description: Devolucion OK.
  *       400:
  *         description: Parametros invalidos.
- *       409:
- *         description: Conflicto
  *       500:
  *         description: Error de servidor.
  */
 router.get("/:accessToken" ,
     // body('googleId').custom(vaidateAdmin),
     // body('email').isEmail(),
-    validarAdminUnico,
+    check("accessToken").custom(validarAdminUnico),
     crearAdmin)  
 
 

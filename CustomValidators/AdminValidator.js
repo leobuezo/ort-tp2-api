@@ -13,17 +13,19 @@ export const vaidateAdmin = async (googleId) => {
     }
 }
 
-export const validarAdminUnico = async (req, res, next) => {
+export const validarAdminUnico = async () => {
     return repositorio.buscarTodos().then((admin) => {
         if (admin.length > 0) {
             return Promise.reject(`Ya existe un adminstrador`)
+        }else{
+            return true
         }
-    }).catch((e) => next())
+    })
 }
 
 export const atletaExisteEnTeam = async (req, res, next) => {
     const { googleId, team } = req.body
-    console.log(googleId, team);
+    
     const atleta = await repositorioAtleta.buscarAtletaPorTeam(googleId, team)
 
     if (atleta.length > 0) {
@@ -33,14 +35,15 @@ export const atletaExisteEnTeam = async (req, res, next) => {
     next()
 }
 
-export const atletaValidoParaTeam = async (req, res, next) => {
-    const { googleId } = req.body
+export const atletaValidoParaTeam = async (googleId) => {
 
     return repositorioAtleta.buscarUnAtleta(googleId).then((atleta) => {
-        if (atleta.aptoFisico != true) {
+        if (atleta[0].aptoFisico != true) {
             return Promise.reject(`No posee apto fisico al dia`)
+        }else{
+            return true
         }
-    }).catch((e) => next())
+    })
 }
 
 // export const validarEdad = async (req, res, next) => {

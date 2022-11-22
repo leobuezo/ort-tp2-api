@@ -32,7 +32,11 @@ export const crearAdmin = async (req, res) => {
         .then(res => res.json())
         .then(async data => {
 
-            const {email, id} = data
+            const {error, email, id} = data
+            
+            if(error){
+                return res.status(401).send("Token Invalido")
+            }
             
             const administrador = new AdministradorDelTeam( "equipo1", "Administrador", email, id)
 
