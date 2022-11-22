@@ -3,7 +3,7 @@ import { body, check } from 'express-validator'
 import { obtenerAtletas, obtenerUnAtleta, crearAtleta, borrarAtleta, finalizazrRegistracion, unirseAClase, darseDeBajaClase } from '../Services/AthleteServices.js'
 
 //Import this callback to validate if user exists or not
-import { validateUser, userExists, validateInfoAthlete } from '../CustomValidators/AthleteValidator.js'
+import { validateUser, userExists, validateInfoAthlete, userIsInClass, notInTeam } from '../CustomValidators/AthleteValidator.js'
 
 const router = express.Router()
 /**
@@ -276,6 +276,8 @@ router.put("/finalizar-registracion",
 */
 router.put("/anotarse-a-clase",
     body('googleId').custom(userExists),
+    notInTeam,
+    userIsInClass,
     unirseAClase
 )
 

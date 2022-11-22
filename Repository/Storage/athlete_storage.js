@@ -1,3 +1,4 @@
+import { ObjectId } from "mongodb"
 import { NotImplemented } from "../../ErrorHandling/NotImplementedApi.js"
 import { StorageConnection } from "./storage_connection.js"
 
@@ -93,32 +94,26 @@ export class AthleteStorage {
         }).toArray()
     }
 
-    async darseDeBaja(googleId) {
-        return await this.collection.updateOne({
-            googleId: googleId
-        }, {
-            $set: {
-                team: null
-            }
-        }
-        )
-    }
-
     async darseDeBajaClase(googleId, idClase) {
         return await this.collection.updateOne(
             { googleId: googleId },
             {
-                $pull: { clases: {idClase} }
+                $pull: { clases: { idClase } }
             }
         )
     }
 
     async unirseAClase(googleId, idClase) {
         return await this.collection.updateOne(
-            { googleId : googleId },
+            { googleId: googleId },
             {
-                $push : {clases : {idClase}}
+                $push: { clases: { idClase } }
             }
-            )
+        )
     }
+    async buscarClaseRegistrada(googleId, idClase) {
+        return await this.collection.find({ googleId: googleId, clases: { $elemMatch: { idClase: idClase } } }).toArray()
+    }
+
+    
 }

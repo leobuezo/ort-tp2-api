@@ -3,6 +3,7 @@ import { crearAlumno } from "../UseCases/AthleteUseCases.js"
 import { AthleteRepository } from "../Repository/athlete_repository.js"
 import { validationResult } from "express-validator"
 import { ClassRepository } from "../Repository/class_repository.js"
+import { darBajaAtleta, registrarAlumnoAClase } from "../UseCases/ClassUseCase.js"
 
 const repositorio = new AthleteRepository()
 const repositorioClase = new ClassRepository()
@@ -135,26 +136,6 @@ export const borrarAtleta = async (req, res) => {
 
 }
 
-export const darseBaja = async (req, res) => {
-
-    const { googleId, codigoTeam } = req.body
-
-    const errors = validationResult(req)
-    if (!errors.isEmpty()) {
-        return res.status(400).json({
-            mensaje: "Por favor, revisar los siguientes errores:",
-            errores: errors.array()
-        })
-    }
-
-    await repositorio.darseDeBaja(googleId)
-
-    res.status(204).json({
-        message: `Se dio de baja al atleta con exito del team`
-    })
-
-}
-
 export const darseDeBajaClase = async (req, res) => {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
@@ -166,18 +147,17 @@ export const darseDeBajaClase = async (req, res) => {
 
     const { googleId, idClase } = req.body
     try {
-        // repositorioClase.darDeBajaAlumno(googleId, idClase)
-        //     .catch(err => {
-        //         console.log(err)
-        //         return res.status(500).json({
-        //             message: "No se pudo eliminar al alumno de la clase"
-        //         })
-        //     })
+
 
         const pudo = await repositorio.darseDeBajaClase(googleId, idClase)
-        if (pudo.modifiedCount > 0) {
+        const borradoDeClase = darBajaAtleta(idClase, googleId)
+        if (pudo.modifiedCount > 0 && borradoDeClase) {
             return res.status(200).json({
                 message: "Se dio de baja al alumno con exito"
+            })
+        } else {
+            return res.status(200).json({
+                message: "No se pudo dar de baja al alumno"
             })
         }
 
@@ -197,19 +177,31 @@ export const unirseAClase = async (req, res) => {
             errores: errors.array()
         })
     }
+
     const { googleId, idClase } = req.body
+
+    const cancelada = await repositorioClase.buscarClasesPorId(idClase)
+    const {esCancelada} = cancelada[0]
+    if(esCancelada) {
+        return res.status(400).json({
+            message : "No se puede anotar a una clase cancelada."
+        })
+    }
 
     try {
         const pudo = await repositorio.unirseAClase(googleId, idClase)
-        if (pudo.modifiedCount > 0) {
+        const unidoAClase = registrarAlumnoAClase(idClase, googleId)
+        if (pudo.modifiedCount > 0 && unidoAClase) {
             return res.status(200).json({
                 message: "Se modifico con exito al atleta"
             })
         } else {
             return res.status(204).json({
-                message: "No se pudo agregar al atleta a la clase"
+                message: "No se pudo agregar al atleta correctamente a la clase"
             })
         }
+
+
     } catch (error) {
         console.log(error)
         return res.status(500).json({

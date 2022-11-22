@@ -1,5 +1,6 @@
 
 import { AthleteRepository } from '../Repository/athlete_repository.js'
+import { ClassRepository } from '../Repository/class_repository.js'
 
 const repositorio = new AthleteRepository()
 export const validateUser = googleId => {
@@ -90,6 +91,30 @@ export const addToTeam = async (req, res, next) => {
             }
         })
     }
+}
 
+export const userIsInClass = async (req, res, next) => {
+    const { idClase, googleId } = req.body
+    const existe = await repositorio.buscarClaseRegistrada(googleId, idClase)
+    if (existe.length > 0) {
+        return res.status(400).json({
+            message: "El atleta ya esta registrado en esta clase."
+        })
+    } else {
+        next()
+    }
+}
 
+export const notInTeam = async (req,res,next) => {
+    const {googleId} = req.body
+    const user = await repositorio.buscarUnAtleta(googleId)
+    const { team } = user[0]
+    if (!team) {
+        return res.status(400).json({
+            message : "El atleta no esta registrado en el team"
+        })
+    } else{
+        next()
+    }
+    
 }

@@ -9,8 +9,8 @@ export class AthleteRepository {
         return this.storage.crearAtleta(atleta)
     }
 
-    modificarAtleta(googleId,objectToModify) {
-        return this.storage.modificarAtleta(googleId,objectToModify)
+    modificarAtleta(googleId, objectToModify) {
+        return this.storage.modificarAtleta(googleId, objectToModify)
     }
 
     darFeedback(feedback) {
@@ -37,23 +37,26 @@ export class AthleteRepository {
         return await this.storage.agregarTeam(googleId, team)
     }
 
-    async buscarOAgregar(atleta){
+    async buscarOAgregar(atleta) {
         return await this.storage.buscarOAgregar(atleta)
     }
 
-    async buscarAtletaPorTeam(googleId, team){
+    async buscarAtletaPorTeam(googleId, team) {
         return await this.storage.buscarAtletaPorTeam(googleId, team)
     }
 
-    async darseDeBaja(googleId){
-        return await this.storage.darseDeBaja(googleId)
-    }
 
-    async darseDeBajaClase(googleId, idClase){
+    async darseDeBajaClase(googleId, idClase) {
         return await this.storage.darseDeBajaClase(googleId, idClase)
     }
 
-    async unirseAClase(googleId, idClase){
-        return await this.storage.unirseAClase(googleId,idClase)
+    async unirseAClase(googleId, idClase) {
+        return await this.storage.unirseAClase(googleId, idClase)
     }
+
+    async buscarClaseRegistrada(googleId,idClase){
+
+    return await this.storage.buscarClaseRegistrada(googleId,idClase)
+}
+    
 }
