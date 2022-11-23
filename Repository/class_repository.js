@@ -90,17 +90,17 @@ export class ClassRepository{
         }
     }
 
-    darBajadeClase(claseId, atletaId){
+    darBajadeClase(claseId, alumnos){
         try {
-            return this.storage.sacarAtletaDeListaAlumnos(claseId,atletaId)
+            return this.storage.sacarAtletaDeListaAlumnos(claseId,alumnos)
         } catch (error) {
             throw new MongoDBInstanceUpdateError(error.message)
         }
     }
 
-    darBajadelistaDeEsperaClase(claseId, atletaId){
+    darBajadelistaDeEsperaClase(claseId, listaEspera){
         try {
-            return this.storage.sacarAtletaDeListaEspera(claseId,atletaId)
+            return this.storage.sacarAtletaDeListaEspera(claseId,listaEspera)
         } catch (error) {
             throw new MongoDBInstanceUpdateError(error.message)
         }
@@ -122,9 +122,9 @@ export class ClassRepository{
         }
     }
 
-    buscarAlumnoEnClase(claseId, alumnoId){
+    buscarAlumnoEnClase(claseId, atletaId){
         try{
-            return this.storage.buscarAlumnoEnClase(claseId, alumnoId)
+            return this.storage.buscarAlumnoEnClase(claseId, atletaId)
         }catch(error){
             throw new MongoDBCannotFindError(error.message, cannotFindError)
         }

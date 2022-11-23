@@ -62,7 +62,7 @@ export const crearNuevaClase= async (req, res) => {
         const{titulo, cupo, ubicacion, diaActividad, coachId}= req.body;
         const fecha= new Date(diaActividad);
         const responseObject = await crearClase(titulo, cupo, ubicacion, fecha, coachId);
-        res.status(200).json(responseObject);
+        res.status(201).json(responseObject);
         //responseObject =! false ? res.status(200).json(responseObject) : res.status(204).json({ message: cantCreateMessage });    
     }catch(error){
         if(error instanceof GenericError){
@@ -82,10 +82,10 @@ export const crearNuevaClase= async (req, res) => {
 
 export const cancelarClases= async (req, res) => {
     try{
-        this.validarRequest(req);
-        const {claseId, coachId}= req.param;
-        const responseObject = await cancelarClase(claseId, coachId);
-        responseObject.length > 0 ? res.status(200).json(responseObject) : res.status(204).json({ message: cantCreateMessage });    
+        //this.validarRequest(req);
+        const {claseId}= req.body;
+        const responseObject = await cancelarClase(claseId);
+        responseObject.modifiedCount == 1 ? res.status(200).json(responseObject) : res.status(204).json({ message: cantCreateMessage });    
     }catch(error){
         if(error instanceof GenericError){
             return res.status(error.status).json({
@@ -126,8 +126,8 @@ export const registrarAlumnoAclases= async (req, res) => {
 export const bajaDeAtleta= async (req, res) => {
     try{
            //this.validarRequest(req)
-           const {claseId, atleta}= req.body;
-           const responseObject = await darBajaAtleta(claseId, atleta);
+           const {claseId, atletaId}= req.body;
+           const responseObject = await darBajaAtleta(claseId, atletaId);
            responseObject == true ? res.status(200).json(responseObject) : res.status(204).json({ message: cantModifyMessage });    
        }catch(error){
            if(error instanceof GenericError){

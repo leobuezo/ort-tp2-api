@@ -1,6 +1,6 @@
 import express from 'express'
 import { body, check } from 'express-validator'
-import {obtenerClases, crearNuevaClase, obtenerClasesPorNombre, registrarAlumnoAclases, bajaDeAtleta} from '../Services/ClassServices.js';
+import {obtenerClases, crearNuevaClase, obtenerClasesPorNombre, registrarAlumnoAclases, bajaDeAtleta, cancelarClases} from '../Services/ClassServices.js';
 
 const router = express.Router();
 
@@ -40,11 +40,11 @@ const router = express.Router();
  *                  description: Si el atleta cuenta con el apto fisico al dia
  *          example:
  *              nombre: string
- *              cupo: string
+ *              cupo: 0
  *              diaActividad: 0
  *              coach: object
- *              alumnos: string
- *              listaEspera: 0
+ *              alumnos: array
+ *              listaEspera: array
  *              esCancelada: false
  */
 
@@ -100,8 +100,8 @@ const router = express.Router();
  * /training_class:
  *   get:
  *     tags: [Class]
- *     summary: Obtener todas las clases
- *     description: Devuelve todos las clases registrados
+ *     summary: Obtiene todas las clases
+ *     description: Devuelve todos las clases registradas
  *     produces: 
  *      - application/json
  *     responses:
@@ -109,15 +109,15 @@ const router = express.Router();
  *         description: Devolucion OK.
  *       500:
  *         description: Error de servidor
- */router.get("/",obtenerClases)
+ */router.get("/clases",obtenerClases)
 
 /**
  * @swagger
  * /training_class:
  *   post:
  *     tags: [Class]
- *     summary: Crear una nueva clases
- *     description: Crea una clase a partir de los datos pasados por parametros
+ *     summary: Crea una nueva clases
+ *     description: Crea una clase a partir de los datos enviados por parametros
  *     requestBody:
  *      required: true
  *      content: 
@@ -129,7 +129,7 @@ const router = express.Router();
  *         description: Devolucion OK.
  *       500:
  *         description: Error de servidor
- */router.post("/",
+ */router.post("/clase",
         body('titulo').exists().isString(),
         body('diaActividad').exists().isString(),
         body('cupo').exists().isNumeric(),
@@ -139,7 +139,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /training_class:
+ * /training_class/alumno:
  *   put:
  *     tags: [Class]
  *     summary: Registra un nueva Alumno
@@ -155,7 +155,7 @@ const router = express.Router();
  *         description: Devolucion OK.
  *       500:
  *         description: Error de servidor
- */router.put("/registrarAlumnoAclases",
+ */router.put("/alumno",
  body('claseId').exists().isString(),
  body('alumnoId').exists().isString(),
  registrarAlumnoAclases)
@@ -163,8 +163,8 @@ const router = express.Router();
 
 /**
  * @swagger
- * /training_class:
- *   put:
+ * /training_class/atleta:
+ *   delete:
  *     tags: [Class]
  *     summary: Da de baja a un alumno de clase
  *     description: Da de baja a un atleta en la lista de alumnos y gestiona el ingreso de la primera persona en lista de espera a la clase
@@ -179,15 +179,38 @@ const router = express.Router();
  *         description: Devolucion OK.
  *       500:
  *         description: Error de servidor
- */router.put("/darBajaAtleta",
+ */router.delete("/atleta",
  body('claseId').exists().isString(),
- body('alumnoId').exists().isString(),
+ body('atletaId').exists().isString(),
  bajaDeAtleta)
 
 
 /**
  * @swagger
- * /training_class/{nombre}:
+ * /training_class/cancelada:
+ *   put:
+ *     tags: [Class]
+ *     summary: Cancela una clase
+ *     description: Recibe el identificador de una clase y se pasa a estado cancelado
+ *     requestBody:
+ *      required: true
+ *      content: 
+ *          application/json:
+ *              schema:
+ *                  $ref : '#/components/schemas/Class'
+ *     responses:
+ *       200:
+ *         description: Devolucion OK.
+ *       500:
+ *         description: Error de servidor
+ */router.put("/cancelada",
+ body('claseId').exists().isString(),
+ cancelarClases)
+
+
+/**
+ * @swagger
+ * /training_class/clase/{nombre}:
  *   get:
  *     tags: [Class]
  *     summary: Obtiene una clase por nombre
@@ -204,7 +227,7 @@ const router = express.Router();
  *         description: Devolucion OK.
  *       500:
  *         description: Error de servidor
- */router.get("/:nombre",
+ */router.get("/clase/:nombre",
          check('nombre').exists().isString(),
          obtenerClasesPorNombre)
 
