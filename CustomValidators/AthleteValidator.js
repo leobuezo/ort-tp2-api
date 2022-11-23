@@ -113,13 +113,19 @@ export const userIsInClass = async (req, res, next) => {
 export const notInTeam = async (req, res, next) => {
     const { googleId } = req.body
     const user = await repositorio.buscarUnAtleta(googleId)
-    const { team } = user[0]
-    if (!team) {
-        return res.status(400).json({
-            message: "El atleta no esta registrado en el team"
-        })
+    if (user.length > 0) {
+        const { team } = user[0]
+        if (!team) {
+            return res.status(400).json({
+                message: "El atleta no esta registrado en el team"
+            })
+        } else {
+            next()
+        }
     } else {
+
         next()
     }
+
 
 }
