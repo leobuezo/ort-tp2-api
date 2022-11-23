@@ -11,7 +11,6 @@ const repoCoach= new CoachRepository();
 export const buscarClases= async () => {
     try{
         const clases= await repoClass.buscarTodasLasClases();
-        console.log(clases);
         return clases;
     }catch(error){
         if(!error instanceof GenericError){
@@ -41,10 +40,8 @@ export const buscarClasesPorNombre= async (nombreClase) => {
 export const registrarAlumnoAClase= async (claseId, atletaId) => {
     try{
         let clase = await repoClass.buscarAlumnoEnClase(claseId,atletaId);
-        console.log(clase);
         if(clase.length == 0){
             clase= await repoClass.buscarClasesPorId(claseId);
-            console.log(clase);
             let {alumnos, cupo}= clase[0];  
             let result;
             if(alumnos.length < cupo){
@@ -64,16 +61,16 @@ export const registrarAlumnoAClase= async (claseId, atletaId) => {
 
 export const darBajaAtleta= async (claseId, atletaId) => {
     try{
-        let clase = await repoClass.buscarAlumnoEnClase(claseId,atletaId);
-        console.log(clase);
+        let clase = await repoClass.buscarClasesPorId(claseId);
         if(clase.length > 0){
-            const bajaClase= await repoClass.darBajadeClase(claseId,atletaId);
-            console.log(bajaClase);
-            const {listaEspera}= clase;
+           const {alumnos, listaEspera} = clase[0];
+           let resultAlumno= alumnos.filter(alumno => alumno.atletaId != atletaId);
+           const bajaClase= await repoClass.darBajadeClase(claseId, resultAlumno);
             if(listaEspera.length > 0){
-                alumnoId= listaEspera.shift();
-                await repoClass.darBajadelistaDeEsperaClase(alumnoId);
-                await repoClass.ingresarAtletaEnClase(alumnoId);
+                const {atletaId} = listaEspera[0];
+                listaEspera.shift();
+                await repoClass.darBajadelistaDeEsperaClase(claseId, listaEspera);
+                await repoClass.ingresarAtletaEnClase(claseId, atletaId);
             }
             return bajaClase.acknowledged
         }
@@ -87,13 +84,8 @@ export const darBajaAtleta= async (claseId, atletaId) => {
 
 export const crearClase= async (titulo, cupo, ubicacion, diaActividad, coachId) => {
     try {
-       console.log("voy a buscar la clase")
-        console.log(coachId)
-        console.log("voy a crear la clase")
         const clase= new Clase(titulo,cupo,ubicacion,diaActividad,coachId);
-        console.log(clase);
         const id = await repoClass.agregarClase(clase);
-        console.log(id.insertedId);
         return id.insertedId;    
     } catch (error) {
         if(!error instanceof GenericError){
@@ -108,7 +100,7 @@ export const cancelarClase= async (claseId)=>{
     try {
         return await repoClass.cancelarClase(claseId);       
     }catch (error) {
-        if(!error instanceof GenericError()){
+        if(!error instanceof GenericError){
             throw new GenericError(error.message,cannotUpdateError);
         }
         throw error;

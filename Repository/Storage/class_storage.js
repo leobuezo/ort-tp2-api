@@ -12,16 +12,16 @@ export class ClassStorage{
         return await this.collection.find({}).toArray()
     }
 
-    async buscarAlumnoEnClase(claseId, alumnoId){
-        return await this.collection.find({_id : ObjectId(claseId), alumnos:{$in:[alumnoId]}}).toArray()
+    async buscarAlumnoEnClase(claseId, atletaId){
+        return await this.collection.find({alumnos:{$in :[atletaId]},
+                                            _id : ObjectId(claseId)}).toArray()
     }
 
     async buscarAlumnoEnListaEspera(claseId, alumnoId){
-        return await this.collection.find({_id : ObjectId(claseId), listaEspera:{$in:[alumnoId]}}).toArray()
+        return await this.collection.find({ $and: [{_id : ObjectId(claseId)}, {listaEspera:{$in:[alumnoId]}}]}).toArray()
     }
 
     async buscarClasePorId(claseId){
-        console.log(claseId);
         return await this.collection.find({_id : ObjectId(claseId)}).toArray()
     }
 
@@ -53,12 +53,12 @@ export class ClassStorage{
         )    
     }
 
-    async sacarAtletaDeListaAlumnos(claseId,alumnoId){
+    async sacarAtletaDeListaAlumnos(claseId,alumnos){
         return await this.collection.updateOne(
             { _id : ObjectId(claseId)},
-            { $pull : 
+            { $set : 
                 {
-                    alumnos: {alumnoId}
+                    alumnos: alumnos
                 }
             }
         )    
@@ -75,12 +75,12 @@ export class ClassStorage{
         )    
     }
 
-    async sacarAtletaDeListaEspera(claseId,alumnoId){
+    async sacarAtletaDeListaEspera(claseId,listaEspera){
         return await this.collection.updateOne(
             { _id :  ObjectId(claseId)},
-            { $pull : 
+            { $set : 
                 {
-                    listaEspera: {alumnoId}
+                    listaEspera: listaEspera
                 }
             }
         )    
