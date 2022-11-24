@@ -96,7 +96,7 @@ export const finalizazrRegistracion = async (req, res) => {
         const response = await repositorio.modificarAtleta(googleId, objectToModify)
         if (response.modifiedCount === 1) {
             const responseObject = await repositorio.buscarUnAtleta(googleId)
-            return res.status(200).json(responseObject)
+            return res.status(200).json(responseObject[0])
         }
     } catch (error) {
         console.log(error)

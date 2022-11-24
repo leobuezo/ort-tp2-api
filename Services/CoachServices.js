@@ -89,7 +89,7 @@ export const registrarse = async (req,res) => {
         const response = await repositorioCoach.modificarCoach(googleId, coachARegistrar)
         if(response.modifiedCount === 1 ){
             const responseObject = await repositorioCoach.buscarUnCoach(googleId)
-            return res.status(200).json(responseObject)
+            return res.status(200).json(responseObject[0])
         } else{
             return res.status(500).json({
                  message : "No se pudieron modificar los datos del coach. Por favor revisarlo"
