@@ -7,7 +7,7 @@ const repositorioAthlete = new AthleteRepository()
 const repositorioCoach = new CoachRepository()
 
 export const athleteAuthenticationUseCase = async (res, next, data) => {
-    const { id, email, error } = data
+    const { id, email, picture, error } = data
 
     const existe = await repositorioCoach.buscarUnCoach(id)
     if (existe.length > 0) {
@@ -17,7 +17,7 @@ export const athleteAuthenticationUseCase = async (res, next, data) => {
         return next()
     }
 
-    const defaultUser = crearAlumnoVacio(id, email)
+    const defaultUser = crearAlumnoVacio(id, email, picture)
 
     try {
         const { usuario, newUser } = await repositorioAthlete.buscarOAgregar(defaultUser)
@@ -39,7 +39,7 @@ export const athleteAuthenticationUseCase = async (res, next, data) => {
 
 export const coachAuthenticationUseCase = async (res, next, data) => {
 
-    const { id, email, error } = data
+    const { id, email, picture, error } = data
     const existe = await repositorioAthlete.buscarUnAtleta(id)
 
     if (existe.length > 0) {
@@ -49,7 +49,7 @@ export const coachAuthenticationUseCase = async (res, next, data) => {
         return next()
     }
 
-    const defaultUser = crearCoachVacio(id, email)
+    const defaultUser = crearCoachVacio(id, email,picture)
     const { usuario, newUser } = await repositorioCoach.buscarOAgregar(defaultUser)
         .catch(err => {
             console.log("Error al buscar o registrar al coach con google", err)

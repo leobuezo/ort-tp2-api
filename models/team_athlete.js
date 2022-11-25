@@ -4,7 +4,7 @@ import { Rol } from "./roles.js";
 import Feedback from '../models/feedback.js'
 
 export default class Alumno {
-    constructor(nombre,apellido,fechaNacimiento,dni,aptoFisico,team,rol,email, googleId) {
+    constructor(nombre,apellido,fechaNacimiento,dni,aptoFisico,team,rol,email, googleId, picture) {
         this._id = uuidv4()
         this.nombre = nombre
         this.apellido = apellido
@@ -16,6 +16,7 @@ export default class Alumno {
         this.email = email
         this.googleId = googleId,
         this.datosValidados = false,
+        this.picture = picture
         this.clases = []
     }
 

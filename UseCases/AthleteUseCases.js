@@ -9,7 +9,7 @@ export const crearAlumno = async (atleta) => {
     return await repositorio.crearAtleta(atleta)
 }
 
-export const crearAlumnoVacio = (googleId, email) => { 
+export const crearAlumnoVacio = (googleId, email, picture) => { 
     return new Alumno(
             null, //nombre
             null, //apellido
@@ -20,5 +20,6 @@ export const crearAlumnoVacio = (googleId, email) => {
             'Atleta', //rol
             email, //email
             googleId, //googleId
+            picture // picture
     )
 }

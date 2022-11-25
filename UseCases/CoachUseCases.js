@@ -10,6 +10,7 @@ export const crearCoachVacio = (googleId, email) => {
         "Coach", //rol
         null, //team 
         null, //fechaNacimiento
-        googleId //googleId
+        googleId, //googleId,
+        picture // picture
     )
 }
