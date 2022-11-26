@@ -146,7 +146,7 @@ router.get("/:_id",
  *         description: Error de servidor
  */
 router.get("/athlete/:dni_atleta", 
-body('dni_atleta').custom(validateDni),
+check('dni_atleta').custom(validateDni),
 obtenerFeedbacksPorAtleta)
 
 /**
@@ -172,7 +172,7 @@ obtenerFeedbacksPorAtleta)
  *         description: Error de servidor
  */
 router.get("/coach/:dni_coach", 
-body('dni_coach').custom(validateCoach),
+check('dni_coach').custom(validateCoach),
 obtenerFeedbacksPorCoach)
 
 /**
