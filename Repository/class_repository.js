@@ -137,5 +137,7 @@ export class ClassRepository{
             throw new MongoDBCannotFindError(error.message, cannotFindError)
         }
     }
-
+    buscarPorGoogleId(id){
+        return this.storage.buscarPorGoogleId(id)
+    }
 }

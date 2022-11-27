@@ -1,6 +1,6 @@
 import express from 'express'
 import { body, check } from 'express-validator'
-import {obtenerClases, crearNuevaClase, obtenerClasesPorNombre, registrarAlumnoAclases, bajaDeAtleta, cancelarClases} from '../Services/ClassServices.js';
+import { obtenerClases, crearNuevaClase, obtenerClasesPorNombre, registrarAlumnoAclases, bajaDeAtleta, cancelarClases, buscarPorId } from '../Services/ClassServices.js';
 
 const router = express.Router();
 
@@ -109,7 +109,7 @@ const router = express.Router();
  *         description: Devolucion OK.
  *       500:
  *         description: Error de servidor
- */router.get("/clases",obtenerClases)
+ */router.get("/clases", obtenerClases)
 
 /**
  * @swagger
@@ -156,9 +156,9 @@ const router = express.Router();
  *       500:
  *         description: Error de servidor
  */router.put("/alumno",
- body('claseId').exists().isString(),
- body('alumnoId').exists().isString(),
- registrarAlumnoAclases)
+                body('claseId').exists().isString(),
+                body('alumnoId').exists().isString(),
+                registrarAlumnoAclases)
 
 
 /**
@@ -180,9 +180,9 @@ const router = express.Router();
  *       500:
  *         description: Error de servidor
  */router.delete("/atleta",
- body('claseId').exists().isString(),
- body('atletaId').exists().isString(),
- bajaDeAtleta)
+                        body('claseId').exists().isString(),
+                        body('atletaId').exists().isString(),
+                        bajaDeAtleta)
 
 
 /**
@@ -204,8 +204,8 @@ const router = express.Router();
  *       500:
  *         description: Error de servidor
  */router.put("/cancelada",
- body('claseId').exists().isString(),
- cancelarClases)
+                                body('claseId').exists().isString(),
+                                cancelarClases)
 
 
 /**
@@ -227,8 +227,13 @@ const router = express.Router();
  *         description: Devolucion OK.
  *       500:
  *         description: Error de servidor
- */router.get("/clase/:nombre",
-         check('nombre').exists().isString(),
-         obtenerClasesPorNombre)
+ */
+router.get("/clase/:nombre",
+        check('nombre').exists().isString(),
+        obtenerClasesPorNombre)
+
+router.get("/clasesDeAtleta/:googleId",
+        buscarPorId
+)
 
 export default router
