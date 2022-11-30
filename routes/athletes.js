@@ -1,6 +1,6 @@
 import express from 'express'
 import { body, check } from 'express-validator'
-import { obtenerAtletas, obtenerUnAtleta, crearAtleta, borrarAtleta, finalizazrRegistracion, unirseAClase, darseDeBajaClase } from '../Services/AthleteServices.js'
+import { obtenerAtletas, obtenerUnAtleta, crearAtleta, borrarAtleta, finalizazrRegistracion, unirseAClase, darseDeBajaClase, obtenerUnAtletaPorDni } from '../Services/AthleteServices.js'
 
 //Import this callback to validate if user exists or not
 import { validateUser, userExists, validateInfoAthlete, userIsInClass, notInTeam } from '../CustomValidators/AthleteValidator.js'
@@ -171,6 +171,10 @@ router.get("/",
 router.get("/:googleId",
     check('googleId').custom(userExists),
     obtenerUnAtleta
+)
+
+router.get("/:dniAtleta",
+    obtenerUnAtletaPorDni
 )
 
 /**

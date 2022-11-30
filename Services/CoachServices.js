@@ -59,6 +59,24 @@ export const obtenerUnCoach = async (req,res) => {
     return res.status(200).json(responseObject)
 }
 
+
+export const obtenerUnCoachPorDni = async (req,res) => {
+    
+    const{dniCoach} = req.params
+    const errors = validationResult(req)
+
+    if(!errors.isEmpty()){
+        return res.status(400).json({
+            mensaje: "Por favor, revisar los siguientes errores:",
+            errores: errors.array()
+        })
+    }
+
+    const responseObject = await repositorioCoach.buscarCoachPorDni(dniCoach)
+    return res.status(200).json(responseObject)
+}
+
+
 export const obtenerCoaches = async (req,res) => {
     const responseObject = await repositorioCoach.buscarCoach()
     responseObject.length ? res.status(200).json(responseObject) : res.status().json({ message: "No hay coaches registrados" })
