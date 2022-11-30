@@ -175,7 +175,7 @@ router.get("/:googleId",
     obtenerUnCoach
 )
 
-router.get("/:dniCoach",
+router.get("/coach-dni/:dniCoach",
     obtenerUnCoachPorDni
 )
 

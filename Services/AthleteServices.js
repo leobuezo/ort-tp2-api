@@ -70,7 +70,7 @@ export const obtenerUnAtletaPorDni = async (req, res) => {
     const { dniAtleta } = req.params
 
     try {
-        const responseObject = await repositorio.buscarUnAtletPorDni(dniAtleta)
+        const responseObject = await repositorio.buscarUnAtletaPorDni(dniAtleta)
         return res.status(200).json(responseObject)
     } catch (error) {
         console.log(error)
