@@ -41,7 +41,7 @@ export const crearAdmin = async (req, res) => {
             const administrador = new AdministradorDelTeam( "equipo1", "Administrador", email, id)
 
             const admin = await repositorio.crearAdmin(administrador)
-            return res.status(201).json(admin)
+            return res.status(201).json(administrador)
             //return res.status(201).json(responseObject)
 
         })
