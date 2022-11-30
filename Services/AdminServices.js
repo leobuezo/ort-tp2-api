@@ -38,7 +38,7 @@ export const crearAdmin = async (req, res) => {
                 return res.status(401).send("Token Invalido")
             }
             
-            const administrador = new AdministradorDelTeam( "equipo1", "Administrador", email, id)
+            const administrador = new AdministradorDelTeam( "Megatlon", "Administrador", email, id)
 
             const admin = await repositorio.crearAdmin(administrador)
             return res.status(201).json(administrador)
@@ -70,9 +70,9 @@ export const crearAtleta = async (req, res) => {
 
     const modify = await repositorioAtleta.agregarTeam(googleId, team)
     if(modify.modifiedCount == 1){
-        return res.status(201).send(`Se creo exitosamente al atleta al team`)
+        return res.status(201).send(modify)
     }else{
-        return res.status(400).send(`No se pudo registrar el atleta al team`)
+        return res.status(400).send(modify)
     }
 }
 
@@ -90,9 +90,9 @@ export const crearCoach =  async (req, res) => {
 
     const modify = await repositorioCoach.registrarCoachAlTeam(googleId, team)
     if(modify.modifiedCount == 1){
-        return res.status(201).send(`Se creo exitosamente al coach al team`)
+        return res.status(201).send(modify)
     }else{
-        return res.status(400).send(`No se pudo registrar el coach al team`)
+        return res.status(400).send(modify)
     }
 }
 
