@@ -173,7 +173,7 @@ router.get("/:googleId",
     obtenerUnAtleta
 )
 
-router.get("/:dniAtleta",
+router.get("/athlete-dni/:dniAtleta",
     obtenerUnAtletaPorDni
 )
 
