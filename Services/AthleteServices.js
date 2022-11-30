@@ -57,6 +57,31 @@ export const obtenerUnAtleta = async (req, res) => {
 
 }
 
+export const obtenerUnAtletaPorDni = async (req, res) => {
+
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+        return res.status(400).json({
+            mensaje: "Por favor, revisar los siguientes errores:",
+            errores: errors.array()
+        })
+    }
+
+    const { dniAtleta } = req.params
+
+    try {
+        const responseObject = await repositorio.buscarUnAtletPorDni(dniAtleta)
+        return res.status(200).json(responseObject)
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({
+            message: "Hubo un error al buscar a una persona"
+        })
+    }
+
+}
+
+
 export const obtenerAtletas = async (req, res) => {
 
     try {

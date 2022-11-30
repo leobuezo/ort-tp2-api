@@ -1,6 +1,6 @@
 import express, { Router } from 'express'
 import { body, check } from 'express-validator'
-import { borrarCoach, crearCoach, obtenerCoaches, obtenerUnCoach, registrarse, cancelarClase, crearClaseCoach } from '../Services/CoachServices.js'
+import { borrarCoach, crearCoach, obtenerCoaches, obtenerUnCoach, registrarse, cancelarClase, crearClaseCoach, obtenerUnCoachPorDni } from '../Services/CoachServices.js'
 import { userCoachExists, validateCoach, validadorInformacionCoach } from '../CustomValidators/CoachValidator.js'
 
 const router = express.Router()
@@ -173,6 +173,10 @@ const router = express.Router()
 router.get("/:googleId",
     check('googleId').custom(userCoachExists),
     obtenerUnCoach
+)
+
+router.get("/:dniCoach",
+    obtenerUnCoachPorDni
 )
 
 //OBTENER TODOS LOS COACHES
