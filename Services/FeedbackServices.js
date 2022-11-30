@@ -1,10 +1,11 @@
 import { NotImplemented } from "../ErrorHandling/CustomError.js"
 import FeedbackRepository from "../Repository/feedback_respository.js"
+import { AthleteRepository } from "../Repository/athlete_repository.js"
 import { validationResult } from "express-validator"
 import Feedback from "../models/feedback.js"
 
 const repositorio = new FeedbackRepository()
-
+const repositorioAtleta = new AthleteRepository()
 
 export const obtenerUnFeedbackPorId = async (req, res) => {
     const errors = validationResult(req)
@@ -42,6 +43,15 @@ export const obtenerFeedbacksPorCoach = async (req, res) => {
     }
     const { dni_coach } = req.params
     const responseObject = await repositorio.obtenerFeedbacksPorCoach(dni_coach)
+    // const responseCompletedObject = responseObject.map(async (element) => { 
+    //     const responseAtletaObject = await repositorioAtleta.buscarUnAtletaPorDni(element.dni_atleta)
+    //     const nombreCompleto = responseAtletaObject[0].nombre  + ' ' + responseAtletaObject[0].apellido
+    //     console.log(nombreCompleto)
+    //     return {
+    //         ...element, 
+    //         nombreAtleta: nombreCompleto
+    //     }
+    // })
     return res.status(200).json(responseObject)
 }
 
