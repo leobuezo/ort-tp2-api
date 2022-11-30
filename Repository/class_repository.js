@@ -140,4 +140,8 @@ export class ClassRepository{
     buscarPorGoogleId(id){
         return this.storage.buscarPorGoogleId(id)
     }
+
+    buscarCoachPorGoogleId(id){
+        return this.storage.buscarCoachPorGoogleId(id)
+    }
 }

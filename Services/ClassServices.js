@@ -151,3 +151,10 @@ export const buscarPorId =async  (req,res) => {
     const clases = await repo.buscarPorGoogleId(googleId)
     return res.status(200).json(clases)
 }
+
+export const buscarCoachPorId = async (req,res) => {
+    const googleId = req.params.googleId
+    const repo = new ClassRepository()
+    const clases = await repo.buscarCoachPorGoogleId(googleId)
+    return res.status(200).json(clases)
+}

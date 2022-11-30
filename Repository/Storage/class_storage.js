@@ -4,7 +4,7 @@ import { StorageConnection } from "./storage_connection.js"
 
 export class ClassStorage {
     constructor() {
-        this.storageConnection = new StorageConnection("TrainIt", "Class")
+        this.storageConnection = new StorageConnection("TrainIt","Class")
         this.collection = this.storageConnection.getCollection()
     }
 
@@ -113,7 +113,15 @@ export class ClassStorage {
 
     async buscarPorGoogleId(id) {
         return await this.collection.find({
-            alumnos: { $elemMatch: { atletaId: id } }
+            alumnos: { $elemMatch: { atletaId: id } },
+            esCancelada : false
+        }).toArray()
+    }
+
+    async buscarCoachPorGoogleId(id) {
+        return await this.collection.find({
+            coachId : id,
+            esCancelada : false
         }).toArray()
     }
 }
